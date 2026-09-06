@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Stylesheets.Stylesheets;
+using Ashfall.Client.Stylesheets;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.Reflection;
@@ -18,10 +19,10 @@ namespace Content.Client.Stylesheets
         private IResourceCache
             _resCache = default!; // TODO: REMOVE (obsolete; used to construct StyleNano/StyleSpace)
 
-        public Stylesheet SheetNanotrasen { get; private set; } = default!;
+        public Stylesheet SheetAshfall { get; private set; } = default!;
         public Stylesheet SheetSystem { get; private set; } = default!;
 
-        [Obsolete("Update to use SheetNanotrasen instead")]
+        [Obsolete("Update to use SheetAshfall instead")]
         public Stylesheet SheetNano { get; private set; } = default!;
 
         [Obsolete("Update to use SheetSystem instead")]
@@ -47,12 +48,12 @@ namespace Content.Client.Stylesheets
             UnusedSheetlets = [..tys];
 
             Stylesheets = new Dictionary<string, Stylesheet>();
-            SheetNanotrasen = Init(new NanotrasenStylesheet(new BaseStylesheet.NoConfig(), this));
+            SheetAshfall = Init(new AshfallStylesheet(new BaseStylesheet.NoConfig(), this));
             SheetSystem = Init(new SystemStylesheet(new BaseStylesheet.NoConfig(), this));
             SheetNano = new StyleNano(_resCache).Stylesheet; // TODO: REMOVE (obsolete)
             SheetSpace = new StyleSpace(_resCache).Stylesheet; // TODO: REMOVE (obsolete)
 
-            _userInterfaceManager.Stylesheet = SheetNanotrasen;
+            _userInterfaceManager.Stylesheet = SheetAshfall;
 
             // warn about unused sheetlets
             if (UnusedSheetlets.Count > 0)

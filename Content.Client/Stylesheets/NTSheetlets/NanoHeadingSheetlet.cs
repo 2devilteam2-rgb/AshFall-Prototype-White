@@ -1,3 +1,4 @@
+using Ashfall.Client.Stylesheets;
 using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Client.UserInterface.Controls;
@@ -10,11 +11,11 @@ namespace Content.Client.Stylesheets.NTSheetlets;
 
 /// Not NTHeading because NanoHeading is the name of the element
 [CommonSheetlet]
-public sealed class NanoHeadingSheetlet : Sheetlet<NanotrasenStylesheet>
+public sealed class NanoHeadingSheetlet : Sheetlet<AshfallStylesheet>
 {
-    public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
+    public override StyleRule[] GetRules(AshfallStylesheet sheet, object config)
     {
-        INanoHeadingConfig nanoHeadingCfg = sheet;
+        var nanoHeadingCfg = (INanoHeadingConfig) sheet;
 
         var nanoHeadingTex = sheet.GetTexture(nanoHeadingCfg.NanoHeadingPath);
         var nanoHeadingBox = new StyleBoxTexture

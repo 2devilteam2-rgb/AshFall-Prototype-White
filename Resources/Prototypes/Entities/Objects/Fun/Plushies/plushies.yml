@@ -1257,35 +1257,35 @@
 
 - type: entity
   parent: BasePlushie
-  id: PlushieVulp
-  name: vulpkanin plushie
-  description: An adorable stuffed toy that resembles a vulpkanin. Yip! Yap!
+  id: PlushieVeiru
+  name: veiru plushie
+  description: An adorable stuffed toy that resembles a veiru. Yip! Yap!
   components:
   - type: Sprite
-    sprite: Objects/Fun/Plushies/vulp.rsi
+    sprite: Objects/Fun/Plushies/veiru.rsi
     state: icon
   - type: EmitSoundOnUse
-    sound: &PlushieVulpSound
-      path: /Audio/Voice/Vulpkanin/howl.ogg
+    sound: &PlushieVeiruSound
+      path: /Audio/Voice/Veiru/howl.ogg
       params:
         volume: -5
   - type: EmitSoundOnLand
-    sound: *PlushieVulpSound
+    sound: *PlushieVeiruSound
   - type: EmitSoundOnActivate
-    sound: *PlushieVulpSound
+    sound: *PlushieVeiruSound
   - type: EmitSoundOnTrigger
-    sound: *PlushieVulpSound
+    sound: *PlushieVeiruSound
   - type: Edible
     requiresSpecialDigestion: true
     useSound:
-      path: /Audio/Voice/Vulpkanin/vulp_scream4.ogg
+      path: /Audio/Voice/Veiru/veiru_scream4.ogg
       params:
         volume: -5
   - type: MeleeWeapon
-    soundHit: *PlushieVulpSound
+    soundHit: *PlushieVeiruSound
   - type: Clothing
     quickEquip: false
-    sprite: Objects/Fun/Plushies/vulp.rsi
+    sprite: Objects/Fun/Plushies/veiru.rsi
     slots:
     - HEAD
     clothingVisuals:
@@ -1294,7 +1294,7 @@
         offset: "0, 0.0625"
   - type: FoodSequenceElement
     entries:
-      CottonBurger: PlushieVulp
+      CottonBurger: PlushieVeiru
 
 - type: entity
   parent: BasePlushie

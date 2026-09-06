@@ -74,9 +74,6 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
     private void OnEntityInserted(Entity<StatusEffectContainerComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        if (_timing.ApplyingState)
-            return;
-
         if (args.Container.ID != StatusEffectContainerComponent.ContainerId)
             return;
 
@@ -93,9 +90,6 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
     private void OnEntityRemoved(Entity<StatusEffectContainerComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        if (_timing.ApplyingState)
-            return;
-
         if (args.Container.ID != StatusEffectContainerComponent.ContainerId)
             return;
 

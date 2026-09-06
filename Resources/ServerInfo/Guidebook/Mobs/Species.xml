@@ -16,7 +16,7 @@
   <GuideEntityEmbed Entity="AppearanceVox" Caption="Vox"/>
   </Box>
   <Box>
-    <GuideEntityEmbed Entity="AppearanceVulpkanin" Caption="Vulpkanin"/>
+    <GuideEntityEmbed Entity="AppearanceVeiru" Caption="Veiru"/>
   </Box>
 
 </Document>

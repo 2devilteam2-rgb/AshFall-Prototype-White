@@ -1,3 +1,4 @@
+using Ashfall.Client.Stylesheets;
 using Content.Client.Stylesheets;
 using Content.Client.Stylesheets.Fonts;
 using Content.Client.Stylesheets.Stylesheets;
@@ -8,9 +9,9 @@ using static Content.Client.Stylesheets.StylesheetHelpers;
 namespace Content.Client.MainMenu.UI;
 
 [CommonSheetlet]
-public sealed class MainMenuSheetlet : Sheetlet<NanotrasenStylesheet>
+public sealed class MainMenuSheetlet : Sheetlet<AshfallStylesheet>
 {
-    public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
+    public override StyleRule[] GetRules(AshfallStylesheet sheet, object config)
     {
         return
         [

@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby.UI.ProfileEditorControls;
 
-public sealed partial class ProfilePreviewSpriteView : SpriteView
+public partial class ProfilePreviewSpriteView : SpriteView
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private ISharedPlayerManager _playerManager = default!;

@@ -18,11 +18,12 @@ public sealed class ContextMenuSheetlet<T> : Sheetlet<T>
     where T : PalettedStylesheet, IWindowConfig, IButtonConfig, IIconConfig
 {
     // TODO: make this not hardcoded (I am too scared to change the context menu colors)
-    private static readonly ColorPalette ContextButtonPalette = ColorPalette.FromHexBase("#000000") with
+    private static readonly ColorPalette ContextButtonPalette = ColorPalette.FromHexBase("#161a1e") with
     {
-        HoveredElement = Color.DarkSlateGray,
-        Element = Color.FromHex("#1119"),
-        PressedElement = Color.LightSlateGray,
+        Element = Color.FromHex("#1a2026e6"),
+        HoveredElement = Color.FromHex("#3d2a18"),
+        PressedElement = Color.FromHex("#573a21"),
+        DisabledElement = Color.FromHex("#121619a0"),
     };
 
     public override StyleRule[] GetRules(T sheet, object config)

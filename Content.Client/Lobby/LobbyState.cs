@@ -132,6 +132,9 @@ namespace Content.Client.Lobby
                 return;
             }
 
+            if (_entityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterGenSystem>(out var ashfallGen))
+                Lobby!.ReadyButton.Disabled = ashfallGen.SelectedCandidate == null || ashfallGen.SelectedJob == null;
+
             Lobby!.StationTime.Text = Loc.GetString("lobby-state-player-status-round-not-started");
             string text;
 
@@ -180,7 +183,7 @@ namespace Content.Client.Lobby
         {
             if (_gameTicker.IsGameStarted)
             {
-                Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
+                Lobby!.ReadyButton.Text = Loc.GetString("ashfall-lobby-join-shift-action");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
                 Lobby!.ObserveButton.Disabled = false;
@@ -189,7 +192,9 @@ namespace Content.Client.Lobby
             {
                 Lobby!.StartTime.Text = string.Empty;
                 Lobby!.ReadyButton.Pressed = _gameTicker.AreWeReady;
-                Lobby!.ReadyButton.Text = Loc.GetString(Lobby!.ReadyButton.Pressed ? "lobby-state-player-status-ready": "lobby-state-player-status-not-ready");
+                Lobby!.ReadyButton.Text = Loc.GetString(Lobby!.ReadyButton.Pressed
+                    ? "ashfall-lobby-cancel-ready-action"
+                    : "ashfall-lobby-ready-action");
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
@@ -264,7 +269,8 @@ namespace Content.Client.Lobby
             }
             else
             {
-                Lobby!.Background.Texture = null;
+                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(
+                    "/Textures/Ashfall/UI/main-menu-splash.png");
 
                 Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-no-background-text"));
             }

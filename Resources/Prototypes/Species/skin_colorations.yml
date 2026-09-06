@@ -44,7 +44,7 @@
   realisticColors: true
 
 - type: skinColoration
-  id: VulpkaninColors
+  id: VeiruColors
   strategy: !type:HueNodeClampedHsvColoration
     nodes:
     - hue: 0 # From red to orange slowly increase saturation. (0.75 -> 0.9)

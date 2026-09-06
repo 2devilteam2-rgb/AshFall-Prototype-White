@@ -16,7 +16,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Lobby.UI.ProfileEditorControls;
 
-public sealed partial class ProfilePreviewSpriteView
+public partial class ProfilePreviewSpriteView
 {
     /// <summary>
     /// A slim reload that only updates the entity itself and not any of the job entities, etc.
@@ -61,15 +61,18 @@ public sealed partial class ProfilePreviewSpriteView
 
         if (humanoid != null && jobClothes)
         {
-            DebugTools.Assert(job != null);
-
-            GiveDummyJobClothes(humanoid, job);
-
-            if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID)))
+            if (job != null)
             {
-                var loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
-                GiveDummyLoadout(loadout);
+                GiveDummyJobClothes(humanoid, job);
+
+                if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID)))
+                {
+                    var loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
+                    GiveDummyLoadout(loadout);
+                }
             }
+
+            EnsureFallbackClothes(job);
         }
     }
 
@@ -176,6 +179,55 @@ public sealed partial class ProfilePreviewSpriteView
             {
                 var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
                 inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
+            }
+        }
+    }
+
+    private void EnsureFallbackClothes(JobPrototype? job)
+    {
+        var inventorySys = EntMan.System<InventorySystem>();
+        if (!inventorySys.TryGetSlots(PreviewDummy, out _))
+            return;
+
+        if (!inventorySys.TryGetSlotEntity(PreviewDummy, "jumpsuit", out var currentJumpsuit) || !currentJumpsuit.Value.IsValid())
+        {
+            string jumpsuitId = "ClothingUniformJumpsuitColorGrey";
+            if (job != null)
+            {
+                var id = job.ID.ToLowerInvariant();
+                if (id.Contains("med") || id.Contains("doc") || id.Contains("chem"))
+                    jumpsuitId = "ClothingUniformJumpsuitMedical";
+                else if (id.Contains("eng") || id.Contains("tech") || id.Contains("atmos"))
+                    jumpsuitId = "ClothingUniformJumpsuitEngineering";
+                else if (id.Contains("sec") || id.Contains("officer") || id.Contains("warden"))
+                    jumpsuitId = "ClothingUniformJumpsuitSecurity";
+                else if (id.Contains("sci") || id.Contains("research"))
+                    jumpsuitId = "ClothingUniformJumpsuitScientist";
+                else if (id.Contains("cargo") || id.Contains("salvage"))
+                    jumpsuitId = "ClothingUniformJumpsuitCargo";
+            }
+
+            try
+            {
+                var jumpsuit = EntMan.SpawnEntity(jumpsuitId, MapCoordinates.Nullspace);
+                inventorySys.TryEquip(PreviewDummy, jumpsuit, "jumpsuit", true, true);
+            }
+            catch
+            {
+                // Fallback ignore
+            }
+        }
+
+        if (!inventorySys.TryGetSlotEntity(PreviewDummy, "shoes", out var currentShoes) || !currentShoes.Value.IsValid())
+        {
+            try
+            {
+                var shoes = EntMan.SpawnEntity("ClothingShoesColorBlack", MapCoordinates.Nullspace);
+                inventorySys.TryEquip(PreviewDummy, shoes, "shoes", true, true);
+            }
+            catch
+            {
+                // Fallback ignore
             }
         }
     }

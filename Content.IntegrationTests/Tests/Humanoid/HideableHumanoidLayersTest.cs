@@ -11,7 +11,7 @@ namespace Content.IntegrationTests.Tests.Humanoid;
 [TestOf(typeof(SharedHideableHumanoidLayersSystem))]
 public sealed class HideableHumanoidLayersTest : InteractionTest
 {
-    protected override string PlayerPrototype => "MobVulpkanin";
+    protected override string PlayerPrototype => "MobVeiru";
 
     [Test]
     public async Task BasicHiding()
@@ -45,7 +45,7 @@ public sealed class HideableHumanoidLayersTest : InteractionTest
             {
                 ["Head"] = new()
                 {
-                    [HumanoidVisualLayers.SnoutCover] = new List<Marking>() { new("VulpSnoutNose", 1) },
+                    [HumanoidVisualLayers.SnoutCover] = new List<Marking>() { new("VeiruSnoutCover", 1) },
                 },
             });
         });
@@ -59,8 +59,8 @@ public sealed class HideableHumanoidLayersTest : InteractionTest
         await Client.WaitAssertion(() =>
         {
             var spriteSystem = CEntMan.System<SpriteSystem>();
-            var snoutIndex = spriteSystem.LayerMapGet(CPlayer, "VulpSnout-snout");
-            var snoutCoverIndex = spriteSystem.LayerMapGet(CPlayer, "VulpSnoutNose-snout-nose");
+            var snoutIndex = spriteSystem.LayerMapGet(CPlayer, "VeiruMuzzle-muzzle");
+            var snoutCoverIndex = spriteSystem.LayerMapGet(CPlayer, "VeiruSnoutCover-nose");
             var spriteComp = CEntMan.GetComponent<SpriteComponent>(CPlayer);
 
             Assert.That(spriteComp[snoutIndex].Visible, Is.False);
@@ -77,8 +77,8 @@ public sealed class HideableHumanoidLayersTest : InteractionTest
         await Client.WaitAssertion(() =>
         {
             var spriteSystem = CEntMan.System<SpriteSystem>();
-            var snoutIndex = spriteSystem.LayerMapGet(CPlayer, "VulpSnout-snout");
-            var snoutCoverIndex = spriteSystem.LayerMapGet(CPlayer, "VulpSnoutNose-snout-nose");
+            var snoutIndex = spriteSystem.LayerMapGet(CPlayer, "VeiruMuzzle-muzzle");
+            var snoutCoverIndex = spriteSystem.LayerMapGet(CPlayer, "VeiruSnoutCover-nose");
             var spriteComp = CEntMan.GetComponent<SpriteComponent>(CPlayer);
 
             Assert.That(spriteComp[snoutIndex].Visible, Is.True);

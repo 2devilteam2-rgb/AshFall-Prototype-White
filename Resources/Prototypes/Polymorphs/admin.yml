@@ -8,9 +8,9 @@
     ignoreAllowRepeatedMorphs: true
 
 - type: polymorph
-  id: AdminVulpSmite
+  id: AdminVeiruSmite
   configuration:
-    entity: MobVulpkanin
+    entity: MobVeiru
     forced: true
     transferName: true
     inventory: Transfer

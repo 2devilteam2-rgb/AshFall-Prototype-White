@@ -94468,7 +94468,7 @@ entities:
     - type: Transform
       parent: 2
       pos: 5.463807,-69.237144
-- proto: PlushieVulp
+- proto: PlushieVeiru
   entities:
   - uid: 13963
     components:

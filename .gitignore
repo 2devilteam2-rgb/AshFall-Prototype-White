@@ -319,3 +319,6 @@ error.glsl
 
 # C# Dev Kit cache file
 *.lscache
+
+# Local ASHFALL staging area. Nothing in this directory belongs in commits.
+/!Test-Do-Not-Push/

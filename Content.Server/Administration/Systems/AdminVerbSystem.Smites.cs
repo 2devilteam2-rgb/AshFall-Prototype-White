@@ -27,7 +27,6 @@ using Content.Shared.Body.Systems;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Cluwne;
 using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Electrocution;
@@ -50,7 +49,6 @@ using Content.Shared.Slippery;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Storage.Components;
-using Content.Shared.Suicide;
 using Content.Shared.Tabletop.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
@@ -72,8 +70,7 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId<StatusEffectComponent> MaidStatus = "StatusEffectClumsyMaid";
 
     private readonly ProtoId<PolymorphPrototype> LizardSmite = "AdminLizardSmite";
-    private readonly ProtoId<PolymorphPrototype> VulpkaninSmite = "AdminVulpSmite";
-    private readonly ProtoId<DamageTypePrototype> _asphyxiationDamageType = "Asphyxiation";
+    private readonly ProtoId<PolymorphPrototype> VeiruSmite = "AdminVeiruSmite";
 
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -105,7 +102,6 @@ public sealed partial class AdminVerbSystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private AtmosDeviceSystem _atmosDevice = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
-    [Dependency] private SharedSuicideSystem _suicide = default!;
 
     private readonly EntProtoId _actionViewLawsProtoId = "ActionViewLaws";
     private readonly ProtoId<SiliconLawsetPrototype> _crewsimovLawset = "Crewsimov";
@@ -277,22 +273,6 @@ public sealed partial class AdminVerbSystem
                 Message = string.Join(": ", hardElectrocuteName, Loc.GetString("admin-smite-electrocute-description"))
             };
             args.Verbs.Add(hardElectrocute);
-
-            var heartAttackName = Loc.GetString("admin-smite-heartattack-name").ToLowerInvariant();
-            Verb heartAttack = new()
-            {
-                Text = heartAttackName,
-                Category = VerbCategory.Smite,
-                Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Alerts/human_crew_monitoring.rsi"), "dead"),
-                Act = () =>
-                {
-                    // If God would had wanted Me to Live he would not have created A Heart Attack!
-                    _suicide.ApplyLethalDamage((args.Target, damageable), _asphyxiationDamageType);
-                },
-                Impact = LogImpact.Extreme,
-                Message = string.Join(": ", heartAttackName, Loc.GetString("admin-smite-heartattack-description"))
-            };
-            args.Verbs.Add(heartAttack);
         }
 
         if (TryComp<CreamPiedComponent>(args.Target, out var creamPied))
@@ -773,20 +753,20 @@ public sealed partial class AdminVerbSystem
         };
         args.Verbs.Add(reptilian);
 
-        var vulpName = Loc.GetString("admin-smite-vulpkanin-species-swap-name").ToLowerInvariant();
-        Verb vulp = new()
+        var veiruName = Loc.GetString("admin-smite-veiru-species-swap-name").ToLowerInvariant();
+        Verb veiru = new()
         {
-            Text = vulpName,
+            Text = veiruName,
             Category = VerbCategory.Smite,
             Icon = new SpriteSpecifier.Rsi(new ("/Textures/Objects/Fun/Balls/tennisball.rsi"), "icon"),
             Act = () =>
             {
-                _polymorphSystem.PolymorphEntity(args.Target, VulpkaninSmite);
+                _polymorphSystem.PolymorphEntity(args.Target, VeiruSmite);
             },
             Impact = LogImpact.Extreme,
-            Message = string.Join(": ", vulpName, Loc.GetString("admin-smite-vulpkanin-species-swap-description"))
+            Message = string.Join(": ", veiruName, Loc.GetString("admin-smite-veiru-species-swap-description"))
         };
-        args.Verbs.Add(vulp);
+        args.Verbs.Add(veiru);
 
         var lockerName = Loc.GetString("admin-smite-locker-stuff-name").ToLowerInvariant();
         Verb locker = new()

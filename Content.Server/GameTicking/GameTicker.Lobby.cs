@@ -150,9 +150,14 @@ namespace Content.Server.GameTicking
 
         public void ToggleReadyAll(bool ready)
         {
-            var status = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             foreach (var playerUserId in _playerGameStatuses.Keys)
             {
+                var hasSelection = !ready ||
+                                   !EntityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterPoolSystem>(out var ashfallPool) ||
+                                   ashfallPool.HasCompleteSelection(playerUserId);
+                var status = ready && hasSelection
+                    ? PlayerGameStatus.ReadyToPlay
+                    : PlayerGameStatus.NotReadyToPlay;
                 _playerGameStatuses[playerUserId] = status;
                 if (!_playerManager.TryGetSessionById(playerUserId, out var playerSession))
                     continue;
@@ -170,6 +175,14 @@ namespace Content.Server.GameTicking
 
             if (RunLevel != GameRunLevel.PreRoundLobby)
             {
+                return;
+            }
+
+            if (ready &&
+                EntityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterPoolSystem>(out var ashfallPool) &&
+                !ashfallPool.HasCompleteSelection(player.UserId))
+            {
+                RaiseNetworkEvent(GetStatusMsg(player), player.Channel);
                 return;
             }
 

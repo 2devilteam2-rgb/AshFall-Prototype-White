@@ -65,10 +65,4 @@ public sealed partial class GroupSelector : EntityTableSelectorWithChildrenBase
             }
         }
     }
-
-    /// <inheritdoc/>
-    public override string ToString()
-    {
-        return $"Group({string.Join(", ", Children.Select(x => $"{x}: {x.Weight}"))})";
-    }
 }

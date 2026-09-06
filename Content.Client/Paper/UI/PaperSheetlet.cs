@@ -1,3 +1,4 @@
+using Ashfall.Client.Stylesheets;
 using Content.Client.Resources;
 using Content.Client.Stylesheets;
 using Content.Client.Stylesheets.SheetletConfigs;
@@ -10,9 +11,9 @@ using static Content.Client.Stylesheets.StylesheetHelpers;
 namespace Content.Client.Paper.UI;
 
 [CommonSheetlet]
-public sealed class PaperSheetlet : Sheetlet<NanotrasenStylesheet>
+public sealed class PaperSheetlet : Sheetlet<AshfallStylesheet>
 {
-    public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
+    public override StyleRule[] GetRules(AshfallStylesheet sheet, object config)
     {
         var windowCfg = (IWindowConfig)sheet;
 

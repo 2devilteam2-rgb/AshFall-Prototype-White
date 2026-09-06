@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.CrewManifest;
+using Content.Client.Ashfall.CharacterGen;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Lobby;
 using Content.Client.UserInterface.Controls;
@@ -86,6 +87,9 @@ namespace Content.Client.LateJoin
 
             if (!_gameTicker.DisallowedLateJoin && _gameTicker.StationNames.Count == 0)
                 _sawmill.Warning("No stations exist, nothing to display in late-join GUI");
+
+            var ashfall = _entitySystem.GetEntitySystem<AshfallCharacterGenSystem>();
+            var selectedCandidate = ashfall.SelectedCandidate;
 
             foreach (var (id, name) in _gameTicker.StationNames)
             {
@@ -183,6 +187,9 @@ namespace Content.Client.LateJoin
                         if (!stationAvailable.ContainsKey(jobId))
                             continue;
 
+                        if (selectedCandidate == null || !selectedCandidate.CompatibleJobs.Contains(jobId))
+                            continue;
+
                         jobsAvailable.Add(_prototypeManager.Index<JobPrototype>(jobId));
                     }
 
@@ -266,7 +273,7 @@ namespace Content.Client.LateJoin
 
                         jobButton.OnPressed += _ => SelectedId.Invoke((id, jobButton.JobId));
 
-                        if (!_jobRequirements.IsAllowed(prototype, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
+                        if (!_jobRequirements.IsAllowed(prototype, selectedCandidate?.Profile, out var reason))
                         {
                             jobButton.Disabled = true;
 

@@ -155,9 +155,9 @@
     state: tattoo_eye_moth_l
 
 - type: marking
-  id: TattooEyeVulpkaninRight
+  id: TattooEyeVeiruRight
   bodyPart: Eyes
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type:
@@ -165,12 +165,12 @@
           negative: true
   sprites:
   - sprite: Mobs/Customization/tattoos.rsi
-    state: tattoo_eye_vulpkanin_r
+    state: tattoo_eye_veiru_r
 
 - type: marking
-  id: TattooEyeVulpkaninLeft
+  id: TattooEyeVeiruLeft
   bodyPart: Eyes
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type:
@@ -178,7 +178,7 @@
           negative: true
   sprites:
   - sprite: Mobs/Customization/tattoos.rsi
-    state: tattoo_eye_vulpkanin_l
+    state: tattoo_eye_veiru_l
 
 - type: marking
   id: TattooEyeshadowUpper

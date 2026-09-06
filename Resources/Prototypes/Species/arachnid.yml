@@ -6,9 +6,9 @@
   defaultSkinTone: "#385878"
   dollPrototype: AppearanceArachnid
   skinColoration: Hues
-  maleFirstNames: NamesArachnidFirst
-  femaleFirstNames: NamesArachnidFirst
-  lastNames: NamesArachnidLast
+  maleFirstNames: NamesAshfallArachnidFirst
+  femaleFirstNames: NamesAshfallArachnidFirst
+  lastNames: NamesAshfallArachnidLast
   sexes:
   - Unsexed
   defaultSoundsBySex:

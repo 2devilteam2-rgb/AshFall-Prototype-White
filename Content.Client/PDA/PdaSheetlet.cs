@@ -1,3 +1,4 @@
+using Ashfall.Client.Stylesheets;
 using Content.Client.PDA;
 using Content.Client.Stylesheets;
 using Content.Client.Stylesheets.Sheetlets;
@@ -11,12 +12,12 @@ using static Content.Client.Stylesheets.StylesheetHelpers;
 namespace Content.Client.PDA;
 
 [CommonSheetlet]
-public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
+public sealed class PdaSheetlet : Sheetlet<AshfallStylesheet>
 {
-    public override StyleRule[] GetRules(NanotrasenStylesheet sheet, object config)
+    public override StyleRule[] GetRules(AshfallStylesheet sheet, object config)
     {
-        IPanelConfig panelCfg = sheet;
-        IButtonConfig btnCfg = sheet;
+        var panelCfg = (IPanelConfig) sheet;
+        var btnCfg = (IButtonConfig) sheet;
 
         // TODO: This should have its own set of images, instead of using button cfg directly.
         var angleBorderRect =
@@ -90,4 +91,3 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
         ];
     }
 }
-

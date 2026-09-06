@@ -182,13 +182,13 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
     private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)
     {
-        if (!IsAllowed(ev.Player, ev.Jobs) || !IsAllowed(ev.Player, ev.Antags))
+        if (!IsAllowed(ev.Player, ev.Jobs, ev.Profile) || !IsAllowed(ev.Player, ev.Antags, ev.Profile))
             ev.Cancelled = true;
     }
 
     private void OnGetDisallowedJobs(ref GetDisallowedJobsEvent ev)
     {
-        ev.Jobs.UnionWith(GetDisallowedJobs(ev.Player));
+        ev.Jobs.UnionWith(GetDisallowedJobs(ev.Player, ev.Profile));
     }
 
     /// <summary>
@@ -197,14 +197,17 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <param name="player">The player.</param>
     /// <param name="jobs">A list of role prototype IDs</param>
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
-    public bool IsAllowed(ICommonSession player, List<ProtoId<JobPrototype>>? jobs)
+    public bool IsAllowed(
+        ICommonSession player,
+        List<ProtoId<JobPrototype>>? jobs,
+        HumanoidCharacterProfile? profile = null)
     {
         if (jobs is null)
             return true;
 
         foreach (var job in jobs)
         {
-            if (!IsAllowed(player, job))
+            if (!IsAllowed(player, job, profile))
                 return false;
         }
 
@@ -217,14 +220,17 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <param name="player">The player.</param>
     /// <param name="antags">A list of role prototype IDs</param>
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
-    public bool IsAllowed(ICommonSession player, List<ProtoId<AntagPrototype>>? antags)
+    public bool IsAllowed(
+        ICommonSession player,
+        List<ProtoId<AntagPrototype>>? antags,
+        HumanoidCharacterProfile? profile = null)
     {
         if (antags is null)
             return true;
 
         foreach (var antag in antags)
         {
-            if (!IsAllowed(player, antag))
+            if (!IsAllowed(player, antag, profile))
                 return false;
         }
 
@@ -237,7 +243,10 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <param name="player">The player.</param>
     /// <param name="job">A list of role prototype IDs</param>
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
-    public bool IsAllowed(ICommonSession player, ProtoId<JobPrototype> job)
+    public bool IsAllowed(
+        ICommonSession player,
+        ProtoId<JobPrototype> job,
+        HumanoidCharacterProfile? profile = null)
     {
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
@@ -255,8 +264,7 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             out _,
             EntityManager,
             ProtoMan,
-            (HumanoidCharacterProfile?)
-            _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
+            profile ?? (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
     }
 
     /// <summary>
@@ -265,7 +273,10 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
     /// <param name="player">The player.</param>
     /// <param name="antag">A list of role prototype IDs</param>
     /// <returns>Returns true if all requirements were met or there were no requirements.</returns>
-    public bool IsAllowed(ICommonSession player, ProtoId<AntagPrototype> antag)
+    public bool IsAllowed(
+        ICommonSession player,
+        ProtoId<AntagPrototype> antag,
+        HumanoidCharacterProfile? profile = null)
     {
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
             return true;
@@ -283,11 +294,12 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
             out _,
             EntityManager,
             ProtoMan,
-            (HumanoidCharacterProfile?)
-            _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
+            profile ?? (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter);
     }
 
-    public HashSet<ProtoId<JobPrototype>> GetDisallowedJobs(ICommonSession player)
+    public HashSet<ProtoId<JobPrototype>> GetDisallowedJobs(
+        ICommonSession player,
+        HumanoidCharacterProfile? profile = null)
     {
         var roles = new HashSet<ProtoId<JobPrototype>>();
         if (!_cfg.GetCVar(CCVars.GameRoleTimers))
@@ -301,7 +313,13 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
         foreach (var job in ProtoMan.EnumeratePrototypes<JobPrototype>())
         {
-            if (!JobRequirements.TryRequirementsMet(job, playTimes, out _, EntityManager, ProtoMan, (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter))
+            if (!JobRequirements.TryRequirementsMet(
+                    job,
+                    playTimes,
+                    out _,
+                    EntityManager,
+                    ProtoMan,
+                    profile ?? (HumanoidCharacterProfile?) _preferencesManager.GetPreferences(player.UserId).SelectedCharacter))
                 roles.Add(job.ID);
         }
 

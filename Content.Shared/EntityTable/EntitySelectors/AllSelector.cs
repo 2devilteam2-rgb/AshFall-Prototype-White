@@ -45,10 +45,4 @@ public sealed partial class AllSelector : EntityTableSelectorWithChildrenBase
             }
         }
     }
-
-    /// <inheritdoc/>
-    public override string ToString()
-    {
-        return $"All({string.Join(", ", Children)})";
-    }
 }

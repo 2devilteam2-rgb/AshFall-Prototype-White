@@ -103,48 +103,48 @@ marking-GauzeMothLowerLegRight = Insectoid Gauze Shin Wrap (Right)
 marking-GauzeMothLowerLegLeft-gauze_moth_lowerleg_l = Insectoid Gauze Shin Wrap (Left)
 marking-GauzeMothLowerLegLeft = Insectoid Gauze Shin Wrap (Left)
 
-marking-GauzeVulpStomach-gauze_vulp_abdomen = Vulpkanin Gauze Stomach Wrap
-marking-GauzeVulpStomach = Vulpkanin Gauze Stomach Wrap
+marking-GauzeVeiruStomach-gauze_veiru_abdomen = Veiru Gauze Stomach Wrap
+marking-GauzeVeiruStomach = Veiru Gauze Stomach Wrap
 
-marking-GauzeVulpBlindfold-gauze_vulp_blindfold = Vulpkanin Blindfold
-marking-GauzeVulpBlindfold = Vulpkanin Blindfold
+marking-GauzeVeiruBlindfold-gauze_veiru_blindfold = Veiru Blindfold
+marking-GauzeVeiruBlindfold = Veiru Blindfold
 
-marking-GauzeVulpBoxerwrapLeft-gauze_vulp_boxerwrap_l = Vulpkanin Gauze Hand Wrap (Left)
-marking-GauzeVulpBoxerwrapLeft = Vulpkanin Gauze Hand Wrap (Left)
+marking-GauzeVeiruBoxerwrapLeft-gauze_veiru_boxerwrap_l = Veiru Gauze Hand Wrap (Left)
+marking-GauzeVeiruBoxerwrapLeft = Veiru Gauze Hand Wrap (Left)
 
-marking-GauzeVulpBoxerwrapRight-gauze_vulp_boxerwrap_r = Vulpkanin Gauze Hand Wrap (Right)
-marking-GauzeVulpBoxerwrapRight = Vulpkanin Gauze Hand Wrap (Right)
+marking-GauzeVeiruBoxerwrapRight-gauze_veiru_boxerwrap_r = Veiru Gauze Hand Wrap (Right)
+marking-GauzeVeiruBoxerwrapRight = Veiru Gauze Hand Wrap (Right)
 
-marking-GauzeVulpHead-gauze_vulp_head = Vulpkanin Gauze Head Wrap
-marking-GauzeVulpHead = Vulpkanin Gauze Head Wrap
+marking-GauzeVeiruHead-gauze_veiru_head = Veiru Gauze Head Wrap
+marking-GauzeVeiruHead = Veiru Gauze Head Wrap
 
-marking-GauzeVulpLeftArm-gauze_vulp_leftarm = Vulpkanin Gauze Arm Wrap (Left)
-marking-GauzeVulpLeftArm = Vulpkanin Gauze Arm Wrap (Left)
+marking-GauzeVeiruLeftArm-gauze_veiru_leftarm = Veiru Gauze Arm Wrap (Left)
+marking-GauzeVeiruLeftArm = Veiru Gauze Arm Wrap (Left)
 
-marking-GauzeVulpLefteyePatch-gauze_vulp_lefteye_2 = Vulpkanin Gauze Eyepatch (Left)
-marking-GauzeVulpLefteyePatch = Vulpkanin Gauze Eyepatch (Left)
+marking-GauzeVeiruLefteyePatch-gauze_veiru_lefteye_2 = Veiru Gauze Eyepatch (Left)
+marking-GauzeVeiruLefteyePatch = Veiru Gauze Eyepatch (Left)
 
-marking-GauzeVulpLowerArmRight-gauze_vulp_lowerarm_r = Vulpkanin Gauze Wrist Wrap (Right)
-marking-GauzeVulpLowerArmRight = Vulpkanin Gauze Wrist Wrap (Right)
+marking-GauzeVeiruLowerArmRight-gauze_veiru_lowerarm_r = Veiru Gauze Wrist Wrap (Right)
+marking-GauzeVeiruLowerArmRight = Veiru Gauze Wrist Wrap (Right)
 
-marking-GauzeVulpLowerLegLeft-gauze_vulp_lowerleg_l = Vulpkanin Gauze Ankle Wrap (Left)
-marking-GauzeVulpLowerLegLeft = Vulpkanin Gauze Ankle Wrap (Left)
+marking-GauzeVeiruLowerLegLeft-gauze_veiru_lowerleg_l = Veiru Gauze Ankle Wrap (Left)
+marking-GauzeVeiruLowerLegLeft = Veiru Gauze Ankle Wrap (Left)
 
-marking-GauzeVulpLowerLegRight-gauze_vulp_lowerleg_r = Vulpkanin Gauze Ankle Wrap (Right)
-marking-GauzeVulpLowerLegRight = Vulpkanin Gauze Ankle Wrap (Right)
+marking-GauzeVeiruLowerLegRight-gauze_veiru_lowerleg_r = Veiru Gauze Ankle Wrap (Right)
+marking-GauzeVeiruLowerLegRight = Veiru Gauze Ankle Wrap (Right)
 
-marking-GauzeVulpRighteyePatch-gauze_vulp_righteye_2 = Vulpkanin Gauze Eyepatch (Right)
-marking-GauzeVulpRighteyePatch = Vulpkanin Gauze Eyepatch (Right)
+marking-GauzeVeiruRighteyePatch-gauze_veiru_righteye_2 = Veiru Gauze Eyepatch (Right)
+marking-GauzeVeiruRighteyePatch = Veiru Gauze Eyepatch (Right)
 
-marking-GauzeVulpShoulder-gauze_vulp_shoulder = Vulpkanin Gauze Shoulder Sling
-marking-GauzeVulpShoulder = Vulpkanin Gauze Shoulder Sling
+marking-GauzeVeiruShoulder-gauze_veiru_shoulder = Veiru Gauze Shoulder Sling
+marking-GauzeVeiruShoulder = Veiru Gauze Shoulder Sling
 
-marking-GauzeVulpUpperArmRight-gauze_vulp_upperarm_r = Vulpkanin Gauze Forearm Wrap (Right)
-marking-GauzeVulpUpperArmRight = Vulpkanin Gauze Forearm Wrap (Right)
+marking-GauzeVeiruUpperArmRight-gauze_veiru_upperarm_r = Veiru Gauze Forearm Wrap (Right)
+marking-GauzeVeiruUpperArmRight = Veiru Gauze Forearm Wrap (Right)
 
-marking-GauzeVulpUpperLegLeft-gauze_vulp_upperleg_l = Vulpkanin Gauze Thigh Wrap (Left)
-marking-GauzeVulpUpperLegLeft = Vulpkanin Gauze Thigh Wrap (Left)
+marking-GauzeVeiruUpperLegLeft-gauze_veiru_upperleg_l = Veiru Gauze Thigh Wrap (Left)
+marking-GauzeVeiruUpperLegLeft = Veiru Gauze Thigh Wrap (Left)
 
-marking-GauzeVulpUpperLegRight-gauze_vulp_upperleg_r = Vulpkanin Gauze Thigh Wrap (Right)
-marking-GauzeVulpUpperLegRight = Vulpkanin Gauze Thigh Wrap (Right)
+marking-GauzeVeiruUpperLegRight-gauze_veiru_upperleg_r = Veiru Gauze Thigh Wrap (Right)
+marking-GauzeVeiruUpperLegRight = Veiru Gauze Thigh Wrap (Right)
 

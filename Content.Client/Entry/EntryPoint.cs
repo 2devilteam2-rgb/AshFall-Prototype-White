@@ -1,4 +1,5 @@
 using Content.Client.Administration.Managers;
+using Content.Client.Ashfall.CharacterGen;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.DebugMon;
@@ -26,6 +27,7 @@ using Content.Client.UserInterface;
 using Content.Client.Viewport;
 using Content.Client.Voting;
 using Content.Shared.Ame.Components;
+using Content.Shared.Ashfall.CharacterGen;
 using Content.Shared.FeedbackSystem;
 using Content.Shared.Gravity;
 using Content.Shared.Localizations;
@@ -38,6 +40,7 @@ using Robust.Client.UserInterface;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Timing;
@@ -80,6 +83,7 @@ namespace Content.Client.Entry
         [Dependency] private IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private ClientsidePlaytimeTrackingManager _clientsidePlaytimeManager = default!;
         [Dependency] private ClientFeedbackManager _feedbackManager = null!;
+        [Dependency] private INetManager _netManager = default!;
 
         public override void PreInit()
         {
@@ -97,6 +101,12 @@ namespace Content.Client.Entry
             Dependencies.BuildGraph();
             Dependencies.InjectDependencies(this);
 
+            _netManager.RegisterNetMessage<MsgAshfallRequestPool>();
+            _netManager.RegisterNetMessage<MsgAshfallSelectCandidate>();
+            _netManager.RegisterNetMessage<MsgAshfallPoolResponse>(msg =>
+                _entitySystemManager.GetEntitySystemOrNull<AshfallCharacterGenSystem>()?.HandlePoolResponse(msg));
+
+            _configManager.OverrideDefault(CVars.LocCultureName, "ru-RU");
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();

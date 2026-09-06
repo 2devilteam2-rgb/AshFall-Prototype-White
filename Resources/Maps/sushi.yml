@@ -122395,7 +122395,7 @@ entities:
     - type: Transform
       parent: 2
       pos: 84.51142,85.579506
-- proto: PlushieVulp
+- proto: PlushieVeiru
   entities:
   - uid: 384
     components:

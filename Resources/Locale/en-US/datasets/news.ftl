@@ -1,4 +1,4 @@
-news-dataset-1 = Tree stuck in tajaran; firefighters baffled.
+news-dataset-1 = Tree stuck in veiru; firefighters baffled.
 news-dataset-2 = Armadillos want aardvarks removed from dictionary claims 'here first'.
 news-dataset-3 = Angel found dancing on pinhead ordered to stop; cited for public nuisance.
 news-dataset-4 = Letters claim they are better than number; 'Always have been'.
@@ -6,7 +6,7 @@ news-dataset-5 = Pens proclaim pencils obsolete, 'lead is dead'.
 news-dataset-6 = Rock and paper sues scissors for discrimination.
 news-dataset-7 = Steak tell-all book reveals he never liked sitting by potato.
 news-dataset-8 = Woodchuck stops counting how many times he’s chucked 'Never again'.
-news-dataset-9 = 'Here kitty kitty' no longer preferred tajaran retrieval technique.
+news-dataset-9 = 'Here kitty kitty' no longer preferred veiru retrieval technique.
 news-dataset-10 = Man travels 7000 light years to retrieve lost hankie, 'It was my favourite'.
 news-dataset-11 = New bowling lane that shoots mini-meteors at bowlers very popular.
 news-dataset-12 = Skrell marries computer; wedding attended by 100 modems.
@@ -27,7 +27,7 @@ news-dataset-26 = Gibson Gazette Updates Frequently Absurd, Poll Indicates
 news-dataset-27 = Taj Demand Longer Breaks, Cleaner Litter, Slower Mice
 news-dataset-28 = Survey: 3 Out Of 5 Skrell Loathe Modern Art
 news-dataset-29 = Skrell Scientist Discovers Gravity While Falling Down Stairs
-news-dataset-30 = Humans Everywhere Agree: Purring Tajarans Are Happy Tajarans
+news-dataset-30 = Humans Everywhere Agree: Purring Veirus Are Happy Veirus
 news-dataset-31 = From The Desk Of Wise Guy Sammy: One Word In This Gazette Is Sdrawkcab
 news-dataset-32 = From The Desk Of Wise Guy Sammy: It's Hard To Have Too Much Shelf Space
 news-dataset-33 = From The Desk Of Wise Guy Sammy: Wine And Friendships Get Better With Age
@@ -77,8 +77,8 @@ news-dataset-62 = Broccoli discovered to be colonies of tiny aliens with murder 
 # Alien ambassador becomes lost on {{AFFECTED}}, refuses to ask for directions
 # Survey: 80% Of People on {{AFFECTED}} Love Clog-Dancing
 # {{AFFECTED}} Phonebooks Print All Wrong Numbers; Results In 15 New Marriages
-# Tajaran Burglar Spotted on {{AFFECTED}}, Mistaken For Dalmatian
+# Veiru Burglar Spotted on {{AFFECTED}}, Mistaken For Dalmatian
 # Esoteric Verbosity Culminates In Communicative Ennui, {{AFFECTED}} Academics Note
-# Boy Saves Tajaran From Tree on {{AFFECTED}}, Thousands Cheer
+# Boy Saves Veiru From Tree on {{AFFECTED}}, Thousands Cheer
 # Shipment Of Apples Overturns, {{AFFECTED}} Diner Offers Applesauce Special
 # Spotted Owl Spotted on {{AFFECTED}}

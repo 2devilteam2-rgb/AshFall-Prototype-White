@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "Original by Emisse, modified by EmoGarbage404. Vox states by Flareguy for SS14. Vulpkanin and Reptilian states by TiniestShark (Github).",
+    "copyright": "Original by Emisse, modified by EmoGarbage404. Vox states by Flareguy for SS14. Veiru and Reptilian states by TiniestShark (Github).",
 
     "size": {
         "x": 32,
@@ -42,15 +42,15 @@
             "directions": 4
         },
         {
-            "name": "equipped-head-vulpkanin",
+            "name": "equipped-head-veiru",
             "directions": 4
         },
         {
-            "name": "equipped-head-light-vulpkanin",
+            "name": "equipped-head-light-veiru",
             "directions": 4
         },
         {
-            "name": "equipped-head-unshaded-vulpkanin",
+            "name": "equipped-head-unshaded-veiru",
             "directions": 4
         },
         {

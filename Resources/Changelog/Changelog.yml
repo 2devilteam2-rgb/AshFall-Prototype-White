@@ -72,7 +72,7 @@ Entries:
   url: https://github.com/space-wizards/space-station-14/pull/43103
 - author: Minemoder
   changes:
-  - message: Vulpkanins can now use Gauze markings.
+  - message: Veirus can now use Gauze markings.
     type: Add
   id: 9568
   time: '2026-03-07T21:39:13.0000000+00:00'
@@ -975,7 +975,7 @@ Entries:
   url: https://github.com/space-wizards/space-station-14/pull/42145
 - author: Cabin-keeper
   changes:
-  - message: Added vulpkanin typing indicator
+  - message: Added veiru typing indicator
     type: Add
   id: 9687
   time: '2026-05-09T16:50:28.0000000+00:00'
@@ -1083,7 +1083,7 @@ Entries:
   url: https://github.com/space-wizards/space-station-14/pull/44003
 - author: ScarKy0
   changes:
-  - message: Vulpkanin can now use more saturated colors in the red-orange-yellow range.
+  - message: Veiru can now use more saturated colors in the red-orange-yellow range.
     type: Tweak
   - message: Vox are no longer hue restricted, but have decreased allowed saturation in the red-pink colors.
     type: Tweak
@@ -3778,10 +3778,3 @@ Entries:
   id: 10057
   time: '2026-08-31T09:34:33.0000000+00:00'
   url: https://github.com/space-wizards/space-station-14/pull/45692
-- author: SlothBasket
-  changes:
-  - message: Fixed incorrect temperature tolerances on several plants introduced by the botany refactor.
-    type: Fix
-  id: 10058
-  time: '2026-09-02T11:40:02.0000000+00:00'
-  url: https://github.com/space-wizards/space-station-14/pull/45801

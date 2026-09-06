@@ -47,10 +47,4 @@ public sealed partial class NestedSelector : EntityTableSelectorWithNestedBase
     {
         return proto.Index(TableId).Table.AverageSpawns(entMan, proto, ctx);
     }
-
-    /// <inheritdoc/>
-    public override string ToString()
-    {
-        return $"Nested({TableId})";
-    }
 }

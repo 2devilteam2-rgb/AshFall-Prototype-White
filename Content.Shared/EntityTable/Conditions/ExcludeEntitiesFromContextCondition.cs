@@ -11,7 +11,6 @@ public sealed partial class ExcludeEntitiesFromContextCondition : EntityTableCon
 {
     /// <summary>
     /// Context key used to track which entity prototypes should not be spawned.
-    /// Value should be <see cref="HashSet{EntityUid}"/>.
     /// </summary>
     public const string EntitiesToExclude = "EntitiesToExclude";
 

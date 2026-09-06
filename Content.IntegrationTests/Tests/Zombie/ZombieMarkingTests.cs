@@ -9,7 +9,7 @@ namespace Content.IntegrationTests.Tests.Zombie;
 [TestOf(typeof(ZombieSystem))]
 public sealed class ZombieMarkingTests : InteractionTest
 {
-    protected override string PlayerPrototype => "MobVulpkanin";
+    protected override string PlayerPrototype => "MobVeiru";
 
     [Test]
     public async Task ProfileApplication()

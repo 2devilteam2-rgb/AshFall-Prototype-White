@@ -282,7 +282,7 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
 
                 // If this marking is one that can be displaced, we need to remove the displacement as well; otherwise
                 // altering a marking at runtime can lead to the renderer falling over.
-                // The Vulps must be shaved.
+                // The Veirus must be shaved.
                 // (https://github.com/space-wizards/space-station-14/issues/40135).
                 if (proto.CanBeDisplaced)
                     _displacement.EnsureDisplacementIsNotOnSprite((target, target.Comp), layerId);

@@ -184,7 +184,14 @@ namespace Content.Server.GameTicking
 
         public HumanoidCharacterProfile GetPlayerProfile(ICommonSession p)
         {
-            return (HumanoidCharacterProfile) _prefsManager.GetPreferences(p.UserId).SelectedCharacter;
+            var legacyProfile = (HumanoidCharacterProfile) _prefsManager.GetPreferences(p.UserId).SelectedCharacter;
+            if (EntityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterPoolSystem>(out var ashfallPool) &&
+                ashfallPool.TryGetSelectedProfile(p.UserId, out var ashfallProfile))
+            {
+                return ashfallProfile;
+            }
+
+            return legacyProfile;
         }
 
         public void PlayerJoinGame(ICommonSession session, bool silent = false)

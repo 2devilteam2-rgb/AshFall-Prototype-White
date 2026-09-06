@@ -5,8 +5,8 @@ namespace Content.Client.Stylesheets;
 
 public interface IStylesheetManager
 {
-    /// Nanotrasen styles: the default style! Use this for most UIs
-    Stylesheet SheetNanotrasen { get; }
+    /// ASHFALL styles: the default style. Use this for player-facing UIs.
+    Stylesheet SheetAshfall { get; }
 
     ///
     /// System styles: use this for any admin / debug menus, and any odds and ends (like the changelog for some reason)
@@ -14,7 +14,7 @@ public interface IStylesheetManager
     Stylesheet SheetSystem { get; }
 
 
-    [Obsolete("Update to use SheetNanotrasen instead")]
+    [Obsolete("Update to use SheetAshfall instead")]
     Stylesheet SheetNano { get; }
 
     [Obsolete("Update to use SheetSystem instead")]

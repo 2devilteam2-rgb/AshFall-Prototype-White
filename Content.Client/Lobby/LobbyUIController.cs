@@ -35,6 +35,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     private CharacterSetupGui? _characterSetup;
     private HumanoidProfileEditor? _profileEditor;
     private CharacterSetupGuiSavePanel? _savePanel;
+    private Ashfall.CharacterGen.UI.AshfallPersonalFilesScreen? _personalFilesScreen;
 
     /// <summary>
     /// This is the characher preview panel in the chat. This should only update if their character updates.
@@ -121,7 +122,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
     private void PreferencesDataLoaded()
     {
-        PreviewPanel?.SetLoaded(true);
+        PreviewPanel?.SetLoaded(_preferencesManager.ServerDataLoaded);
 
         if (_stateManager.CurrentState is not LobbyState)
             return;
@@ -132,17 +133,74 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     public void OnStateEntered(LobbyState state)
     {
         PreviewPanel?.SetLoaded(_preferencesManager.ServerDataLoaded);
+        if (state.Lobby?.CharacterPreview?.PersonalFilesButton != null)
+        {
+            state.Lobby.CharacterPreview.PersonalFilesButton.OnPressed += _ => OpenPersonalFilesScreen();
+        }
+
+        if (EntityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterGenSystem>(out var ashfallGen))
+        {
+            ashfallGen.PoolUpdated += RefreshLobbyPreview;
+            ashfallGen.RequestPool(refresh: false);
+        }
+
         ReloadCharacterSetup();
     }
 
     public void OnStateExited(LobbyState state)
     {
         PreviewPanel?.SetLoaded(false);
+        if (EntityManager.TrySystem<Ashfall.CharacterGen.AshfallCharacterGenSystem>(out var ashfallGen))
+        {
+            ashfallGen.PoolUpdated -= RefreshLobbyPreview;
+        }
+
+        _personalFilesScreen?.Dispose();
+        _personalFilesScreen = null;
         _profileEditor?.Dispose();
         _characterSetup?.Dispose();
 
         _characterSetup = null;
         _profileEditor = null;
+    }
+
+    public void OpenPersonalFilesScreen()
+    {
+        if (_stateManager.CurrentState is not LobbyState lobby || lobby.Lobby == null)
+            return;
+
+        if (_personalFilesScreen == null)
+        {
+            _personalFilesScreen = new Ashfall.CharacterGen.UI.AshfallPersonalFilesScreen();
+            _personalFilesScreen.BackToLobby += ClosePersonalFilesScreen;
+            _personalFilesScreen.CandidateSelected += _ =>
+            {
+                RefreshLobbyPreview();
+            };
+            lobby.Lobby.AddChild(_personalFilesScreen);
+            Robust.Client.UserInterface.Controls.LayoutContainer.SetAnchorAndMarginPreset(_personalFilesScreen, Robust.Client.UserInterface.Controls.LayoutContainer.LayoutPreset.Wide);
+        }
+
+        lobby.Lobby.MainContainer.Visible = false;
+        _personalFilesScreen.Visible = true;
+    }
+
+    public void ClosePersonalFilesScreen()
+    {
+        if (_stateManager.CurrentState is not LobbyState lobby || lobby.Lobby == null)
+            return;
+
+        if (_personalFilesScreen != null)
+        {
+            _personalFilesScreen.Visible = false;
+            if (_personalFilesScreen.Parent != null)
+                _personalFilesScreen.Parent.RemoveChild(_personalFilesScreen);
+
+            _personalFilesScreen = null;
+        }
+
+        lobby.Lobby.MainContainer.Visible = true;
+        RefreshLobbyPreview();
     }
 
     /// <summary>
@@ -166,18 +224,18 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (PreviewPanel == null)
             return;
 
-        // Get selected character, load it, then set it
-        var character = _preferencesManager.Preferences?.SelectedCharacter;
+        var ashfallGen = EntityManager.SystemOrNull<Ashfall.CharacterGen.AshfallCharacterGenSystem>();
+        var profile = ashfallGen?.SelectedProfile ?? (_preferencesManager.Preferences?.SelectedCharacter as HumanoidCharacterProfile);
 
-        if (character is not HumanoidCharacterProfile humanoid)
+        if (profile == null)
         {
             PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
             PreviewPanel.SetSummaryText(string.Empty);
             return;
         }
 
-        PreviewPanel.ProfilePreviewSpriteView.LoadPreview(humanoid);
-        PreviewPanel.SetSummaryText(humanoid.Summary);
+        PreviewPanel.ProfilePreviewSpriteView.LoadPreview(profile);
+        PreviewPanel.SetSummaryText(profile.Summary);
     }
 
     private void RefreshProfileEditor()

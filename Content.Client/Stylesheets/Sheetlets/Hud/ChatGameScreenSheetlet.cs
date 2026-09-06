@@ -11,14 +11,22 @@ public sealed class ChatGameScreenSheetlet : Sheetlet<PalettedStylesheet>
 {
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
+        var outputBox = new StyleBoxFlat
+        {
+            BackgroundColor = Color.FromHex("#101315"),
+            BorderColor = Color.FromHex("#2A3138"),
+            BorderThickness = new Thickness(1),
+        };
+        outputBox.SetContentMarginOverride(StyleBox.Margin.All, 4);
+
         return
         [
             E()
                 .Class(SeparatedChatGameScreen.StyleClassChatContainer)
-                .Panel(new StyleBoxFlat(sheet.SecondaryPalette.Background)),
+                .Panel(new StyleBoxFlat(Color.FromHex("#151719"))),
             E<OutputPanel>()
                 .Class(SeparatedChatGameScreen.StyleClassChatOutput)
-                .Panel(new StyleBoxFlat(sheet.SecondaryPalette.BackgroundDark)),
+                .Panel(outputBox),
         ];
     }
 }

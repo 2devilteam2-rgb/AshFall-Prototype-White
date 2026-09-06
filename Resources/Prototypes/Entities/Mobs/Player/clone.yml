@@ -155,7 +155,7 @@
   - Rootable # diona
   - Sericulture # arachnids
   - MovementSpeedModifier # moths when weightless
-  - JumpAbility # vulp leaping
+  - JumpAbility # veiru leaping
   - Bloodstream # blood reagents
   copyInternalStorage: false
   copyImplants: false
@@ -191,7 +191,6 @@
   - PlantTraitLigneous
   - PlantTraitScream
   - PlantTraitUnviable
-  - PlantTraitSeedless
 
 # for plant lifecycle clones
 - type: cloningSettings
@@ -200,5 +199,6 @@
   components:
   # traits
   - PlantTraitSampled
+  - PlantTraitSeedless
   eventComponents:
   - PlantHolder

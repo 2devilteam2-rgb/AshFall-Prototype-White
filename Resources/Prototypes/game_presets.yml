@@ -78,13 +78,10 @@
   - extended
   - shittersafari
   name: extended-title
-  showInVote: false #2boring2vote
+  showInVote: false
   description: extended-description
   rules:
-  - BasicStationEventScheduler
-  - MeteorSwarmScheduler
-  - SpaceTrafficControlEventScheduler
-  - BasicRoundstartVariation
+  - AshfallExtendedRule
 
 - type: gamePreset
   id: Greenshift

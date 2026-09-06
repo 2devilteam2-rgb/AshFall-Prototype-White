@@ -206,86 +206,86 @@
     state: satin_reptilian
 
 - type: marking
-  id: UndergarmentBottomBoxersVulpkanin
+  id: UndergarmentBottomBoxersVeiru
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: boxers_vulpkanin
+    state: boxers_veiru
 
 - type: marking
-  id: UndergarmentBottomBriefsVulpkanin
+  id: UndergarmentBottomBriefsVeiru
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: briefs_vulpkanin
+    state: briefs_veiru
 
 - type: marking
-  id: UndergarmentBottomSatinVulpkanin
+  id: UndergarmentBottomSatinVeiru
   bodyPart: UndergarmentBottom
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: satin_vulpkanin
+    state: satin_veiru
 
 - type: marking
-  id: UndergarmentTopBraVulpkanin
+  id: UndergarmentTopBraVeiru
   bodyPart: UndergarmentTop
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: classic_vulpkanin
+    state: classic_veiru
 
 - type: marking
-  id: UndergarmentTopSportsbraVulpkanin
+  id: UndergarmentTopSportsbraVeiru
   bodyPart: UndergarmentTop
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: sports_vulpkanin
+    state: sports_veiru
 
 - type: marking
-  id: UndergarmentTopBinderVulpkanin
+  id: UndergarmentTopBinderVeiru
   bodyPart: UndergarmentTop
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: binder_vulpkanin
+    state: binder_veiru
 
 - type: marking
-  id: UndergarmentTopTanktopVulpkanin
+  id: UndergarmentTopTanktopVeiru
   bodyPart: UndergarmentTop
-  groupWhitelist: [Vulpkanin]
+  groupWhitelist: [Veiru]
   coloring:
     default:
       type: null
       fallbackColor: '#FFFFFF'
   sprites:
   - sprite: Mobs/Customization/undergarments.rsi
-    state: tanktop_vulpkanin
+    state: tanktop_veiru
     
