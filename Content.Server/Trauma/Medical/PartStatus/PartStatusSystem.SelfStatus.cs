@@ -35,6 +35,8 @@ public sealed partial class PartStatusSystem
                 .OrderBy(p => _symmetryPriority.IndexOf(p.PartSymmetry)))
             .ToList();
 
+        var anyListed = false;
+
         foreach (var partStatus in orderedParts)
         {
             if (partStatus.Missing)
@@ -43,6 +45,7 @@ public sealed partial class PartStatusSystem
                     ("possessive", Loc.GetString("inspect-part-status-you")),
                     ("part", partStatus.PartName)));
                 message.PushNewline();
+                anyListed = true;
                 continue;
             }
 
@@ -52,14 +55,21 @@ public sealed partial class PartStatusSystem
                 ? string.Empty
                 : Loc.GetString("self-inspect-part-status-separator") +
                   string.Join(Loc.GetString("self-inspect-part-status-separator"), tags);
-            var lineLoc = IsHealthy(partStatus) && tags.Count == 0
-                ? "self-inspect-part-status-line-fine"
-                : "self-inspect-part-status-line";
 
-            message.AddMarkupPermissive(Loc.GetString(lineLoc,
+            if (IsHealthy(partStatus) && tags.Count == 0)
+                continue;
+
+            message.AddMarkupPermissive(Loc.GetString("self-inspect-part-status-line",
                 ("part", partStatus.PartName),
                 ("condition", condition),
                 ("tags", tagText)));
+            message.PushNewline();
+            anyListed = true;
+        }
+
+        if (!anyListed)
+        {
+            message.AddMarkupPermissive(Loc.GetString("self-inspect-part-status-all-fine"));
             message.PushNewline();
         }
 

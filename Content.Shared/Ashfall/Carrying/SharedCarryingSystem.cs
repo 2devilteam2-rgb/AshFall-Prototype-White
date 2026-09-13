@@ -14,6 +14,7 @@ using Content.Shared.Popups;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Content.Shared.Verbs;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Ashfall.Carrying;
 
@@ -264,4 +265,5 @@ public abstract partial class SharedCarryingSystem : EntitySystem
     }
 }
 
+[Serializable, NetSerializable]
 public sealed partial class CarryTargetDoAfterEvent : SimpleDoAfterEvent;

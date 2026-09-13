@@ -335,8 +335,13 @@ public sealed partial class PartStatusSystem : EntitySystem
                 .OrderBy(p => _symmetryPriority.IndexOf(p.PartSymmetry)))
             .ToList();
 
+        var anyListed = false;
+
         foreach (var partStatus in orderedParts)
         {
+            if (!partStatus.Missing && IsHealthy(partStatus))
+                continue;
+
             var possessive = inspectingSelf
                 ? Loc.GetString("inspect-part-status-you")
                 : Loc.GetString("inspect-part-status-their");
@@ -348,11 +353,7 @@ public sealed partial class PartStatusSystem : EntitySystem
             }
             else
             {
-                var healthy = IsHealthy(partStatus);
-                if (healthy)
-                    locString = styleless ? "inspect-part-status-line-styleless" : "inspect-part-status-line-fine";
-                else
-                    locString = styleless ? "inspect-part-status-line-styleless" : "inspect-part-status-line";
+                locString = styleless ? "inspect-part-status-line-styleless" : "inspect-part-status-line";
             }
 
             var statusDescription = partStatus.Missing ? string.Empty : BuildStatusDescription(partStatus, inspectingSelf);
@@ -372,6 +373,16 @@ public sealed partial class PartStatusSystem : EntitySystem
                 message.AddMarkupPermissive($"[color={statusColor}]{line}[/color]");
             }
 
+            message.PushNewline();
+            anyListed = true;
+        }
+
+        if (!anyListed)
+        {
+            var allFine = styleless
+                ? Loc.GetString("inspect-part-status-no-injuries-styleless")
+                : Loc.GetString("inspect-part-status-no-injuries");
+            message.AddMarkupPermissive(allFine);
             message.PushNewline();
         }
     }
