@@ -58,8 +58,9 @@ public sealed partial class PullerComponent : Component
     [ViewVariables]
     public Dictionary<GrabStage, int> GrabVirtualItemStageCount = new()
     {
-        // a choke hold takes both hands: no free hand means no punching or item use while strangling
-        { GrabStage.Suffocate, 2 },
+        // one extra grab item on top of the base pull one: together they occupy
+        // both hands, so no punching or item use while strangling
+        { GrabStage.Suffocate, 1 },
     };
 
     [DataField]

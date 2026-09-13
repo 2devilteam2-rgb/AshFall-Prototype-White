@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Goobstation.Common.Hands;
 using Content.Server.Stack;
 using Content.Server.Stunnable;
 using Content.Shared.ActionBlocker;
@@ -8,6 +9,7 @@ using Content.Shared.Explosion;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Input;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Stacks;
@@ -163,6 +165,18 @@ namespace Content.Server.Hands.Systems
             var length = direction.Length();
             var distance = Math.Clamp(length, minDistance, hands.ThrowRange);
             direction *= distance / length;
+
+            // <Goob> - throwing a grab's virtual item throws the grabbed mob
+            if (TryComp(throwEnt, out VirtualItemComponent? virt))
+            {
+                var virtEv = new VirtualItemThrownEvent(virt.BlockingEntity, player, throwEnt.Value, direction);
+                RaiseLocalEvent(player, ref virtEv);
+                RaiseLocalEvent(virt.BlockingEntity, ref virtEv);
+
+                // the grab throw released the pull and deleted the virtual item
+                if (!Exists(throwEnt.Value))
+                    return true;
+            }
 
             var throwSpeed = hands.BaseThrowspeed;
 
