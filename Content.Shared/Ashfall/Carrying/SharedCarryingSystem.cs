@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -26,12 +27,14 @@ public abstract partial class SharedCarryingSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CarriableComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
+        SubscribeLocalEvent<CarriableComponent, CarryTargetDoAfterEvent>(OnCarryDoAfter);
         SubscribeLocalEvent<CarrierComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
         SubscribeLocalEvent<CarrierComponent, VirtualItemDeletedEvent>(OnVirtualItemDeleted);
         SubscribeLocalEvent<CarrierComponent, MobStateChangedEvent>(OnMobStateChanged);
@@ -86,10 +89,35 @@ public abstract partial class SharedCarryingSystem : EntitySystem
             {
                 Text = Loc.GetString("ashfall-verb-carry-fireman"),
                 IconEntity = GetNetEntity(uid),
-                Act = () => TryCarry(args.User, uid),
+                Act = () => StartCarryDoAfter(args.User, uid),
                 Priority = 2,
             });
         }
+    }
+
+    private void StartCarryDoAfter(EntityUid carrier, EntityUid target)
+    {
+        if (!CanCarry(carrier, target))
+            return;
+
+        var doAfter = new DoAfterArgs(EntityManager, carrier, Comp<CarriableComponent>(target).CarryTime, new CarryTargetDoAfterEvent(), target)
+        {
+            Target = target,
+            BreakOnDamage = true,
+            BreakOnMove = true,
+            NeedHand = true,
+        };
+
+        _doAfter.TryStartDoAfter(doAfter);
+    }
+
+    private void OnCarryDoAfter(Entity<CarriableComponent> ent, ref CarryTargetDoAfterEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (args.Args.Target is { } target)
+            TryCarry(args.User, target);
     }
 
     public bool CanCarry(EntityUid carrier, EntityUid target)
@@ -235,3 +263,5 @@ public abstract partial class SharedCarryingSystem : EntitySystem
         args.Cancel();
     }
 }
+
+public sealed partial class CarryTargetDoAfterEvent : SimpleDoAfterEvent;

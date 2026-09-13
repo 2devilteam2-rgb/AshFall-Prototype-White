@@ -74,6 +74,7 @@
   abstract: true
   save: false
   components:
+  - type: Legs # prevent standing etc with not enough legs
   - type: Body
   - type: VisualBody
   - type: Hands
