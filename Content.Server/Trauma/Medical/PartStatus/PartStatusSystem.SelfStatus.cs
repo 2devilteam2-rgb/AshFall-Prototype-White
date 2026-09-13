@@ -25,7 +25,6 @@ public sealed partial class PartStatusSystem
             Loc.GetString("inspect-part-status-title") +
             "[/color][/bold]");
         message.PushNewline();
-        AddLine(message);
 
         var numb = _statusEffects.TryEffectsWithComp<PainNumbnessStatusEffectComponent>(entity, out _);
         var cold = HasColdAlert(entity);

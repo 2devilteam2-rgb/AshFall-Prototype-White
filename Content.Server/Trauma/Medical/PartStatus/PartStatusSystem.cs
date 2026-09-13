@@ -310,7 +310,6 @@ public sealed partial class PartStatusSystem : EntitySystem
                 Loc.GetString(titlestring, ("entity", FormattedMessage.EscapeText(Identity.Name(entity, EntityManager)))) +
                 "[/color][/bold]");
             message.PushNewline();
-            AddLine(message);
         }
         else
         {
@@ -545,13 +544,5 @@ public sealed partial class PartStatusSystem : EntitySystem
         }
 
         return descriptions;
-    }
-
-    private void AddLine(FormattedMessage message)
-    {
-        message.PushColor(Color.FromHex("#878C87"));
-        message.AddText(Loc.GetString("examine-border-line"));
-        message.PushNewline();
-        message.Pop();
     }
 }
