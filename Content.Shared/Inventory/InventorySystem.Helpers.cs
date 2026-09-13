@@ -69,6 +69,12 @@ public partial class InventorySystem
 
     public bool SpawnItemInSlot(EntityUid uid, string slot, string prototype, bool silent = false, bool force = false, InventoryComponent? inventory = null)
     {
+        return SpawnItemInSlot(uid, slot, prototype, out _, silent, force, inventory);
+    }
+
+    public bool SpawnItemInSlot(EntityUid uid, string slot, string prototype, [NotNullWhen(true)] out EntityUid? spawned, bool silent = false, bool force = false, InventoryComponent? inventory = null)
+    {
+        spawned = null;
         if (!Resolve(uid, ref inventory, false))
             return false;
 
@@ -95,6 +101,12 @@ public partial class InventorySystem
         }
 
         // We finally try to equip the item, otherwise we delete it.
-        return TryEquip(uid, item, slot, silent, force) || DeleteItem();
+        if (TryEquip(uid, item, slot, silent, force))
+        {
+            spawned = item;
+            return true;
+        }
+
+        return DeleteItem();
     }
 }

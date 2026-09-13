@@ -35,8 +35,9 @@
   coefficients: # To be decided
     Poison: 1
 
+# Vulps get more heat damage because fur
 - type: damageModifierSet
-  id: Veiru
+  id: Vulpkanin
   coefficients:
     Heat: 1.15
     Cold: 0.85
@@ -69,3 +70,14 @@
     Cellular: 0.0
 
 #endregion
+
+- type: damageModifierSet
+  id: Veiru
+  coefficients:
+    Heat: 1.15
+    Cold: 0.85
+
+#endregion
+#region Special
+
+# immune to everything except physical and heat damage; vulnerable to holy damage because they're undead, but not as vulnerable as a ghost or demon would be

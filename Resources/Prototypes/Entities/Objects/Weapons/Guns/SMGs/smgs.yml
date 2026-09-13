@@ -57,13 +57,13 @@
     - FullAuto
     soundGunshot:
       collection: SMG_1_Gunshots
+    defaultDirection: 1, 0
   - type: EmitSoundOnPickup
     sound:
       collection: GunPickupSoundCollection
   - type: EmitSoundOnDrop
     sound:
       collection: GunDropSoundCollection
-    defaultDirection: 1, 0
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/smg_cock.ogg

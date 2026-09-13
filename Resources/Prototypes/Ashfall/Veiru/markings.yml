@@ -308,8 +308,7 @@
 - type: marking
   id: VeiruOutears
   bodyPart: HeadTop
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_head.rsi
       state: outears
@@ -357,8 +356,7 @@
 - type: marking
   id: VeiruInears
   bodyPart: HeadTop
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_head.rsi
       state: inears
@@ -390,8 +388,7 @@
 - type: marking
   id: VeiruMuzzleinears
   bodyPart: Snout
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_head.rsi
       state: muzzleinears
@@ -399,8 +396,7 @@
 - type: marking
   id: VeiruTailFluffy
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_fluffy
@@ -449,8 +445,7 @@
 - type: marking
   id: VeiruTailRing
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_m
@@ -460,8 +455,7 @@
 - type: marking
   id: VeiruTailSkeleton
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_m
@@ -471,8 +465,7 @@
 - type: marking
   id: VeiruTailTip
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_m
@@ -482,8 +475,7 @@
 - type: marking
   id: VeiruTailFluffySkeleton
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_fluffy
@@ -494,8 +486,7 @@
 - type: marking
   id: VeiruTailWingler1
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_fluffy
@@ -505,8 +496,7 @@
 - type: marking
   id: VeiruTailWingler2
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_fluffy
@@ -516,8 +506,7 @@
 - type: marking
   id: VeiruTailWingler3
   bodyPart: Tail
-  groupWhitelist: [Veiru, Felinid, Android, Human]
-  sponsorOnly: false # 
+  groupWhitelist: [Veiru, Human]
   sprites:
     - sprite: Ashfall/Veiru/veiru_tail.rsi
       state: tail_fluffy

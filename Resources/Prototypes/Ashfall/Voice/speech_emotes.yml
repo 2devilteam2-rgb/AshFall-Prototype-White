@@ -1,23 +1,5 @@
 # Ashfall species emotes (ported from Corvax Tajaran)
 - type: emote
-  id: Gasp
-  name: chat-emote-name-gasp
-  category: Vocal
-  available: false
-  whitelist:
-    components:
-    - Vocal
-  blacklist:
-    components:
-    - BorgChassis
-  chatMessages: ["chat-emote-msg-gasp"]
-  chatTriggers:
-  - gasp
-  - gasps
-  - ахает
-  - задыхается
-
-- type: emote
   id: Purr
   name: chat-emote-name-purr
   category: Vocal

@@ -54,7 +54,6 @@
     nightVision: true
     proximityRevealRadius: 3.0
   - type: LightDetectionDamage
-    detectionValue: 10
     detectionValueMax: 10
     detectionValueRegeneration: 1.0
     takeDamageOnLight: true

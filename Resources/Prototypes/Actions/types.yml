@@ -524,15 +524,15 @@
 
 - type: entity
   parent: ActionToggleWagging
-  id: ActionToggleWaggingVeiru
+  id: ActionToggleWaggingVulpkanin
   components:
   - type: Action
     itemIconStyle: NoItem
     useDelay: 1 # Prevents Emote Spam
   - type: Sprite
-    sprite: Ashfall/Veiru/veiru_tail.rsi
+    sprite: Mobs/Customization/Vulpkanin/tail_markings.rsi
     layers:
-    - state: tail_m
+    - state: tail-wag-icon
 
 - type: entity
   parent: BaseAction
@@ -563,7 +563,7 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionVeiruGravityJump
+  id: ActionVulpkaninGravityJump
   name: Leap
   description: Use your agile legs to leap a short distance. Be careful not to bump into anything!
   components:
@@ -627,3 +627,30 @@
     sprite: Interface/Actions/voice-mask.rsi
     layers:
     - state: icon
+
+- type: entity
+  parent: ActionToggleWagging
+  id: ActionToggleWaggingVeiru
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 1 # Prevents Emote Spam
+  - type: Sprite
+    sprite: Ashfall/Veiru/veiru_tail.rsi
+    layers:
+    - state: tail_m
+
+- type: entity
+  parent: BaseAction
+  id: ActionVeiruGravityJump
+  name: Leap
+  description: Use your agile legs to leap a short distance. Be careful not to bump into anything!
+  components:
+  - type: Action
+    useDelay: 12
+  - type: Sprite
+    sprite: Interface/Actions/jump.rsi
+    layers:
+    - state: icon
+  - type: InstantAction
+    event: !type:GravityJumpEvent {}

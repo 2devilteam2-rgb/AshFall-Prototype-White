@@ -57,3 +57,6 @@
 
 - type: organCategory
   id: Kidneys
+
+- type: organCategory
+  id: Tail

@@ -55,8 +55,6 @@
   - type: EmitSoundOnDrop
     sound:
       collection: GunDropSoundCollection
-    soundEmpty:
-      path: /Audio/Weapons/Guns/Empty/empty.ogg
   - type: CustomSpriteAmmoCounter
     loadedAmmoSprite: Interface/ItemStatus/Shotgun_Shells/not_spent.png
     spentAmmoSprite: Interface/ItemStatus/Shotgun_Shells/spent.png

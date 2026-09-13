@@ -102,6 +102,12 @@ public sealed partial class BloodstreamComponent : Component
     public FixedPoint2 BloodRefreshAmount = 1.0f;
 
     /// <summary>
+    /// Should we allow entities to regain their blood? This affects blood increase from reagents and topicals.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool BloodIncreaseEnabled = true;
+
+    /// <summary>
     /// How much blood needs to be in the temporary solution in order to create a puddle?
     /// </summary>
     [DataField, AutoNetworkedField]

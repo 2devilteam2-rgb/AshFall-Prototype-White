@@ -603,6 +603,34 @@ public sealed partial class BloodstreamSystem : EntitySystem
     }
 
     /// <summary>
+    /// Change how much blood is recovered in a bloodstream.
+    /// </summary>
+    public void ChangeBloodRefreshAmount(Entity<BloodstreamComponent?> ent, FixedPoint2 amount)
+    {
+        if(!Resolve(ent, ref ent.Comp, logMissing: false))
+        {
+            return;
+        }
+        if(amount < 0f)
+        {
+            amount = 0f;
+        }
+        ent.Comp.BloodRefreshAmount = amount;
+        DirtyField(ent, ent.Comp, nameof(BloodstreamComponent.BloodRefreshAmount));
+    }
+
+    /// <summary>
+    /// Change whether or not blood can be increased in a bloodstream.
+    /// </summary>
+    public void ChangeBloodIncreaseEnabled(Entity<BloodstreamComponent?> ent, bool status = true)
+    {
+        if (!Resolve(ent, ref ent.Comp, logMissing: false))
+            return;
+        ent.Comp.BloodIncreaseEnabled = status;
+        DirtyField(ent, ent.Comp, nameof(BloodstreamComponent.BloodIncreaseEnabled));
+    }
+
+    /// <summary>
     /// Get the reagent data for blood that a specific entity should have.
     /// </summary>
     public List<ReagentData> GetEntityBloodData(Entity<BloodstreamComponent?> entity)

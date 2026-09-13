@@ -54,14 +54,14 @@
       - FullAuto
     soundGunshot:
       collection: Lmg_1_Gunshots
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
   - type: EmitSoundOnPickup
     sound:
       collection: GunPickupSoundCollection
   - type: EmitSoundOnDrop
     sound:
       collection: GunDropSoundCollection
-    soundEmpty:
-      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/lmg_cock.ogg
