@@ -18,14 +18,12 @@ public sealed partial class OrganRelationSystem : EntitySystem
 
     private void OnChildShutdown(Entity<ChildOrganComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.Parent is not { } parentUid)
+        // Parent shut down before the child.
+        if (ent.Comp.Parent is not { } parentUid || !_parent.TryComp(parentUid, out var parentComp))
             return;
 
-        if (_parent.TryComp(parentUid, out var parentComp))
-        {
-            parentComp.Children.Remove(ent);
-            Dirty(parentUid, parentComp);
-        }
+        parentComp.Children.Remove(ent);
+        Dirty(parentUid, parentComp);
     }
 
     private void OnParentShutdown(Entity<ParentOrganComponent> ent, ref ComponentShutdown args)
@@ -35,11 +33,12 @@ public sealed partial class OrganRelationSystem : EntitySystem
 
         foreach (var childUid in ent.Comp.Children)
         {
-            if (_child.TryComp(childUid, out var childComp))
-            {
-                childComp.Parent = null;
-                Dirty(childUid, childComp);
-            }
+            // Child shut down before the parent.
+            if (!_child.TryComp(childUid, out var childComp))
+                continue;
+
+            childComp.Parent = null;
+            Dirty(childUid, childComp);
         }
     }
 
@@ -50,9 +49,6 @@ public sealed partial class OrganRelationSystem : EntitySystem
     public void Relate(Entity<ParentOrganComponent?> parent, Entity<ChildOrganComponent?> child)
     {
         if (!_parent.Resolve(parent, ref parent.Comp) || !_child.Resolve(child, ref child.Comp))
-            return;
-
-        if (child.Comp.Parent == parent.Owner)
             return;
 
         DebugTools.Assert(child.Comp.Parent == null);
@@ -79,11 +75,9 @@ public sealed partial class OrganRelationSystem : EntitySystem
         child.Comp.Parent = null;
         Dirty(child, child.Comp);
 
-        if (_parent.TryComp(parentUid, out var parentComp))
-        {
-            parentComp.Children.Remove(child);
-            Dirty(parentUid, parentComp);
-        }
+        var parentComp = _parent.Comp(parentUid);
+        parentComp.Children.Remove(child);
+        Dirty(parentUid, parentComp);
     }
 
     /// <summary>
@@ -97,10 +91,7 @@ public sealed partial class OrganRelationSystem : EntitySystem
 
         while (child.Comp?.Parent is { } parent)
         {
-            if (!_parent.TryComp(parent, out var parentComp))
-                yield break;
-
-            yield return (parent, parentComp);
+            yield return (parent, _parent.Comp(parent));
 
             if (!_child.TryGetComponent(parent, out var parentChild))
                 yield break;
@@ -120,10 +111,7 @@ public sealed partial class OrganRelationSystem : EntitySystem
 
         foreach (var child in parent.Comp.Children)
         {
-            if (!_child.TryComp(child, out var childComp))
-                continue;
-
-            yield return (child, childComp);
+            yield return (child, _child.Comp(child));
 
             foreach (var childChild in AllChildren(child))
             {
