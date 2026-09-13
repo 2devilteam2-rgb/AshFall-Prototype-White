@@ -86,6 +86,7 @@
   - SolarControlComputerCircuitboard
   - SolarTrackerElectronics
   - EmitterCircuitboard
+  - PowerComputerCircuitboard
 
 - type: technology
   id: AtmosphericTech
@@ -149,6 +150,8 @@
   - HellfireFreezerMachineCircuitBoard
   - PortableScrubberMachineCircuitBoard
   - HolofanProjector
+  - AlertsComputerCircuitboard
+  - AtmosMonitoringComputerCircuitboard
   technologyPrerequisites:
   - AtmosphericTech
 

@@ -51,7 +51,11 @@ public sealed partial class OrganRelationSystem : EntitySystem
         if (!_parent.Resolve(parent, ref parent.Comp) || !_child.Resolve(child, ref child.Comp))
             return;
 
-        DebugTools.Assert(child.Comp.Parent == null);
+        if (child.Comp.Parent == parent.Owner)
+            return;
+
+        DebugTools.Assert(child.Comp.Parent == null,
+            $"Cannot relate {ToPrettyString(child)} to {ToPrettyString(parent)}: the child is already related to {ToPrettyString(child.Comp.Parent!.Value)}.");
 
         parent.Comp.Children.Add(child);
         Dirty(parent, parent.Comp);

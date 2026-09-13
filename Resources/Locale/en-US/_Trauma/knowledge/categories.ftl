@@ -4,3 +4,4 @@ knowledge-category-MeleeCombat = Melee Combat
 knowledge-category-RangedCombat = Ranged Combat
 knowledge-category-Physical = Physical
 knowledge-category-Crafting = Crafting
+knowledge-category-Martial = Martial Arts

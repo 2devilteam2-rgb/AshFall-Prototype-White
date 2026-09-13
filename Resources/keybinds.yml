@@ -47,6 +47,14 @@ binds:
 - function: Strafe
   type: State
   key: Control
+# <Trauma>
+- function: OpenMartialArtsMenu
+  type: State
+  key: O
+- function: ResistGrab
+  type: State
+  key: B
+# </Trauma>
 # Shuttle
 - function: ShuttleStrafeUp
   type: State

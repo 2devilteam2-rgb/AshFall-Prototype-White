@@ -1,0 +1,5 @@
+- files:
+  - "cassette_player.rsi/**"
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2314793744d0b4ae00e330a9c9fdb7662e67b2de/icons/obj/items/walkman.dmi, https://github.com/cmss13-devs/cmss13/blob/925b704ac6622abaa972fd2a1c8d6348340bbb51/icons/mob/humans/onmob/clothing/ears.dmi, Walkman_1-5 modified by @IceNoobXD on Github"
+  source: "https://github.com/RMC-14/RMC-14/tree/52e1347e85636174b18ac7eadb503f65fb79e081/Resources/Textures/_RMC14/Objects/Devices/cassette_player.rsi"

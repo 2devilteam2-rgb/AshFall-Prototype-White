@@ -78,6 +78,8 @@ public abstract partial class SharedKnowledgeSystem : CommonKnowledgeSystem
         Subs.CVar(_cfg, TraumaCVars.SkillsEnabled, x => SkillsEnabled = x, true);
         Subs.CVar(_cfg, TraumaCVars.SkillGain, x => _skillGain = x, true);
 
+        InitializeMartialArts();
+
         LoadSkillPrototypes();
     }
 
@@ -458,6 +460,28 @@ public abstract partial class SharedKnowledgeSystem : CommonKnowledgeSystem
         return found;
     }
 
+    /// <summary>
+    /// Returns all knowledge entities that have a required component.
+    /// </summary>
+    public List<Entity<T, KnowledgeComponent>>? GetKnowledgeWith<T>(EntityUid target) where T : IComponent
+    {
+        if (GetContainer(target)?.Comp.Container is not { } container)
+            return null;
+
+        var knowledgeEnts = new List<Entity<T, KnowledgeComponent>>();
+        var query = GetEntityQuery<T>();
+        foreach (var knowledge in container.ContainedEntities)
+        {
+            if (!_query.TryComp(knowledge, out var knowledgeComp))
+                continue;
+
+            if (query.TryComp(knowledge, out var comp))
+                knowledgeEnts.Add((knowledge, comp, knowledgeComp));
+        }
+
+        return knowledgeEnts;
+    }
+
     public bool IsHolder(EntityUid target)
         => _holderQuery.HasComp(target);
 
@@ -503,6 +527,34 @@ public abstract partial class SharedKnowledgeSystem : CommonKnowledgeSystem
         {
             RaiseLocalEvent(unit, ref args);
         }
+    }
+
+    /// <summary>
+    /// Relays an event to all non-martial arts knowledges a mob has.
+    /// It also relays it to the active martial art, but not any inactive ones.
+    /// </summary>
+    public void RelayActiveEvent<T>(Entity<KnowledgeHolderComponent> ent, ref T args) where T : notnull
+    {
+        if (!IsAwake(ent) || GetContainer(ent) is not {} brain || brain.Comp.Container is not {} container)
+            return;
+
+        foreach (var unit in container.ContainedEntities)
+        {
+            // dont relay to inactive martial arts
+            if (_artQuery.HasComp(unit) && unit != brain.Comp.ActiveMartialArt)
+                continue;
+
+            RaiseLocalEvent(unit, ref args);
+        }
+    }
+
+    /// <summary>
+    /// Relays an event only to the mob's currently active martial art, if any.
+    /// </summary>
+    public void RelayMartialArt<T>(Entity<KnowledgeHolderComponent> ent, ref T args) where T : notnull
+    {
+        if (IsAwake(ent) && GetActiveMartialArt(ent) is {} skill)
+            RaiseLocalEvent(skill, ref args);
     }
 
     public override Dictionary<EntProtoId, int> GetSkillMasteries(EntityUid target)
@@ -651,6 +703,18 @@ public record struct KnowledgeAddedEvent(Entity<KnowledgeContainerComponent> Con
 /// </summary>
 [ByRefEvent]
 public record struct KnowledgeRemovedEvent(Entity<KnowledgeContainerComponent> Container, EntityUid Holder);
+
+/// <summary>
+/// Raised on an active knowledge entity just before deactivating it.
+/// </summary>
+[ByRefEvent]
+public record struct KnowledgeEnabledEvent(Entity<KnowledgeContainerComponent> Container, EntityUid Holder);
+
+/// <summary>
+/// Raised on an active knowledge entity just after activating it.
+/// </summary>
+[ByRefEvent]
+public record struct KnowledgeDisabledEvent(Entity<KnowledgeContainerComponent> Container, EntityUid Holder);
 
 /// <summary>
 /// Event to try show a skill popup to the user.

@@ -1,0 +1,88 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+- type: entity
+  parent: Airlock
+  id: AirlockMail
+  suffix: Mail
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Standard/mail.rsi
+  - type: Wires
+    layoutId: AirlockCargo
+  - type: Paintable
+    group: AirlockStandard
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockMailGlass
+  suffix: Mail
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Glass/mail.rsi
+  - type: Wires
+    layoutId: AirlockCargo
+  - type: Paintable
+    group: AirlockGlass
+
+# Surgery
+- type: entity
+  parent: Airlock
+  id: AirlockSurgery
+  suffix: Surgery
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Standard/surgery.rsi
+  - type: Paintable
+    group: AirlockStandard
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockSurgeryGlass
+  suffix: Surgery
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Glass/surgery.rsi
+  - type: Paintable
+    group: AirlockGlass
+
+# Paramedic
+- type: entity
+  parent: Airlock
+  id: AirlockParamedic
+  suffix: Paramedic
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Standard/paramedic.rsi
+  - type: Paintable
+    group: AirlockStandard
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockParamedicGlass
+  suffix: Paramedic
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Glass/paramedic.rsi
+  - type: Paintable
+    group: AirlockGlass
+
+# Brigmedic
+- type: entity
+  parent: Airlock
+  id: AirlockBrigmed
+  suffix: Brigmed
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Standard/brigmedic.rsi
+  - type: Paintable
+    group: AirlockStandard
+
+- type: entity
+  parent: AirlockGlass
+  id: AirlockBrigmedGlass
+  suffix: Brigmed
+  components:
+  - type: Sprite
+    sprite: _Starlight/Structures/Doors/Airlocks/Glass/brigmedic.rsi
+  - type: Paintable
+    group: AirlockGlass

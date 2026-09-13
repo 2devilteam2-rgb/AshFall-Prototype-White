@@ -33,4 +33,10 @@ public sealed partial class KnowledgeContainerComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public Dictionary<EntProtoId, EntityUid> KnowledgeDict = new();
+
+    /// <summary>
+    /// The currently enabled martial art.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? ActiveMartialArt;
 }

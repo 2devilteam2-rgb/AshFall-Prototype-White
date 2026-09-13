@@ -1,4 +1,7 @@
-﻿using Content.Server.Station.Systems;
+﻿using Ashfall.Server.Degradation.Components;
+using Content.Server._Starlight.Zones;
+using Content.Server.Station.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Random;
 
 namespace Content.Server.GameTicking.Rules.VariationPass;
@@ -12,6 +15,7 @@ public abstract partial class VariationPassSystem<T> : GameRuleSystem<T>
 {
     [Dependency] protected StationSystem Stations = default!;
     [Dependency] protected IRobustRandom Random = default!;
+    [Dependency] protected ZoneSystem Zones = default!;
 
     public override void Initialize()
     {
@@ -23,6 +27,32 @@ public abstract partial class VariationPassSystem<T> : GameRuleSystem<T>
     protected bool IsMemberOfStation(Entity<TransformComponent> ent, ref StationVariationPassEvent args)
     {
         return Stations.GetOwningStation(ent, ent.Comp) == args.Station.Owner;
+    }
+
+    protected bool IsTarget(EntityUid rule, Entity<TransformComponent> ent, ref StationVariationPassEvent args)
+    {
+        if (!IsMemberOfStation(ent, ref args))
+            return false;
+        if (!TryComp<DegradationZoneTargetComponent>(rule, out var target))
+            return true;
+        return Zones.TryGetZone((ent.Owner, (TransformComponent?) ent.Comp), out var zone) && zone.ID == target.Zone.Id;
+    }
+
+    protected bool TryFindRandomTargetTile(EntityUid rule,
+        Entity<Content.Shared.Station.Components.StationDataComponent> station,
+        out EntityCoordinates coordinates)
+    {
+        for (var i = 0; i < 64; i++)
+        {
+            if (!TryFindRandomTileOnStation(station, out _, out _, out coordinates))
+                continue;
+            if (!TryComp<DegradationZoneTargetComponent>(rule, out var target) ||
+                Zones.TryGetZone(coordinates, out var zone) && zone.ID == target.Zone.Id)
+                return true;
+        }
+
+        coordinates = default;
+        return false;
     }
 
     protected abstract void ApplyVariation(Entity<T> ent, ref StationVariationPassEvent args);

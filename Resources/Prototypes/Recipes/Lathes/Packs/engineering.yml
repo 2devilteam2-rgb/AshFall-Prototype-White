@@ -22,6 +22,10 @@
   - HandheldStationMap
   - ClothingHeadHatWelding
   - ClothingHeadHatCone
+  - ConstructionBag
+  - AshfallRestorationTool
+  - AshfallTapeRecorder
+  - AshfallRecorderTape
 
 - type: latheRecipePack
   id: AtmosStatic
@@ -47,6 +51,7 @@
   - CellRechargerCircuitboard
   - WeaponCapacitorRechargerCircuitboard
   - FreezerElectronics
+  - PortableSMESMachineCircuitboard
 
 - type: latheRecipePack
   id: EngineeringBoardsStatic
@@ -90,3 +95,6 @@
   - TelecomServerCircuitboard
   - SMESAdvancedMachineCircuitboard
   - HolopadMachineCircuitboard
+  - AlertsComputerCircuitboard
+  - PowerComputerCircuitboard
+  - AtmosMonitoringComputerCircuitboard

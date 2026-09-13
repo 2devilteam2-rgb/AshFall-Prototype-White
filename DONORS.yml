@@ -18,7 +18,6 @@ references:
   - https://github.com/Goob-Station/Goob-Station
   - https://github.com/corvax-team/ss14-wl
   - https://github.com/Sector-Crescent/Hullrot
-  - https://github.com/RMC-14/RMC-14
   - https://github.com/Trauma-Station/Trauma-Station
   - https://github.com/AU-14/ColonialMarinesUniverse
   - https://github.com/Baystation12/Baystation12
@@ -46,3 +45,88 @@ imports:
       - Resources/Audio/Ashfall/Ambience
       - Resources/Audio/Ashfall/Effects
     role: Atmospheric hull creaking, airlock stress, and metallic combat collision impacts
+  - name: Trauma-Station
+    repository: https://github.com/Trauma-Station/Trauma-Station
+    revision: caf1177ada3810a675975da85042e7e0eb73a402
+    license: AGPL-3.0-or-later
+    paths:
+      - Content.Shared/Trauma/MartialArts
+      - Content.Shared/Trauma/Grab
+      - Content.Shared/Trauma/EntityEffects
+      - Content.Shared/Trauma/EntityConditions
+      - Content.Shared/Trauma/Heretic
+      - Content.Shared/Trauma/Interaction
+      - Content.Shared/Trauma/Knowledge
+      - Content.Shared/Trauma/StatusEffects
+      - Content.Shared/Trauma/Weapons
+      - Content.Shared/Trauma/Medical/Shared/EntityConditions
+      - Content.Shared/Trauma/Medical/Shared/EntityEffects
+      - Content.Shared/Goobstation
+      - Content.Server/Goobstation
+      - Content.Shared/EntityConditions/SharedEntityConditionsSystem.Trauma.cs
+      - Content.Shared/Movement/Pulling
+      - Content.Shared/Weapons/Melee
+      - Resources/Audio/_Goobstation
+      - Resources/Prototypes/_Trauma/MartialArts
+      - Resources/Prototypes/_Trauma/Entities/Knowledge
+      - Resources/Prototypes/_Trauma/Entities/StatusEffects/martial_arts.yml
+      - Resources/Prototypes/_Goobstation
+      - Resources/ServerInfo/_Goobstation/Guidebook/MartialArts
+      - Resources/ServerInfo/_Trauma/Guidebook/MartialArts
+      - Resources/Textures/_Goobstation
+      - Resources/Textures/_Trauma/Interface/Misc/armstrongkarate.rsi
+      - Resources/Locale/en-US/_Trauma
+      - Resources/Locale/ru-RU/_Trauma
+      - Resources/Locale/en-US/_Goobstation/wraith.ftl
+      - Resources/Locale/ru-RU/_Goobstation/wraith.ftl
+    role: MartialArts combo engine (CQC and 12 other martial arts), pull-based grab overhaul (staged grabs, chokes, grab-throws), supporting entity effects/conditions, knowledge/UI integration, guidebook pages, sprites
+    adaptations: >-
+      Physical layout follows the established Trauma vendoring scheme (Content.Trauma.Shared/Common and
+      Content.Medical.* files placed under Content.*/Trauma with upstream namespaces preserved; Content.Trauma.Client
+      namespace renamed Content.Client.Trauma for the Knowledge family only). Goobstation drop-ins keep their
+      Content.Goobstation.* namespaces and live under Content.*/Goobstation. The chef variant MartialArtCQCChef was
+      dropped (upstream Areas system not vendored), along with ExperienceOnCooking and KnowledgeConflict components.
+      The upstream UserActions panel MartialArtsTabControl was skipped (depends on the not-vendored UserActions
+      subsystem and Goobstation UIKit); martial arts are accessed through the radial menu UI controller instead.
+      Core-file integrations mirror upstream marked hunks: PullingSystem grab hooks, melee ComboAttackPerformedEvent
+      raises, AttackedEvent.ModifiersList, EntityEffectEvent.Predicted plumbing, TryAddStatusEffect and
+      RelayStatusEffectEvent made public, TakeStaminaDamage immediate/hardStun knockdown branch, GameTopMenuBar
+      OnLoad/OnUnload hooks, [Access] removal on PullableComponent. StatusEffectAttackSpeed keeps the upstream
+      Rallied component, so the small Goobstation Wraith rally files are vendored with it. The upstream dead
+      TargetingCondition reference in the abstract CQCNeckSnap combo and the unreachable grab-retake success popup
+      branch are kept verbatim. One hardcoded English popup in SharedKnowledgeSystem.MartialArts was localized as
+      martial-art-combo-prepare. Grab popups were relocated from _white/grab to _Trauma/grab and all new keys were
+      translated into ru-RU. Additional vendored pieces: the melee damage-examine locale (armor-penetration,
+      click-damage-modifier, heavy-damage-modifier) with ru-RU translations, the pull alert severity icons
+      relocated from _White/Interface/Alerts/pull.rsi to _Trauma/Interface/Alerts/pull.rsi, and the
+      WideSwingIgnore tag with its wide-swing raycast exemption hunk.
+  - name: Monolith
+    repository: https://github.com/Monolith-Station/Monolith
+    revision: 89e5d18472de6bf330f161fb42df7831ee2529f7
+    license: AGPL-3.0-or-later
+    paths:
+      - Content.Shared/Ashfall/Restoration
+      - Content.Server/Ashfall/Restoration
+      - Content.Client/Ashfall/Restoration
+    role: adapted original-layout restoration (pristine-layout snapshot before degradation, missing-structure ghosts, material-cost rebuilding), adapted from the Monolith ShipRepair design
+    adaptations: >-
+      Ashfall-native reimplementation of the Monolith ShipRepair design, not a wholesale copy: a networked chunked grid
+      snapshot on RestorationGridComponent, RestorableComponent material requirements, and client ghost rendering.
+      Monolith's charge-based repair abstraction was replaced with real steel/plasteel stack costs.
+  - name: RMC-14
+    repository: https://github.com/RMC-14/RMC-14
+    revision: 52e1347e85636174b18ac7eadb503f65fb79e081
+    license: MIT for code; CC-BY-SA-3.0 for the vendored cassette_player.rsi textures (originally from cmss13)
+    paths:
+      - Content.Shared/Ashfall/Recorder
+      - Content.Server/Ashfall/Recorder
+      - Content.Client/Ashfall/Recorder
+      - Resources/Prototypes/Ashfall/Recorder
+      - Resources/Prototypes/Ashfall/Recipes/Lathes/recorder.yml
+      - Resources/Textures/Ashfall/Objects/Recorder
+    role: "handheld cassette tape recorder: local-speech recording onto physical tapes, playback, transcript printing, tape capacity/respool (adapted from the RMC universal recorder)"
+    adaptations: >-
+      Re-prototyped as Ashfall-native entities with fresh en-US/ru-RU localization (not RMC's);
+      speech capture via this fork's Content.Shared.Speech ListenEvent + ActiveListenerComponent;
+      UI adapted to this fork's SimpleRadialMenu radial BUI API and ItemSlots Entity<T> API;
+      visuals via GenericVisualizer on vendored sprites.

@@ -39,6 +39,23 @@
     experienceCost: 20
     timeBetweenExperience: 1
 
+- type: entity
+  parent: BaseKnowledge
+  id: BaseMartialArtsKnowledge
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _Goobstation/Interface/Misc/intents.rsi
+    state: harm
+  - type: Knowledge
+    category: MartialArt
+    experienceCost: 10
+    color: "#c70000"
+    costs: null # Being able to learn any of these roundstart is too much
+  - type: MartialArtsKnowledge
+    blocked: false
+    icon: Objects/Misc/skub.rsi
+
 # Actual categories
 
 - type: knowledgeCategory
@@ -60,3 +77,7 @@
 - type: knowledgeCategory
   id: Crafting
   name: knowledge-category-Crafting
+
+- type: knowledgeCategory
+  id: MartialArt
+  name: knowledge-category-Martial

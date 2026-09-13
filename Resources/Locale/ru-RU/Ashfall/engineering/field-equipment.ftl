@@ -1,0 +1,10 @@
+ent-ConstructionBag = строительная сумка
+    .desc = Прочная поясная сумка для строительных материалов.
+ent-PortableSMESEmpty = переносной СМЭС
+    .desc = Передвижной СМЭС, который заряжается от высоковольтного кабеля и питает локальную низковольтную сеть.
+ent-PortableSMES = { ent-PortableSMESEmpty }
+    .desc = { ent-PortableSMESEmpty.desc }
+ent-PortableSMESMachineCircuitboard = машинная плата переносного СМЭС
+    .desc = Машинная печатная плата переносного СМЭС.
+recipes-wall-diagonal-name = диагональная стена
+recipes-reinforced-wall-diagonal-name = диагональная укреплённая стена

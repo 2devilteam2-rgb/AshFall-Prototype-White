@@ -1,0 +1,108 @@
+- type: entity
+  parent: BaseStorageItem
+  id: ConstructionBag
+  name: construction bag
+  description: A rugged belt bag for carrying construction materials.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Mining/ore_bag.rsi
+    state: icon
+  - type: Clothing
+    sprite: Objects/Specific/Mining/ore_bag.rsi
+    quickEquip: false
+    slots:
+    - belt
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,3
+    quickInsert: true
+    areaInsert: true
+    whitelist:
+      tags:
+      - Ingot
+      - Sheet
+      - ConstructionMaterial
+  - type: Dumpable
+  - type: StaticPrice
+    price: 55.5
+
+- type: entity
+  parent: BaseSMES
+  id: PortableSMESEmpty
+  suffix: Empty
+  name: portable SMES
+  description: A movable SMES that charges from an HV cable and supplies a local LV network.
+  components:
+  - type: AmbientSound
+    volume: -9
+    range: 2
+    sound:
+      path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: Battery
+    maxCharge: 8000000
+    startingCharge: 0
+  - type: PowerNetworkBattery
+    maxSupply: 15000
+    maxChargeRate: 40000
+    supplyRampTolerance: 5000
+    supplyRampRate: 500
+    efficiency: 0.8
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+  - type: BatteryDischarger
+    voltage: Apc
+    node: output
+  - type: PowerProvider
+    voltage: Apc
+  - type: Apc
+    voltage: Apc
+  - type: ExtensionCableProvider
+  - type: Machine
+    board: PortableSMESMachineCircuitboard
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.30,-0.30,0.30,0.30"
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  parent: PortableSMESEmpty
+  id: PortableSMES
+  suffix: Portable, 8MJ
+  components:
+  - type: Battery
+    startingCharge: 8000000
+
+- type: entity
+  id: PortableSMESMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: portable SMES machine board
+  description: A machine printed circuit board for a portable SMES.
+  components:
+  - type: Sprite
+    state: engineering
+  - type: MachineBoard
+    prototype: PortableSMESEmpty
+    componentRequirements:
+      PowerCell:
+        amount: 4
+        defaultPrototype: PowerCellSmall
+    stackRequirements:
+      Manipulator: 1
+      CableHV: 10

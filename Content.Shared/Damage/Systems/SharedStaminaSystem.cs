@@ -159,13 +159,11 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         if (component.Critical)
             return;
 
-        var damage = args.PushProbability * component.CritThreshold;
-        TakeStaminaDamage(uid, damage, component, source: args.Source);
+        TakeStaminaDamage(uid, args.StaminaDamage, component, source: args.Source);
 
         args.PopupPrefix = "disarm-action-shove-";
         args.IsStunned = component.Critical;
-
-        args.Handled = true;
+        // Shoving shouldnt handle it
     }
 
     [SubscribeLocalEvent]
@@ -329,7 +327,8 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     }
 
     public void TakeStaminaDamage(EntityUid uid, float value, StaminaComponent? component = null,
-        EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null, bool ignoreResist = false)
+        EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null, bool ignoreResist = false,
+        bool immediate = true) // Trauma
     {
         if (!Resolve(uid, ref component, false))
             return;
@@ -376,9 +375,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
         if (!component.Critical)
         {
-            if (component.StaminaDamage >= component.CritThreshold)
+            if (component.StaminaDamage >= component.CritThreshold && value > 0) // Trauma - check positive value too
             {
-                EnterStamCrit(uid, component);
+                EnterStamCrit(uid, component, immediate); // Trauma - pass immediate
             }
         }
         else
@@ -455,11 +454,18 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         }
     }
 
-    private void EnterStamCrit(EntityUid uid, StaminaComponent? component = null)
+    private void EnterStamCrit(EntityUid uid, StaminaComponent? component = null, bool hardStun = false)
     {
         if (!Resolve(uid, ref component) ||
             component.Critical)
         {
+            return;
+        }
+
+        if (!hardStun)
+        {
+            if (!HasComp<KnockedDownComponent>(uid))
+                StunSystem.TryKnockdown(uid, component.StunTime, true);
             return;
         }
 

@@ -1,0 +1,19 @@
+- type: latheRecipe
+  id: AshfallTapeRecorder
+  result: AshfallTapeRecorder
+  completetime: 4
+  categories:
+  - Tools
+  materials:
+    Steel: 600
+    Glass: 300
+
+- type: latheRecipe
+  id: AshfallRecorderTape
+  result: AshfallRecorderTape
+  completetime: 1
+  categories:
+  - Tools
+  materials:
+    Steel: 100
+    Glass: 50

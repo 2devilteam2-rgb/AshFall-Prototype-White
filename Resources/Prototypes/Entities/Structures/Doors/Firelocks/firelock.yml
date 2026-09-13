@@ -9,6 +9,7 @@
     flags:
     - Anchorable
   - type: Rotatable
+  - type: ZoneBoundaryExempt
   - type: AtmosAlarmable
     syncWith:
     - FireAlarm

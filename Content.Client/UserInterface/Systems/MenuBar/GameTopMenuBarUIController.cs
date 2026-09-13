@@ -25,6 +25,10 @@ public sealed partial class GameTopMenuBarUIController : UIController
     [Dependency] private GuidebookUIController _guidebook = default!;
     [Dependency] private EmotesUIController _emotes = default!;
 
+    // <Trauma>
+    public static Action<GameTopMenuBar>? OnLoad;
+    public static Action<GameTopMenuBar>? OnUnload;
+    // </Trauma>
     private GameTopMenuBar? GameTopMenuBar => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>();
 
     public override void Initialize()
@@ -47,6 +51,10 @@ public sealed partial class GameTopMenuBarUIController : UIController
         _action.UnloadButton();
         _sandbox.UnloadButton();
         _emotes.UnloadButton();
+        // <Trauma>
+        if (GameTopMenuBar is { } bar)
+            OnUnload?.Invoke(bar);
+        // </Trauma>
     }
 
     public void LoadButtons()
@@ -60,5 +68,9 @@ public sealed partial class GameTopMenuBarUIController : UIController
         _action.LoadButton();
         _sandbox.LoadButton();
         _emotes.LoadButton();
+        // <Trauma>
+        if (GameTopMenuBar is { } bar)
+            OnLoad?.Invoke(bar);
+        // </Trauma>
     }
 }

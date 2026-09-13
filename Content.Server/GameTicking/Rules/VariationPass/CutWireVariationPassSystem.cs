@@ -21,7 +21,7 @@ public sealed partial class CutWireVariationPassSystem : VariationPassSystem<Cut
         while (query.MoveNext(out var uid, out _, out var transform))
         {
             // Ignore if not part of the station
-            if (!IsMemberOfStation((uid, transform), ref args))
+            if (!IsTarget(ent, (uid, transform), ref args))
                 continue;
 
             // Check against blacklist

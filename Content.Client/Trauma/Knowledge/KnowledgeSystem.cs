@@ -11,7 +11,9 @@ using Content.Trauma.Common.CCVar;
 using Content.Trauma.Common.Knowledge;
 using Content.Trauma.Common.Knowledge.Components;
 using Content.Trauma.Common.Knowledge.Prototypes;
+using Content.Trauma.Common.MartialArts;
 using Content.Trauma.Shared.Knowledge.Systems;
+using Content.Trauma.Shared.MartialArts.Components;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Prototypes;
 
@@ -33,6 +35,7 @@ public sealed partial class KnowledgeSystem : SharedKnowledgeSystem
         SubscribeLocalEvent<KnowledgeHolderComponent, UpdateExperienceEvent>(OnUpdateExperienceEvent);
         Subs.CVar(_cfg, TraumaCVars.SkillPopups, x => _showPopups = x, true);
         SubscribeAllEvent<SkillPopupEvent>(OnSkillPopup);
+        SubscribeLocalEvent<KnowledgeHolderComponent, GetPerformedAttackTypesEvent>(OnGetAttackTypes);
 
         CharacterWindow.OnOpened += EnsureKnowledgeTab;
         LobbyUIController.OnProfileEditorCreated += AddProfileEditorTab;
@@ -43,6 +46,15 @@ public sealed partial class KnowledgeSystem : SharedKnowledgeSystem
         base.Shutdown();
         CharacterWindow.OnOpened -= EnsureKnowledgeTab;
         LobbyUIController.OnProfileEditorCreated -= AddProfileEditorTab;
+    }
+
+    private void OnGetAttackTypes(Entity<KnowledgeHolderComponent> ent, ref GetPerformedAttackTypesEvent args)
+    {
+        if (GetActiveMartialArt(ent) is not { } skill ||
+            !TryComp<CanPerformComboComponent>(skill, out var combo))
+            return;
+
+        args.AttackTypes = combo.LastAttacks;
     }
 
     private void EnsureKnowledgeTab(CharacterWindow window)
@@ -107,6 +119,23 @@ public sealed partial class KnowledgeSystem : SharedKnowledgeSystem
             .ToList();
     }
 
+    /// <summary>
+    /// Returns the martial arts that a knowledge entity has, along with some helper data for the client.
+    /// </summary>
+    public List<(EntityUid, EntProtoId, string)> GetMartialArtsForClientDoohickey(EntityUid target)
+    {
+        if (GetKnowledgeWith<MartialArtsKnowledgeComponent>(target) is not {} arts)
+            return [];
+
+        var list = new List<(EntityUid, EntProtoId, string)>();
+        foreach (var art in arts)
+        {
+            list.Add((art, Prototype(art)!.ID, Name(art)));
+        }
+        list.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+        return list;
+    }
+
     public void OnUpdateExperienceEvent(Entity<KnowledgeHolderComponent> ent, ref UpdateExperienceEvent args)
     {
         var localPlayer = _player.LocalEntity;
@@ -117,6 +146,14 @@ public sealed partial class KnowledgeSystem : SharedKnowledgeSystem
             return;
 
         EnsureKnowledgeTab(window);
+    }
+
+    /// <summary>
+    /// Changes the active martial art of the player.
+    /// </summary>
+    public void ChangeMartialArt(EntProtoId? id)
+    {
+        RaisePredictiveEvent(new KnowledgeUpdateMartialArtsEvent(id));
     }
 
     private void OnSkillPopup(SkillPopupEvent args)

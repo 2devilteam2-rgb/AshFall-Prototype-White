@@ -154,7 +154,7 @@ public sealed partial class PartStatusSystem : EntitySystem
             return;
 
         var partStatusSet = CollectPartStatuses(entity);
-        var text = GetExamineText(entity, entity, partStatusSet);
+        var text = GetSelfStatusText(entity, partStatusSet);
 
         _chat.ChatMessageToOne(
             ChatChannel.Emotes,

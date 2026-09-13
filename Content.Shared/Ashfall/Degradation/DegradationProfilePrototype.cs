@@ -1,3 +1,4 @@
+using Content.Shared._Starlight.Zones;
 using Robust.Shared.Prototypes;
 
 namespace Ashfall.Shared.Degradation;
@@ -56,4 +57,7 @@ public sealed partial class DegradationFaultEntry
 
     [DataField]
     public HashSet<string> IncompatibleWith = new();
+
+    [DataField]
+    public ProtoId<ZonePrototype>? TargetZone;
 }

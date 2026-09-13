@@ -1,0 +1,33 @@
+- type: latheRecipe
+  id: ConstructionBag
+  result: ConstructionBag
+  completetime: 1
+  categories:
+  - Tools
+  - Engineering
+  materials:
+    Steel: 500
+    Cloth: 500
+
+- type: latheRecipe
+  id: PortableSMESMachineCircuitboard
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  result: PortableSMESMachineCircuitboard
+  materials:
+    Steel: 800
+    Glass: 900
+
+- type: latheRecipe
+  id: AlertsComputerCircuitboard
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  result: AlertsComputerCircuitboard
+
+- type: latheRecipe
+  id: PowerComputerCircuitboard
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  result: PowerComputerCircuitboard
+
+- type: latheRecipe
+  id: AtmosMonitoringComputerCircuitboard
+  parent: [ BaseCircuitboardRecipe, BaseEngineeringMachineRecipeCategory ]
+  result: AtmosMonitoringComputerCircuitboard

@@ -1,0 +1,9 @@
+ent-AshfallRestorationTool = restoration scanner
+    .desc = Compares the station with its original layout and rebuilds missing structures from loaded materials.
+ent-AshfallRestorationGhost = restoration outline
+ashfall-restoration-ghost-name = missing {$proto}
+ashfall-restoration-no-snapshot = This grid has no restoration snapshot.
+ashfall-restoration-occupied = The original position is occupied by another anchored object.
+ashfall-restoration-original-exists = The original structure still exists elsewhere and cannot be duplicated.
+ashfall-restoration-missing-materials = The scanner does not contain the required materials or components.
+ashfall-restoration-complete = Original structure restored.

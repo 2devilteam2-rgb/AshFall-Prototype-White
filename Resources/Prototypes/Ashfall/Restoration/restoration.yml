@@ -1,0 +1,31 @@
+- type: entity
+  id: AshfallRestorationTool
+  parent: BaseStorageItem
+  name: restoration scanner
+  description: Compares the station with its original layout and rebuilds missing structures from loaded materials.
+  components:
+  - type: RestorationTool
+  - type: Sprite
+    sprite: Objects/Tools/rcd.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: Objects/Tools/rcd.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,5,3
+    quickInsert: true
+    whitelist:
+      tags:
+      - Sheet
+      - Ingot
+      - ConstructionMaterial
+
+- type: entity
+  id: AshfallRestorationGhost
+  name: restoration outline

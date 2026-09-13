@@ -51,6 +51,9 @@
     resistance: 2
   - type: BlockWeather
   - type: SunShadowCast
+  - type: Restorable
+    requirements:
+      Steel: 2
 
 - type: entity
   abstract: true
@@ -422,6 +425,10 @@
     price: 250
   - type: RadiationBlocker
     resistance: 5
+  - type: Restorable
+    requirements:
+      Steel: 1
+      Plasteel: 1
   - type: Fixtures
     fixtures:
       fix1:
@@ -475,6 +482,13 @@
       - *SpawnPlasteel
   - type: RadiationBlocker
     resistance: 5
+  - type: Construction
+    graph: Girder
+    node: diagonalReinforcedWall
+  - type: Restorable
+    requirements:
+      Steel: 1
+      Plasteel: 1
 
 - type: entity
   parent: [ BaseWall, StructureHealthWallStrong ]
@@ -718,6 +732,9 @@
       - *ChangeNodeGirder
       - *SoundMetalSlam
       - *SpawnSteel
+  - type: Construction
+    graph: Girder
+    node: diagonalWall
 
 - type: entity
   parent: WallSolid

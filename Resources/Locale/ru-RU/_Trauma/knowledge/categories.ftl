@@ -4,3 +4,4 @@ knowledge-category-MeleeCombat = Ближний бой
 knowledge-category-RangedCombat = Дальний бой
 knowledge-category-Physical = Физическая форма
 knowledge-category-Crafting = Ремесло
+knowledge-category-Martial = Боевые искусства

@@ -8,7 +8,7 @@ namespace Content.Shared.Movement.Pulling.Components;
 /// Specifies an entity as being pullable by an entity with <see cref="PullerComponent"/>
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(Systems.PullingSystem))]
+// GOob edit modularity delted explit access
 public sealed partial class PullableComponent : Component
 {
     /// <summary>

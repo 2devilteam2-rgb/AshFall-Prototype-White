@@ -1,4 +1,9 @@
-﻿using Content.Shared.Damage;
+﻿// <Trauma>
+using Content.Medical.Common.Damage;
+using Content.Medical.Common.EntityEffects;
+using Content.Medical.Common.Targeting;
+// </Trauma>
+using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
@@ -27,7 +32,12 @@ public sealed partial class HealthChangeEntityEffectSystem : EntityEffectSystem<
                 entity.AsNullable(),
                 damageSpec,
                 args.Effect.IgnoreResistances,
-                interruptsDoAfters: false);
+                interruptsDoAfters: false,
+                origin: args.User, // Trauma - without this the user's targeting is never used
+                targetPart: args.Effect.UseTargeting ? args.Effect.TargetPart : null,
+                ignoreBlockers: args.Effect.IgnoreBlockers,
+                splitDamage: args.Effect.SplitDamage,
+                increaseOnly: args.Effect.IncreaseOnly);
     }
 }
 
@@ -45,6 +55,29 @@ public sealed partial class HealthChange : EntityEffectBase<HealthChange>
     /// </summary>
     [DataField]
     public bool IgnoreResistances = true;
+
+    // <Trauma>
+    /// <summary>
+    /// How to scale the effect based on the temperature of the target entity.
+    /// </summary>
+    [DataField]
+    public TemperatureScaling? ScaleByTemperature;
+
+    [DataField]
+    public SplitDamageBehavior SplitDamage = SplitDamageBehavior.SplitEnsureAllOrganic;
+
+    [DataField]
+    public bool UseTargeting = true;
+
+    [DataField]
+    public TargetBodyPart TargetPart = TargetBodyPart.All;
+
+    [DataField]
+    public bool IgnoreBlockers = true;
+
+    [DataField]
+    public bool IncreaseOnly;
+    // </Trauma>
 
     public override string EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         {

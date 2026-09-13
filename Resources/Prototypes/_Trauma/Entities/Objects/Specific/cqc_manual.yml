@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+- type: entity
+  abstract: true
+  id: BaseBookSounds # BookBase isnt really a base
+  components:
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_Goobstation/Items/handling/book_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_Goobstation/Items/handling/book_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_Goobstation/Items/handling/book_drop.ogg
+      params:
+        volume: -4
+
+- type: entity
+  parent: [BaseItem, BaseSyndicateContraband, BaseBookSounds]
+  id: CQCManual
+  name: old manual
+  description: A small, black manual. There are drawn instructions of tactical hand-to-hand combat.
+  components:
+  - type: Sprite
+    sprite: _Goobstation/Objects/Misc/cqc_manual.rsi
+    layers:
+    - state: icon
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 3000
+  - type: UseRequiresSight
+  - type: KnowledgeGrantOnUse
+    skills:
+      MartialArtCQC: 88
+    doAfter: 2
+  - type: GuideHelp
+    guides:
+    - CQC

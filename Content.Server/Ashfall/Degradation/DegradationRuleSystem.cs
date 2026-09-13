@@ -1,8 +1,10 @@
 using Content.Server.GameTicking.Rules;
 using Content.Server.Station.Events;
+using Content.Server.Station.Systems;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.Prototypes;
 using Ashfall.Server.Degradation.Components;
+using Content.Server.Ashfall.Restoration;
 using Ashfall.Shared.Degradation;
 
 namespace Ashfall.Server.Degradation;
@@ -13,11 +15,13 @@ namespace Ashfall.Server.Degradation;
 public sealed partial class DegradationRuleSystem : GameRuleSystem<DegradationRuleComponent>
 {
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RestorationSystem _restoration = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<StationPostInitEvent>(OnStationPostInit);
+        SubscribeLocalEvent<StationPostInitEvent>(OnStationPostInit,
+            before: new[] { typeof(RoundstartStationVariationRuleSystem) });
     }
 
     protected override void Added(
@@ -42,11 +46,15 @@ public sealed partial class DegradationRuleSystem : GameRuleSystem<DegradationRu
 
         foreach (var fault in scenario.Faults)
         {
-            if (GameTicker.AddFilteredGameRule(fault.Rule) == null)
+            var faultRule = GameTicker.AddFilteredGameRule(fault.Rule);
+            if (faultRule == null)
             {
                 Log.Warning($"Degradation fault {fault.Id} ({fault.Rule}) was ignored and will not be applied.");
                 continue;
             }
+
+            if (fault.TargetZone is { } zone)
+                EnsureComp<DegradationZoneTargetComponent>(faultRule.Value).Zone = zone;
 
             component.ActivatedFaults.Add(fault.Id);
             component.ActivatedRules.Add(fault.Rule);
@@ -65,6 +73,9 @@ public sealed partial class DegradationRuleSystem : GameRuleSystem<DegradationRu
         {
             if (HasComp<EndedGameRuleComponent>(uid) || rule.Scenario == null)
                 continue;
+
+            foreach (var grid in ev.Station.Comp.Grids)
+                _restoration.CapturePristineLayout(grid);
 
             var state = EnsureComp<DegradationStateComponent>(ev.Station);
             state.Profile = rule.Profile.Id;

@@ -1,0 +1,110 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: AshfallTapeRecorderBase
+  components:
+  - type: Sprite
+    sprite: Ashfall/Objects/Recorder/cassette_player.rsi
+    layers:
+    - map: ["enum.UniversalRecorderVisualLayers.Base"]
+      state: taperecorder_idle
+  - type: Item
+    size: Small
+    inhandVisuals:
+      left:
+      - sprite: Objects/Fun/Instruments/recorder.rsi
+        state: inhand-left
+      right:
+      - sprite: Objects/Fun/Instruments/recorder.rsi
+        state: inhand-right
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.UniversalRecorderVisuals.State:
+        enum.UniversalRecorderVisualLayers.Base:
+          Empty: { state: taperecorder_empty }
+          Idle: { state: taperecorder_idle }
+          Recording: { state: taperecorder_recording }
+          Playing: { state: taperecorder_playing }
+  - type: UniversalRecorder
+    tapeSlot:
+      name: ashfall-recorder-slot-name
+      insertSuccessPopup: ashfall-recorder-popup-insert-generic
+      insertSound: /Audio/Machines/button.ogg
+      ejectSound: /Audio/Machines/button.ogg
+      whitelist:
+        components:
+        - UniversalRecorderTape
+  - type: ContainerContainer
+    containers:
+      ashfall_recorder_tape: !type:ContainerSlot {}
+  - type: ItemSlots
+  - type: UserInterface
+    interfaces:
+      enum.UniversalRecorderUiKey.Recorder:
+        type: UniversalRecorderRecorderBui
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 60
+      Glass: 30
+
+- type: entity
+  parent: AshfallTapeRecorderBase
+  id: AshfallTapeRecorderEmpty
+  name: tape recorder
+  description: Records nearby speech onto magnetic tape, plays it back, and prints a transcript.
+  suffix: Empty
+
+- type: entity
+  parent: AshfallTapeRecorderBase
+  id: AshfallTapeRecorder
+  name: tape recorder
+  description: Records nearby speech onto magnetic tape, plays it back, and prints a transcript.
+  components:
+  - type: UniversalRecorder
+    tapeSlot:
+      name: ashfall-recorder-slot-name
+      startingItem: AshfallRecorderTape
+      insertSuccessPopup: ashfall-recorder-popup-insert-generic
+      insertSound: /Audio/Machines/button.ogg
+      ejectSound: /Audio/Machines/button.ogg
+      whitelist:
+        components:
+        - UniversalRecorderTape
+
+- type: entity
+  parent: BaseItem
+  id: AshfallRecorderTape
+  name: magnetic cassette
+  description: A two-sided magnetic cassette with twenty minutes of capacity per side.
+  components:
+  - type: Sprite
+    sprite: Ashfall/Objects/Recorder/cassette_player.rsi
+    layers:
+    - map: ["enum.UniversalRecorderTapeVisualLayers.Base"]
+      state: cassette_regulation
+    - map: ["enum.UniversalRecorderTapeVisualLayers.Ribbon"]
+      state: ribbon_overlay
+      visible: false
+  - type: Item
+    size: Tiny
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.UniversalRecorderTapeVisuals.Side:
+        enum.UniversalRecorderTapeVisualLayers.Base:
+          Front: { state: cassette_regulation }
+          Back: { state: cassette_flip }
+      enum.UniversalRecorderTapeVisuals.Unspooled:
+        enum.UniversalRecorderTapeVisualLayers.Ribbon:
+          True: { visible: true }
+          False: { visible: false }
+  - type: UniversalRecorderTape
+  - type: UserInterface
+    interfaces:
+      enum.UniversalRecorderUiKey.Tape:
+        type: UniversalRecorderTapeBui
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 20
+      Glass: 5

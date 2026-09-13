@@ -115,6 +115,13 @@ public sealed partial class RepairableSystem : EntitySystem
             delay *= ent.Comp.SelfRepairPenalty;
         }
 
+        // Self-repair already has its own explicit penalty.
+        if (args.User != args.Target && TryComp<DamageableComponent>(ent.Owner, out var damageable))
+        {
+            var positiveDamage = _damageableSystem.GetPositiveDamage((ent.Owner, damageable)).GetTotal();
+            delay *= Math.Clamp((float) positiveDamage / 100f, 0.5f, 3f);
+        }
+
         // Run the repairing doafter
         args.Handled = _toolSystem.UseTool(args.Used, args.User, ent.Owner, delay, ent.Comp.QualityNeeded, new RepairDoAfterEvent(), ent.Comp.FuelCost);
     }

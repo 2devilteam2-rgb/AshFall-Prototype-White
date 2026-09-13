@@ -9,6 +9,10 @@ namespace Content.Trauma.Common.Input
     {
         public static readonly BoundKeyFunction Strafe = "Strafe";
 
+        // Martial arts
+        public static readonly BoundKeyFunction OpenMartialArtsMenu = "OpenMartialArtsMenu";
+        public static readonly BoundKeyFunction ResistGrab = "ResistGrab";
+
         // Targeting
         public static readonly BoundKeyFunction TargetingMod = "TargetingMod";
         public static readonly BoundKeyFunction TargetHead = "TargetHead";

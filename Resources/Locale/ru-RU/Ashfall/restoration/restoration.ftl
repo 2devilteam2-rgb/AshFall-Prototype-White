@@ -1,0 +1,9 @@
+ent-AshfallRestorationTool = реставрационный сканер
+    .desc = Сравнивает станцию с исходной планировкой и восстанавливает пропавшие конструкции из загруженных материалов.
+ent-AshfallRestorationGhost = контур восстановления
+ashfall-restoration-ghost-name = отсутствует: {$proto}
+ashfall-restoration-no-snapshot = Для этой сети нет исходного снимка.
+ashfall-restoration-occupied = Исходное место занято другой закреплённой конструкцией.
+ashfall-restoration-original-exists = Исходная конструкция всё ещё существует в другом месте, её нельзя дублировать.
+ashfall-restoration-missing-materials = В сканере не хватает материалов или деталей.
+ashfall-restoration-complete = Исходная конструкция восстановлена.

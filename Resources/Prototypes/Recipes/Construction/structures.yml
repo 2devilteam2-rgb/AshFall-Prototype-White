@@ -65,8 +65,22 @@
 
 - type: construction
   parent: Girder
+  id: DiagonalWall
+  name: recipes-wall-diagonal-name
+  targetNode: diagonalWall
+  canRotate: true
+
+- type: construction
+  parent: Girder
   id: ReinforcedWall
   targetNode: reinforcedWall
+
+- type: construction
+  parent: Girder
+  id: DiagonalReinforcedWall
+  name: recipes-reinforced-wall-diagonal-name
+  targetNode: diagonalReinforcedWall
+  canRotate: true
 
 - type: construction
   parent: Girder

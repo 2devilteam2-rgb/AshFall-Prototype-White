@@ -1,0 +1,10 @@
+ent-ConstructionBag = construction bag
+    .desc = A rugged belt bag for carrying construction materials.
+ent-PortableSMESEmpty = portable SMES
+    .desc = A movable SMES that charges from an HV cable and supplies a local LV network.
+ent-PortableSMES = { ent-PortableSMESEmpty }
+    .desc = { ent-PortableSMESEmpty.desc }
+ent-PortableSMESMachineCircuitboard = portable SMES machine board
+    .desc = A machine printed circuit board for a portable SMES.
+recipes-wall-diagonal-name = diagonal wall
+recipes-reinforced-wall-diagonal-name = diagonal reinforced wall
