@@ -79,9 +79,8 @@
                                             <Label Name="DossierNameLabel" StyleClasses="FancyWindowTitle" FontColorOverride="#D48944" HorizontalExpand="True" />
                                             <Label Name="DossierNumberLabel" StyleClasses="Status" FontColorOverride="#878C87" Align="Right" />
                                         </BoxContainer>
-                                        <GridContainer Name="DossierFactsGrid" Columns="4" HorizontalExpand="True" HSeparationOverride="8" VSeparationOverride="3" />
-                                        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8" Margin="0 6 0 0">
-                                            <GridContainer Name="DossierCultureGrid" Columns="4" HorizontalExpand="True" HSeparationOverride="8" VSeparationOverride="3" />
+                                        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" SeparationOverride="8">
+                                            <GridContainer Name="DossierFactsGrid" Columns="4" HorizontalExpand="True" HSeparationOverride="12" VSeparationOverride="4" />
                                             <Button Name="CultureWikiButton" Text="{Loc 'ashfall-dossier-culture-wiki'}" StyleClasses="AshfallUtilityAction" MinWidth="90" MinHeight="28" VerticalAlignment="Center" />
                                         </BoxContainer>
                                         <BoxContainer Name="DossierSkills" Orientation="Vertical" HorizontalExpand="True" Margin="0 4 0 0" SeparationOverride="2" />

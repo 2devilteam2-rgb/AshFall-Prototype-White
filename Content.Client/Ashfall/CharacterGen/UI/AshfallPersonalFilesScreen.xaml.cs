@@ -57,7 +57,6 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
     private ProfilePreviewSpriteView DossierPreview => this.FindControl<ProfilePreviewSpriteView>("DossierPreview");
     private Label DossierNameLabel => this.FindControl<Label>("DossierNameLabel");
     private GridContainer DossierFactsGrid => this.FindControl<GridContainer>("DossierFactsGrid");
-    private GridContainer DossierCultureGrid => this.FindControl<GridContainer>("DossierCultureGrid");
     private Button CultureWikiButton => this.FindControl<Button>("CultureWikiButton");
     private Label DossierNumberLabel => this.FindControl<Label>("DossierNumberLabel");
     private Label DossierSelectionLabel => this.FindControl<Label>("DossierSelectionLabel");
@@ -570,13 +569,23 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-sex", sex);
         AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-species", species, padCells: 2);
 
-        DossierCultureGrid.RemoveAllChildren();
+        var hasCultureFacts = !string.IsNullOrEmpty(candidate.Dossier.Morphology) ||
+                              !string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin) ||
+                              !string.IsNullOrEmpty(candidate.Dossier.Birthplace);
+        if (hasCultureFacts)
+            AddDossierSpacer(DossierFactsGrid);
+
         if (!string.IsNullOrEmpty(candidate.Dossier.Morphology))
-            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-phenotype", candidate.Dossier.Morphology);
+            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-phenotype", candidate.Dossier.Morphology);
         if (!string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin))
-            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-culture", candidate.Dossier.CulturalOrigin);
+            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-culture", candidate.Dossier.CulturalOrigin);
         if (!string.IsNullOrEmpty(candidate.Dossier.Birthplace))
-            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-birthplace", candidate.Dossier.Birthplace, padCells: 2);
+        {
+            // birthplace reads best on its own full row, so pad the culture row out first
+            while (DossierFactsGrid.ChildCount % 4 != 0)
+                DossierFactsGrid.AddChild(new Control());
+            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-birthplace", candidate.Dossier.Birthplace, padCells: 2);
+        }
         DossierNumberLabel.Text = Loc.GetString("ashfall-personal-files-number",
             ("number", _inspectedPinSlot is { } slot ? slot + 1 : _inspectedIndex + 1));
         var inspectedPin = _genSystem.GetPinByCandidate(candidate.CandidateId);
@@ -725,13 +734,19 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
             grid.AddChild(new Control());
     }
 
+    private static void AddDossierSpacer(GridContainer grid)
+    {
+        // one empty cell per grid column, forming a short blank row between fact groups
+        for (var i = 0; i < 4; i++)
+            grid.AddChild(new Control { MinHeight = 6 });
+    }
+
     private void ClearDossier()
     {
         CloseSkillsWindow();
         DossierPreview.ClearPreview();
         DossierNameLabel.Text = string.Empty;
         DossierFactsGrid.RemoveAllChildren();
-        DossierCultureGrid.RemoveAllChildren();
         DossierNumberLabel.Text = string.Empty;
         DossierSelectionLabel.Text = string.Empty;
         DossierSkills.RemoveAllChildren();
