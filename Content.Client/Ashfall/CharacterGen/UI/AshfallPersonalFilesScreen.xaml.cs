@@ -56,10 +56,9 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
     private PanelContainer DossierPanel => this.FindControl<PanelContainer>("DossierPanel");
     private ProfilePreviewSpriteView DossierPreview => this.FindControl<ProfilePreviewSpriteView>("DossierPreview");
     private Label DossierNameLabel => this.FindControl<Label>("DossierNameLabel");
-    private Label DossierBioLabel => this.FindControl<Label>("DossierBioLabel");
-    private RichTextLabel DossierCultureLabel => this.FindControl<RichTextLabel>("DossierCultureLabel");
+    private GridContainer DossierFactsGrid => this.FindControl<GridContainer>("DossierFactsGrid");
+    private GridContainer DossierCultureGrid => this.FindControl<GridContainer>("DossierCultureGrid");
     private Button CultureWikiButton => this.FindControl<Button>("CultureWikiButton");
-    private Label DossierBirthplaceLabel => this.FindControl<Label>("DossierBirthplaceLabel");
     private Label DossierNumberLabel => this.FindControl<Label>("DossierNumberLabel");
     private Label DossierSelectionLabel => this.FindControl<Label>("DossierSelectionLabel");
     private ScrollContainer DossierScroll => this.FindControl<ScrollContainer>("DossierScroll");
@@ -566,21 +565,18 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         var species = _prototypes.TryIndex<SpeciesPrototype>(profile.Species, out var speciesProto)
             ? Loc.GetString(speciesProto.Name)
             : Loc.GetString("ashfall-personal-files-sex-other");
-        DossierBioLabel.Text = Loc.GetString("ashfall-personal-files-dossier-bio", ("age", profile.Age), ("sex", sex), ("species", species));
-        // RichTextLabel: muted color via markup, the line wraps instead of clipping.
-        // Markup collapses runs of regular spaces, so the visual padding is non-breaking.
-        var cultureGap = new string('\u00A0', 2);
-        var cultureLine = !string.IsNullOrEmpty(candidate.Dossier.Morphology)
-            ? $"МОРФОЛОГИЯ // {candidate.Dossier.Morphology}{cultureGap}•{cultureGap}КУЛЬТУРНАЯ ЛИНИЯ // {candidate.Dossier.CulturalOrigin}"
-            : (!string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin)
-                ? $"КУЛЬТУРНАЯ ЛИНИЯ // {candidate.Dossier.CulturalOrigin}"
-                : string.Empty);
-        DossierCultureLabel.SetMarkup(string.IsNullOrEmpty(cultureLine)
-            ? string.Empty
-            : $"[color=#878C87]{cultureLine}[/color]");
-        DossierBirthplaceLabel.Text = !string.IsNullOrEmpty(candidate.Dossier.Birthplace)
-            ? $"МЕСТО РОЖДЕНИЯ // {candidate.Dossier.Birthplace}"
-            : string.Empty;
+        DossierFactsGrid.RemoveAllChildren();
+        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-age", profile.Age.ToString());
+        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-sex", sex);
+        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-species", species, padCells: 2);
+
+        DossierCultureGrid.RemoveAllChildren();
+        if (!string.IsNullOrEmpty(candidate.Dossier.Morphology))
+            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-phenotype", candidate.Dossier.Morphology);
+        if (!string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin))
+            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-culture", candidate.Dossier.CulturalOrigin);
+        if (!string.IsNullOrEmpty(candidate.Dossier.Birthplace))
+            AddDossierFact(DossierCultureGrid, "ashfall-personal-files-dossier-label-birthplace", candidate.Dossier.Birthplace, padCells: 2);
         DossierNumberLabel.Text = Loc.GetString("ashfall-personal-files-number",
             ("number", _inspectedPinSlot is { } slot ? slot + 1 : _inspectedIndex + 1));
         var inspectedPin = _genSystem.GetPinByCandidate(candidate.CandidateId);
@@ -711,14 +707,31 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
 
     // No candidate picked yet: blank dossier and a dimmed assignment placeholder, so the
     // top-down flow starts at the candidate list.
+    private void AddDossierFact(GridContainer grid, string labelKey, string value, int padCells = 0)
+    {
+        grid.AddChild(new Label
+        {
+            Text = Loc.GetString(labelKey),
+            FontColorOverride = Color.FromHex("#878C87"),
+        });
+        grid.AddChild(new Label
+        {
+            Text = value,
+            FontColorOverride = Color.FromHex("#C5CAC5"),
+            // Wider gap after the value visually groups each label-value pair.
+            Margin = new Thickness(0, 0, 18, 0),
+        });
+        for (var i = 0; i < padCells; i++)
+            grid.AddChild(new Control());
+    }
+
     private void ClearDossier()
     {
         CloseSkillsWindow();
         DossierPreview.ClearPreview();
         DossierNameLabel.Text = string.Empty;
-        DossierBioLabel.Text = string.Empty;
-        DossierCultureLabel.SetMarkup(string.Empty);
-        DossierBirthplaceLabel.Text = string.Empty;
+        DossierFactsGrid.RemoveAllChildren();
+        DossierCultureGrid.RemoveAllChildren();
         DossierNumberLabel.Text = string.Empty;
         DossierSelectionLabel.Text = string.Empty;
         DossierSkills.RemoveAllChildren();
