@@ -268,6 +268,10 @@ public sealed partial class PullingSystem
         if (!TrySetGrabStages((puller, puller.Comp), (pullable, pullable.Comp), newStage, escapeAttemptModifier))
             return false;
 
+        // Only player grab attacks advance combos; stage effects and escapes do not.
+        var grabAttack = new ComboAttackPerformedEvent(puller.Owner, pullable.Owner, puller.Owner, ComboAttackType.Grab);
+        RaiseLocalEvent(puller.Owner, ref grabAttack);
+
         var filter = Filter.Pvs(pullable, entityManager: EntityManager)
             .RemovePlayerByAttachedEntity(puller.Owner); // puller will predict it, don't flash twice
         _color.RaiseEffect(Color.Yellow, new List<EntityUid> { pullable }, filter);
@@ -276,11 +280,27 @@ public sealed partial class PullingSystem
 
     public bool TrySetGrabStages(Entity<PullerComponent> puller, Entity<PullableComponent> pullable, GrabStage stage, float escapeAttemptModifier = 1f)
     {
+        if (puller.Comp.Pulling != pullable.Owner || pullable.Comp.Puller != puller.Owner)
+            return false;
+
         var oldStage = puller.Comp.GrabStage;
+        if (oldStage == stage && pullable.Comp.GrabStage == stage)
+            return true;
+
         puller.Comp.GrabStage = stage;
         Dirty(puller);
         pullable.Comp.GrabStage = stage;
         Dirty(pullable);
+
+        if (!TryUpdateGrabVirtualItems(puller, pullable))
+        {
+            // couldn't claim the hands the new stage needs (e.g. choking wants both), undo the stage change
+            puller.Comp.GrabStage = oldStage;
+            Dirty(puller);
+            pullable.Comp.GrabStage = oldStage;
+            Dirty(pullable);
+            return false;
+        }
 
         // harder grabs force you closer together, you can't use mind powers to choke someone 3m away
         var stageLength = stage switch
@@ -304,16 +324,6 @@ public sealed partial class PullingSystem
                 nudge = Vector2.Normalize(nudge) * NudgeImpulse;
                 _physics.ApplyLinearImpulse(puller, nudge);
             }
-        }
-
-        if (!TryUpdateGrabVirtualItems(puller, pullable))
-        {
-            // couldn't claim the hands the new stage needs (e.g. choking wants both), undo the stage change
-            puller.Comp.GrabStage = oldStage;
-            Dirty(puller);
-            pullable.Comp.GrabStage = oldStage;
-            Dirty(pullable);
-            return false;
         }
 
         var filter = Filter.Pvs(puller, entityManager: EntityManager)
@@ -355,8 +365,6 @@ public sealed partial class PullingSystem
             popupType);
         _audio.PlayPredicted(new SoundPathSpecifier("/Audio/Effects/thudswoosh.ogg"), pullable, puller);
 
-        var comboEv = new ComboAttackPerformedEvent(puller.Owner, pullable.Owner, puller.Owner, ComboAttackType.Grab);
-        RaiseLocalEvent(puller.Owner, ref comboEv);
         return true;
     }
 
@@ -406,16 +414,17 @@ public sealed partial class PullingSystem
             return true;
         }
 
-        for (var i = 0; i < Math.Abs(delta); i++)
+        while (puller.Comp.GrabVirtualItems.Count > newVirtualItemsCount)
         {
-            if (i >= puller.Comp.GrabVirtualItems.Count)
-                break;
-
-            var item = puller.Comp.GrabVirtualItems[i];
-            puller.Comp.GrabVirtualItems.Remove(item);
-            if (TryComp<VirtualItemComponent>(item, out var virtualItem))
-                _virtual.DeleteVirtualItem((item, virtualItem), puller);
+            var index = puller.Comp.GrabVirtualItems.Count - 1;
+            var item = puller.Comp.GrabVirtualItems[index];
+            puller.Comp.GrabVirtualItems.RemoveAt(index);
+            // Hand cleanup must not treat this stage change as dropping the grab.
+            RemComp<VirtualItemComponent>(item);
+            PredictedQueueDel(item);
         }
+
+        Dirty(puller);
 
         return true;
     }

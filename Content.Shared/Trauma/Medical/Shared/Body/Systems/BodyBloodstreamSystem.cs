@@ -49,6 +49,7 @@ public sealed partial class BodyBloodstreamSystem : EntitySystem
     private static readonly TimeSpan BleedUpdateInterval = TimeSpan.FromSeconds(0.5);
 
     private readonly HashSet<EntityUid> _dirtyBodies = new();
+    private readonly HashSet<EntityUid> _fieldCauteryParts = new();
 
     public override void Initialize()
     {
@@ -339,7 +340,8 @@ public sealed partial class BodyBloodstreamSystem : EntitySystem
     {
         var delta = args.NewSeverity - args.OldSeverity;
         var part = args.Component.HoldingWoundable;
-        if (delta < ent.Comp.SeverityThreshold ||
+        if (_fieldCauteryParts.Contains(part) ||
+            delta < ent.Comp.SeverityThreshold ||
             TerminatingOrDeleted(part) ||
             _body.GetBody(part) is not {} body)
             return;
@@ -557,7 +559,16 @@ public sealed partial class BodyBloodstreamSystem : EntitySystem
         {
             var burn = new DamageSpecifier();
             burn.DamageDict["Heat"] = 15;
-            _damageable.TryChangeDamage(part, burn, origin: args.User);
+            // The treatment below seals one wound. Its burn must not cauterize the whole part too.
+            _fieldCauteryParts.Add(part);
+            try
+            {
+                _damageable.TryChangeDamage(part, burn, origin: args.User);
+            }
+            finally
+            {
+                _fieldCauteryParts.Remove(part);
+            }
         }
 
         worstBleed.BleedingAmountRaw = 0;
@@ -567,6 +578,8 @@ public sealed partial class BodyBloodstreamSystem : EntitySystem
             nameof(BleedInflicterComponent.BleedingAmountRaw),
             nameof(BleedInflicterComponent.IsBleeding),
             nameof(BleedInflicterComponent.Scaling));
+
+        UpdateBodyBleedAmount(ent);
 
         _audio.PlayPredicted(new SoundPathSpecifier("/Audio/Effects/lightburn.ogg"), ent.Owner, args.User);
         var msg = isImprovised

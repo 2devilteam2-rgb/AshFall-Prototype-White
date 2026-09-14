@@ -50,7 +50,7 @@ public sealed partial class UseDelaySystem
         if (!delayed.Comp.Delays.TryGetValue(id, out var entry))
             return false;
 
-        return entry.EndTime >= _gameTiming.CurTime;
+        return entry.EndTime > _gameTiming.CurTime;
     }
 
     /// <summary>

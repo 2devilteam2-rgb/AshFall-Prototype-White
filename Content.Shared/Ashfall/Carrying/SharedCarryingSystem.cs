@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.ActionBlocker;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
@@ -29,6 +30,7 @@ public abstract partial class SharedCarryingSystem : EntitySystem
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
 
     public override void Initialize()
     {
@@ -43,6 +45,8 @@ public abstract partial class SharedCarryingSystem : EntitySystem
         SubscribeLocalEvent<CarrierComponent, KnockedDownEvent>(OnKnockedDown);
         SubscribeLocalEvent<CarrierComponent, EntityTerminatingEvent>(OnCarrierTerminating);
 
+        SubscribeLocalEvent<BeingCarriedComponent, ComponentStartup>(OnBeingCarriedStartup);
+        SubscribeLocalEvent<BeingCarriedComponent, ComponentShutdown>(OnBeingCarriedShutdown);
         SubscribeLocalEvent<BeingCarriedComponent, UpdateCanMoveEvent>(OnBeingCarriedMoveAttempt);
         SubscribeLocalEvent<BeingCarriedComponent, StandAttemptEvent>(OnBeingCarriedStandAttempt);
         SubscribeLocalEvent<BeingCarriedComponent, EntityTerminatingEvent>(OnBeingCarriedTerminating);
@@ -254,8 +258,21 @@ public abstract partial class SharedCarryingSystem : EntitySystem
         DropCarried(uid, component);
     }
 
+    private void OnBeingCarriedStartup(Entity<BeingCarriedComponent> ent, ref ComponentStartup args)
+    {
+        _actionBlocker.UpdateCanMove(ent);
+    }
+
+    private void OnBeingCarriedShutdown(Entity<BeingCarriedComponent> ent, ref ComponentShutdown args)
+    {
+        _actionBlocker.UpdateCanMove(ent);
+    }
+
     private void OnBeingCarriedMoveAttempt(EntityUid uid, BeingCarriedComponent component, ref UpdateCanMoveEvent args)
     {
+        if (component.LifeStage > ComponentLifeStage.Running)
+            return;
+
         args.Cancel();
     }
 

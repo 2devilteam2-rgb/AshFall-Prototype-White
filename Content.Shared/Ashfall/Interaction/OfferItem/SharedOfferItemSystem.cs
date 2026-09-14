@@ -115,7 +115,9 @@ public abstract partial class SharedOfferItemSystem : EntitySystem
     {
         if (args.Handled ||
             args.User == uid ||
+            component.IsInOfferMode ||
             component.IsInReceiveMode ||
+            component.Target is not null ||
             !TryComp<OfferItemComponent>(args.User, out var offer) ||
             !offer.IsInOfferMode ||
             !TryGetStoredItem(args.User, offer, out var item) ||
