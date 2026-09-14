@@ -73,7 +73,17 @@ public sealed class ProfileFullBodySpriteView : ProfilePreviewSpriteView
         var oldModulate = world.Modulate;
         // Same as the bust view: take the tint from the screen handle, which already carries
         // the accumulated tree modulate (ancestor fades), not from own values.
-        world.Modulate *= renderHandle.DrawingHandleScreen.Modulate;
+        var tint = renderHandle.DrawingHandleScreen.Modulate;
+        // Dim-fade: darken RGB by the fade alpha and keep the sprite opaque, so every layer
+        // dims as one silhouette instead of clothes/hair revealing the body behind them.
+        // The dim bottoms out at the panel tone, not pure black, to blend into the dossier.
+        const float FloorR = 0x14 / 255f, FloorG = 0x15 / 255f, FloorB = 0x16 / 255f;
+        var fade = tint.A;
+        tint.R = tint.R * fade + FloorR * (1f - fade);
+        tint.G = tint.G * fade + FloorG * (1f - fade);
+        tint.B = tint.B * fade + FloorB * (1f - fade);
+        tint.A = 1;
+        world.Modulate *= tint;
 
         renderHandle.DrawEntity(PreviewDummy, position, scale, null, EyeRotation, OverrideDirection, sprite, xform, EntMan.System<SharedTransformSystem>());
         world.Modulate = oldModulate;
