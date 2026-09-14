@@ -32,6 +32,8 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
 {
     private AshfallSkillsDetailWindow? _skillsWindow;
     private AshfallCultureDetailWindow? _cultureWindow;
+    private HumanoidCharacterProfile? _skillsProfile;
+    private JobPrototype? _skillsJob;
 
     /// <summary>
     ///     Accent color shared with the generator's education tags.
@@ -48,15 +50,21 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
     private GridContainer CandidatesGrid => this.FindControl<GridContainer>("CandidatesGrid");
     private GridContainer PrioritySlotsGrid => this.FindControl<GridContainer>("PrioritySlotsGrid");
     private Label PriorityHintLabel => this.FindControl<Label>("PriorityHintLabel");
-    private BoxContainer DossierSkills => this.FindControl<BoxContainer>("DossierSkills");
+    private Control LeftFlowSpacer => this.FindControl<Control>("LeftFlowSpacer");
     private BoxContainer DossierSections => this.FindControl<BoxContainer>("DossierSections");
     private GridContainer JobsGrid => this.FindControl<GridContainer>("JobsGrid");
     private Label AssignmentHeading => this.FindControl<Label>("AssignmentHeading");
+    private LayoutContainer AssignmentSlotContainer => this.FindControl<LayoutContainer>("AssignmentSlotContainer");
     private PanelContainer AssignmentPanel => this.FindControl<PanelContainer>("AssignmentPanel");
     private PanelContainer DossierPanel => this.FindControl<PanelContainer>("DossierPanel");
     private ProfilePreviewSpriteView DossierPreview => this.FindControl<ProfilePreviewSpriteView>("DossierPreview");
     private Label DossierNameLabel => this.FindControl<Label>("DossierNameLabel");
-    private GridContainer DossierFactsGrid => this.FindControl<GridContainer>("DossierFactsGrid");
+    private BoxContainer DossierIdentityFacts => this.FindControl<BoxContainer>("DossierIdentityFacts");
+    private BoxContainer DossierSpeciesFacts => this.FindControl<BoxContainer>("DossierSpeciesFacts");
+    private BoxContainer DossierCultureFacts => this.FindControl<BoxContainer>("DossierCultureFacts");
+    private BoxContainer DossierBirthplaceFacts => this.FindControl<BoxContainer>("DossierBirthplaceFacts");
+    private RichTextLabel DossierSkillsSummary => this.FindControl<RichTextLabel>("DossierSkillsSummary");
+    private Button SkillsDetailsButton => this.FindControl<Button>("SkillsDetailsButton");
     private Button CultureWikiButton => this.FindControl<Button>("CultureWikiButton");
     private Label DossierNumberLabel => this.FindControl<Label>("DossierNumberLabel");
     private Label DossierSelectionLabel => this.FindControl<Label>("DossierSelectionLabel");
@@ -89,6 +97,7 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
 
     // Slide + fade animation state.
     private const float AnimationDuration = 0.45f;
+    private const float WideLeftFlowMinHeight = 900f;
     private float _assignmentAnimationProgress = 0f;
     private bool _assignmentTargetOpen = false;
 
@@ -128,6 +137,9 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         };
         RefreshButton.OnPressed += OnRefreshPressed;
         CultureWikiButton.OnPressed += OnCultureWikiPressed;
+        SkillsDetailsButton.OnPressed += _ => OpenSkillsWindow();
+        OnResized += UpdateLeftFlowLayout;
+        UpdateLeftFlowLayout();
 
         LayoutContainer.SetAnchorPreset(AssignmentPanel, LayoutContainer.LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(DossierPanel, LayoutContainer.LayoutPreset.Wide);
@@ -157,6 +169,13 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         LayoutContainer.SetMarginBottom(AmbientAnim, 16f);
     }
 
+    private void UpdateLeftFlowLayout()
+    {
+        // The whole left column scrolls at compact heights. On taller windows the spacer keeps
+        // priorities anchored near the bottom without making the candidate grid absorb space.
+        LeftFlowSpacer.Visible = Height >= WideLeftFlowMinHeight;
+    }
+
     protected override void EnteredTree()
     {
         base.EnteredTree();
@@ -175,16 +194,28 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         if (_timing.RealTime < _cooldownEnd)
             return;
 
+        var inspected = ResolveInspectedCandidate();
+        var pin = inspected == null ? null : _genSystem.GetPinByCandidate(inspected.CandidateId);
+
         _refreshPending = true;
-        _draftJob = null;
-        _inspectedIndex = -1;
-        _inspectedPinSlot = null;
         _pendingSlot = null;
-        _pendingDossierClear = false;
-        _assignmentTargetOpen = false;
-        _dossierTargetOpen = false;
-        _assignmentAnimationProgress = 0f;
-        _dossierAnimationProgress = 0f;
+
+        if (pin != null)
+        {
+            // Pins survive pool refreshes. Inspect through the slot DTO before the old pool is
+            // replaced, keeping the open panels and their animation progress exactly as-is.
+            _inspectedIndex = -1;
+            _inspectedPinSlot = pin.SlotIndex;
+            _draftJob = pin.Job;
+            _pendingDossierClear = false;
+        }
+        else
+        {
+            CloseInspection(inspected != null);
+        }
+
+        UpdateAllCards();
+        PopulatePrioritySlots();
         _genSystem.RequestPool(refresh: true);
     }
 
@@ -220,14 +251,13 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         if (_refreshPending)
         {
             _refreshPending = false;
-            _inspectedIndex = -1;
-            _inspectedPinSlot = null;
-            _draftJob = null;
             _pendingSlot = null;
-            _assignmentTargetOpen = false;
-            _dossierTargetOpen = false;
-            _assignmentAnimationProgress = 0f;
-            _dossierAnimationProgress = 0f;
+
+            // A pin should survive a refresh. If it was removed concurrently, close through the
+            // normal animation rather than leaving a stale dossier or clearing it in one frame.
+            if (_inspectedPinSlot is { } slot && _genSystem.GetPinnedSlot(slot) == null)
+                CloseInspection(true);
+
             CandidatesGrid.RemoveAllChildren();
             _cardControls.Clear();
         }
@@ -288,13 +318,7 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
                 {
                     if (_inspectedIndex == inspectedIndex)
                     {
-                        _inspectedIndex = -1;
-                        _inspectedPinSlot = null;
-                        _draftJob = null;
-                        _pendingSlot = null;
-                        _assignmentTargetOpen = false;
-                        _dossierTargetOpen = false;
-                        _pendingDossierClear = true;
+                        CloseInspection(true);
                         UpdateAllCards();
                         PopulatePrioritySlots();
                         return;
@@ -410,6 +434,15 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         if (pinned != null)
         {
             var targetIndex = _genSystem.Candidates.FindIndex(c => c.CandidateId == pinned.CandidateId);
+            if ((_inspectedPinSlot == slotIndex) ||
+                (targetIndex >= 0 && _inspectedIndex == targetIndex))
+            {
+                CloseInspection(true);
+                UpdateAllCards();
+                PopulatePrioritySlots();
+                return;
+            }
+
             if (targetIndex >= 0)
             {
                 _inspectedIndex = targetIndex;
@@ -427,17 +460,6 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
             }
 
             // Pinned survivor of an earlier pool: inspect straight from the slot DTO.
-            if (_inspectedPinSlot == slotIndex)
-            {
-                _inspectedPinSlot = null;
-                _draftJob = null;
-                _assignmentTargetOpen = false;
-                _dossierTargetOpen = false;
-                _pendingDossierClear = true;
-                PopulatePrioritySlots();
-                return;
-            }
-
             _inspectedIndex = -1;
             _inspectedPinSlot = slotIndex;
             _draftJob = pinned.Job;
@@ -463,7 +485,15 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
 
         if (_draftJob is not { } job)
         {
-            ShowPriorityHint(Loc.GetString("ashfall-personal-files-slot-select-role"));
+            if (_pendingSlot == slotIndex)
+            {
+                SetPendingSlot(null);
+                HidePriorityHint();
+                return;
+            }
+
+            SetPendingSlot(slotIndex);
+            ShowPriorityHint(Loc.GetString("ashfall-personal-files-slot-pending", ("slot", slotIndex + 1)));
             return;
         }
 
@@ -511,18 +541,37 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         }
     }
 
+    private void CloseInspection(bool clearAfterAnimation)
+    {
+        _inspectedIndex = -1;
+        _inspectedPinSlot = null;
+        _draftJob = null;
+        _pendingSlot = null;
+        _assignmentTargetOpen = false;
+        _dossierTargetOpen = false;
+        _pendingDossierClear |= clearAfterAnimation;
+    }
+
     private void ShowPriorityHint(string text)
     {
         PriorityHintLabel.Text = text;
+        PriorityHintLabel.ToolTip = text;
     }
 
     private void HidePriorityHint()
     {
         PriorityHintLabel.Text = string.Empty;
+        PriorityHintLabel.ToolTip = null;
     }
 
     private void UpdatePriorityHint()
     {
+        if (_pendingSlot is { } pendingSlot)
+        {
+            ShowPriorityHint(Loc.GetString("ashfall-personal-files-slot-pending", ("slot", pendingSlot + 1)));
+            return;
+        }
+
         // Static hint while the inspected candidate is already pinned elsewhere.
         if (_inspectedIndex >= 0 && _inspectedIndex < _genSystem.Candidates.Count &&
             _genSystem.GetPinByCandidate(_genSystem.Candidates[_inspectedIndex].CandidateId) is { } pin)
@@ -564,28 +613,23 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         var species = _prototypes.TryIndex<SpeciesPrototype>(profile.Species, out var speciesProto)
             ? Loc.GetString(speciesProto.Name)
             : Loc.GetString("ashfall-personal-files-sex-other");
-        DossierFactsGrid.RemoveAllChildren();
-        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-age", profile.Age.ToString());
-        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-sex", sex);
-        AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-species", species, padCells: 2);
-
-        var hasCultureFacts = !string.IsNullOrEmpty(candidate.Dossier.Morphology) ||
-                              !string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin) ||
-                              !string.IsNullOrEmpty(candidate.Dossier.Birthplace);
-        if (hasCultureFacts)
-            AddDossierSpacer(DossierFactsGrid);
+        DossierIdentityFacts.RemoveAllChildren();
+        DossierSpeciesFacts.RemoveAllChildren();
+        DossierCultureFacts.RemoveAllChildren();
+        DossierBirthplaceFacts.RemoveAllChildren();
+        AddDossierFact(DossierIdentityFacts, "ashfall-personal-files-dossier-label-age", profile.Age.ToString());
+        AddDossierFact(DossierIdentityFacts, "ashfall-personal-files-dossier-label-sex", sex);
+        AddDossierFact(DossierSpeciesFacts, "ashfall-personal-files-dossier-label-species", species);
 
         if (!string.IsNullOrEmpty(candidate.Dossier.Morphology))
-            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-phenotype", candidate.Dossier.Morphology);
+            AddDossierFact(DossierCultureFacts, "ashfall-personal-files-dossier-label-phenotype", candidate.Dossier.Morphology);
         if (!string.IsNullOrEmpty(candidate.Dossier.CulturalOrigin))
-            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-culture", candidate.Dossier.CulturalOrigin);
+            AddDossierFact(DossierCultureFacts, "ashfall-personal-files-dossier-label-culture", candidate.Dossier.CulturalOrigin);
         if (!string.IsNullOrEmpty(candidate.Dossier.Birthplace))
-        {
-            // birthplace reads best on its own full row, so pad the culture row out first
-            while (DossierFactsGrid.ChildCount % 4 != 0)
-                DossierFactsGrid.AddChild(new Control());
-            AddDossierFact(DossierFactsGrid, "ashfall-personal-files-dossier-label-birthplace", candidate.Dossier.Birthplace, padCells: 2);
-        }
+            AddDossierFact(DossierBirthplaceFacts, "ashfall-personal-files-dossier-label-birthplace", candidate.Dossier.Birthplace);
+
+        DossierCultureFacts.Visible = DossierCultureFacts.ChildCount > 0;
+        DossierBirthplaceFacts.Visible = DossierBirthplaceFacts.ChildCount > 0;
         DossierNumberLabel.Text = Loc.GetString("ashfall-personal-files-number",
             ("number", _inspectedPinSlot is { } slot ? slot + 1 : _inspectedIndex + 1));
         var inspectedPin = _genSystem.GetPinByCandidate(candidate.CandidateId);
@@ -709,36 +753,41 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
             });
         }
 
+        // The assignment drawer keeps its original slide-down shape, but only reserves the
+        // height its rows actually need. This leaves the candidate selector usable at 720p
+        // without clipping the five large priority cards below it.
+        var assignmentRows = Math.Max(1, (JobsGrid.ChildCount + JobsGrid.Columns - 1) / JobsGrid.Columns);
+        var assignmentHeight = 72f + (assignmentRows - 1) * 36f;
+        AssignmentSlotContainer.MinSize = new Vector2(0f, assignmentHeight);
+        AssignmentPanel.MinSize = new Vector2(0f, assignmentHeight);
+
         AssignmentHeading.Text = _draftJob != null && _prototypes.TryIndex(_draftJob, out var draftJobProto)
             ? Loc.GetString("ashfall-personal-files-assignment-selected", ("job", draftJobProto.LocalizedName))
             : Loc.GetString("ashfall-personal-files-assignment-heading");
     }
 
-    // No candidate picked yet: blank dossier and a dimmed assignment placeholder, so the
-    // top-down flow starts at the candidate list.
-    private void AddDossierFact(GridContainer grid, string labelKey, string value, int padCells = 0)
+    // Each semantic row owns its fact cells, so optional culture fields can disappear without
+    // shifting unrelated values into another column.
+    private void AddDossierFact(BoxContainer row, string labelKey, string value)
     {
-        grid.AddChild(new Label
+        var fact = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+            SeparationOverride = 1,
+        };
+        fact.AddChild(new Label
         {
             Text = Loc.GetString(labelKey),
-            FontColorOverride = Color.FromHex("#878C87"),
+            StyleClasses = { AshfallStylesheet.StatusClass },
+            FontColorOverride = Color.FromHex("#737873"),
         });
-        grid.AddChild(new Label
+        fact.AddChild(new Label
         {
             Text = value,
             FontColorOverride = Color.FromHex("#C5CAC5"),
-            // Wider gap after the value visually groups each label-value pair.
-            Margin = new Thickness(0, 0, 18, 0),
         });
-        for (var i = 0; i < padCells; i++)
-            grid.AddChild(new Control());
-    }
-
-    private static void AddDossierSpacer(GridContainer grid)
-    {
-        // one empty cell per grid column, forming a short blank row between fact groups
-        for (var i = 0; i < 4; i++)
-            grid.AddChild(new Control { MinHeight = 6 });
+        row.AddChild(fact);
     }
 
     private void ClearDossier()
@@ -746,14 +795,23 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         CloseSkillsWindow();
         DossierPreview.ClearPreview();
         DossierNameLabel.Text = string.Empty;
-        DossierFactsGrid.RemoveAllChildren();
+        DossierIdentityFacts.RemoveAllChildren();
+        DossierSpeciesFacts.RemoveAllChildren();
+        DossierCultureFacts.RemoveAllChildren();
+        DossierBirthplaceFacts.RemoveAllChildren();
+        DossierCultureFacts.Visible = false;
+        DossierBirthplaceFacts.Visible = false;
         DossierNumberLabel.Text = string.Empty;
         DossierSelectionLabel.Text = string.Empty;
-        DossierSkills.RemoveAllChildren();
+        DossierSkillsSummary.Text = string.Empty;
+        _skillsProfile = null;
+        _skillsJob = null;
         DossierSections.RemoveAllChildren();
 
         AssignmentHeading.Text = Loc.GetString("ashfall-personal-files-assignment-heading");
         JobsGrid.RemoveAllChildren();
+        AssignmentSlotContainer.MinSize = Vector2.Zero;
+        AssignmentPanel.MinSize = Vector2.Zero;
     }
 
     // Presentation order only; the shared dossier DTO keeps its generation order.
@@ -884,58 +942,28 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         }
 
         activeSkills = activeSkills.OrderByDescending(s => s.Mastery).ThenBy(s => s.Name).ToList();
-
-        DossierSkills.RemoveAllChildren();
-        var heading = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-        };
-        heading.AddChild(new Label
-        {
-            Text = Loc.GetString("ashfall-dossier-skills-summary-heading"),
-            FontColorOverride = Color.FromHex("#878C87"),
-        });
-
-        var detailsButton = new ContainerButton
-        {
-            HorizontalAlignment = HAlignment.Left,
-            StyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent },
-        };
-        var detailsLabel = new Label
-        {
-            Text = Loc.GetString("ashfall-dossier-skills-details-button"),
-            FontColorOverride = Color.FromHex("#A3A8A3"),
-            Margin = new Thickness(4, 1),
-        };
-        detailsButton.AddChild(detailsLabel);
-        detailsButton.OnMouseEntered += _ => detailsButton.StyleBoxOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#343638"),
-        };
-        detailsButton.OnMouseExited += _ => detailsButton.StyleBoxOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.Transparent,
-        };
-        detailsButton.OnPressed += _ =>
-        {
-            _skillsWindow ??= new AshfallSkillsDetailWindow(_prototypes, knowledgeSystem);
-            _skillsWindow.Populate(profile, activeJob);
-            if (!_skillsWindow.IsOpen)
-                _skillsWindow.OpenCentered();
-        };
-        heading.AddChild(detailsButton);
-        DossierSkills.AddChild(heading);
+        _skillsProfile = profile;
+        _skillsJob = activeJob;
 
         var entries = activeSkills.Take(3).Select(skill => $"{skill.Name} {skill.Roman}").ToList();
         if (activeSkills.Count > 3)
             entries.Add(Loc.GetString("ashfall-dossier-skills-more", ("count", activeSkills.Count - 3)));
 
-        var summary = new RichTextLabel { HorizontalExpand = true };
-        summary.SetMessage(entries.Count > 0
+        DossierSkillsSummary.SetMessage(entries.Count > 0
             ? string.Join(" • ", entries)
             : Loc.GetString("ashfall-dossier-skills-none"), Color.FromHex("#A3A8A3"));
-        DossierSkills.AddChild(summary);
+    }
+
+    private void OpenSkillsWindow()
+    {
+        if (_skillsProfile == null)
+            return;
+
+        var knowledgeSystem = _entMan.System<KnowledgeSystem>();
+        _skillsWindow ??= new AshfallSkillsDetailWindow(_prototypes, knowledgeSystem);
+        _skillsWindow.Populate(_skillsProfile, _skillsJob);
+        if (!_skillsWindow.IsOpen)
+            _skillsWindow.OpenCentered();
     }
 
     private void AddDossierSection(AshfallDossierSection section, Control? extraControl = null, bool groupStart = false)
@@ -993,21 +1021,20 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         if (_assignmentAnimationProgress <= 0.001f)
         {
             AssignmentPanel.Visible = false;
+            AssignmentSlotContainer.Visible = false;
             AssignmentPanel.Modulate = Color.White;
             return;
         }
 
+        AssignmentSlotContainer.Visible = true;
         AssignmentPanel.Visible = true;
         // Ease-in-out so the slide starts and ends gently instead of snapping.
-        var t = _assignmentAnimationProgress;
-        var ease = t < 0.5f
-            ? 4f * t * t * t
-            : 1f - MathF.Pow(-2f * t + 2f, 3f) / 2f;
+        var ease = EaseInOutCubic(_assignmentAnimationProgress);
 
         // Modulate (not ModulateSelfOverride): the fade must cover the panel AND its
         // content, otherwise text and icons stay opaque until the final-frame snap.
         AssignmentPanel.Modulate = new Color(1f, 1f, 1f, ease);
-        var travel = MathF.Max(AssignmentPanel.Height, 150f);
+        var travel = MathF.Max(AssignmentPanel.Height, AssignmentSlotContainer.MinSize.Y);
         var yOffset = (1f - ease) * -travel;
         LayoutContainer.SetPosition(AssignmentPanel, new Vector2(0f, yOffset));
     }
@@ -1037,10 +1064,7 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         }
 
         DossierPanel.Visible = true;
-        var t = _dossierAnimationProgress;
-        var ease = t < 0.5f
-            ? 4f * t * t * t
-            : 1f - MathF.Pow(-2f * t + 2f, 3f) / 2f;
+        var ease = EaseInOutCubic(_dossierAnimationProgress);
 
         // Modulate (not ModulateSelfOverride): text, portrait and sections must fade out
         // together with the backdrop instead of snapping off on the last frame.
@@ -1049,6 +1073,13 @@ public sealed partial class AshfallPersonalFilesScreen : PanelContainer
         // dossier content never shifts or snaps mid-fade.
         if (_dossierTargetOpen)
             LayoutContainer.SetPosition(DossierPanel, new Vector2((1f - ease) * 60f, 0f));
+    }
+
+    private static float EaseInOutCubic(float progress)
+    {
+        return progress < 0.5f
+            ? 4f * progress * progress * progress
+            : 1f - MathF.Pow(-2f * progress + 2f, 3f) / 2f;
     }
 
     private void UpdatePortraitNoise(FrameEventArgs args)

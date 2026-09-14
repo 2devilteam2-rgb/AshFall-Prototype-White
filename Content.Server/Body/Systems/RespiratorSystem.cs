@@ -21,6 +21,8 @@ using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.Metabolism;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Trauma.Common.MartialArts;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -104,7 +106,7 @@ public sealed partial class RespiratorSystem : EntitySystem
                 }
             }
 
-            if (respirator.Saturation < respirator.SuffocationThreshold)
+            if (!CanBreathe(uid, respirator))
             {
                 if (_gameTiming.CurTime >= respirator.LastGaspEmoteTime + respirator.GaspEmoteCooldown)
                 {
@@ -123,6 +125,19 @@ public sealed partial class RespiratorSystem : EntitySystem
             StopSuffocation((uid, respirator));
             respirator.SuffocationCycles = 0;
         }
+    }
+
+    private bool CanBreathe(EntityUid uid, RespiratorComponent respirator) // Goobstation
+    {
+        if (respirator.Saturation < respirator.SuffocationThreshold)
+            return false;
+
+        // <Trauma>
+        if (TryComp<PullableComponent>(uid, out var pullable) && pullable.GrabStage == GrabStage.Suffocate)
+            return false;
+
+        return !HasComp<BlockedBreathingComponent>(uid);
+        // </Trauma>
     }
 
     public void Inhale(Entity<RespiratorComponent?> entity)

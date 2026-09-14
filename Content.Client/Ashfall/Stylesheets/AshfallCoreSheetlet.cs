@@ -185,6 +185,41 @@ public sealed class AshfallCoreSheetlet : Sheetlet<AshfallStylesheet>
             "btn-gray", Color.FromHex("#C6C9C4"), Color.FromHex("#E8EAE6"), Color.FromHex("#A3A8A3"),
             Color.FromHex("#545654"), disabledButton,
             sheet.BaseFont.GetFont(12));
+
+        // Secondary text actions used inside dense records. They remain clearly interactive on
+        // hover and press without competing with the dossier content like a full bevel button.
+        StyleBoxFlat InlineActionBox(Color background)
+        {
+            var box = new StyleBoxFlat { BackgroundColor = background };
+            box.SetContentMarginOverride(StyleBox.Margin.Horizontal, 5);
+            box.SetContentMarginOverride(StyleBox.Margin.Vertical, 2);
+            return box;
+        }
+
+        rules.AddRange(new StyleRule[]
+        {
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoNormal()
+                .Prop(ContainerButton.StylePropertyStyleBox, InlineActionBox(Color.Transparent)),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoHovered()
+                .Prop(ContainerButton.StylePropertyStyleBox, InlineActionBox(Color.FromHex("#343638"))),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoPressed()
+                .Prop(ContainerButton.StylePropertyStyleBox, InlineActionBox(Color.FromHex("#151617"))),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoDisabled()
+                .Prop(ContainerButton.StylePropertyStyleBox, InlineActionBox(Color.Transparent)),
+            E<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(AshfallStylesheet.InlineActionClass)
+                .ParentOf(E<Label>())
+                .Prop(Label.StylePropertyFont, monoSmall)
+                .Prop(Label.StylePropertyFontColor, AshfallStylesheet.Text),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoHovered()
+                .ParentOf(E<Label>())
+                .Prop(Label.StylePropertyFontColor, AshfallStylesheet.Orange),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoPressed()
+                .ParentOf(E<Label>())
+                .Prop(Label.StylePropertyFontColor, Color.FromHex("#B97A3F")),
+            ButtonRule(AshfallStylesheet.InlineActionClass).PseudoDisabled()
+                .ParentOf(E<Label>())
+                .Prop(Label.StylePropertyFontColor, AshfallStylesheet.DisabledText),
+        });
         AddFlatButtonRules(rules, AshfallStylesheet.DestructiveActionClass,
             "btn-gray", Color.FromHex("#C1705F"), Color.FromHex("#D4836F"), Color.FromHex("#8E463D"),
             Color.FromHex("#545654"), disabledButton,

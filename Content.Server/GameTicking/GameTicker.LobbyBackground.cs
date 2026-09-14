@@ -1,3 +1,4 @@
+using Content.Shared.Ashfall;
 using Content.Shared.GameTicking.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -19,6 +20,16 @@ public sealed partial class GameTicker
     {
         var allprotos = ProtoMan.EnumeratePrototypes<LobbyBackgroundPrototype>().ToList();
         _lobbyBackgrounds ??= new List<ProtoId<LobbyBackgroundPrototype>>();
+
+        var configuredBackground = _cfg.GetCVar(AshfallCCVars.LobbyBackground);
+        if (!string.IsNullOrWhiteSpace(configuredBackground) &&
+            ProtoMan.TryIndex<LobbyBackgroundPrototype>(configuredBackground, out var configuredProto) &&
+            WhitelistedBackgroundExtensions.Contains(configuredProto.Background.Extension))
+        {
+            _lobbyBackgrounds.Add(configuredProto.ID);
+            RandomizeLobbyBackground();
+            return;
+        }
 
         //create protoids from them
         foreach (var proto in allprotos)

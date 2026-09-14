@@ -11,6 +11,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.Hands.Components;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Events;
@@ -55,9 +56,20 @@ public sealed partial class PullingSystem
         SubscribeLocalEvent<PullableComponent, UpdateCanMoveEvent>(OnGrabbedMoveAttempt);
         SubscribeLocalEvent<PullableComponent, SpeakAttemptEvent>(OnGrabbedSpeakAttempt);
 
+        SubscribeLocalEvent<PullerComponent, AttackAttemptEvent>(OnPullerAttackAttempt);
         SubscribeLocalEvent<PullerComponent, VirtualItemThrownEvent>(OnVirtualItemThrown);
         SubscribeLocalEvent<PullerComponent, AddCuffDoAfterEvent>(OnAddCuffDoAfterEvent);
         SubscribeLocalEvent<PullerComponent, AttackedEvent>(OnAttacked);
+    }
+
+    private void OnPullerAttackAttempt(Entity<PullerComponent> ent, ref AttackAttemptEvent args)
+    {
+        if (ent.Comp.GrabStage != GrabStage.Suffocate)
+            return;
+
+        // both hands are wrapped around the victim's throat, no punching or weapon swings
+        args.Cancel();
+        _popup.PopupClient(Loc.GetString("popup-grab-hands-busy"), ent, ent, PopupType.Medium);
     }
 
     private void OnVirtualItemThrown(EntityUid uid, PullerComponent component, ref VirtualItemThrownEvent args)

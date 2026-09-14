@@ -176,7 +176,7 @@ public sealed partial class AshfallPrioritySlotCard : PanelContainer
             MouseFilter = MouseFilterMode.Ignore,
             MinSize = new Vector2(52, 62),
             SetSize = new Vector2(52, 62),
-            ModulateSelfOverride = new Color(255, 255, 255, 140),
+            ModulateSelfOverride = Color.FromHex("#FFFFFF8C"),
         };
         clip.AddChild(_preview);
         clip.AddChild(_noise);
@@ -254,8 +254,10 @@ public sealed partial class AshfallPrioritySlotCard : PanelContainer
             UpdateMoveArrows();
             _clearButton.Visible = false;
             _nameLabel.Text = Loc.GetString("ashfall-personal-files-slot-empty");
+            _nameLabel.ToolTip = null;
             _nameLabel.FontColorOverride = Color.FromHex("#6B6E6B");
             _jobLabel.Text = string.Empty;
+            _jobLabel.ToolTip = null;
             _preview.ClearPreview();
             _settled = true;
             return;
@@ -268,9 +270,11 @@ public sealed partial class AshfallPrioritySlotCard : PanelContainer
         _clearButton.Visible = true;
         _clearButton.ToolTip = Loc.GetString("ashfall-personal-files-slot-clear");
         _nameLabel.Text = GetFirstName(pin.Candidate.Profile.Name);
+        _nameLabel.ToolTip = pin.Candidate.Profile.Name;
         _nameLabel.FontColorOverride = Color.FromHex("#E8DFD0");
         var jobProto = _prototypes.TryIndex(pin.Job, out JobPrototype? jp) ? jp : null;
         _jobLabel.Text = jobProto?.LocalizedName ?? pin.Job.Id;
+        _jobLabel.ToolTip = _jobLabel.Text;
         _preview.LoadPreview(pin.Candidate.Profile, jobProto, showClothes: true);
 
         // A real pin action (not the initial populate): press flash + the drop sound.
@@ -324,9 +328,7 @@ public sealed partial class AshfallPrioritySlotCard : PanelContainer
     // token is used here; the full name stays untouched everywhere else.
     private static string GetFirstName(string fullName) => fullName.Trim().Split(' ', 2)[0];
 
-    // Pin feedback: an amber "stamp" border slams in with a pressed-in darkening, then a
-    // light overshoot fades back. Modulating near-black surfaces alone is invisible, so
-    // the border swap carries the effect.
+    // Pin feedback stays on the frame so the employee portrait keeps its normal colors.
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
@@ -339,17 +341,11 @@ public sealed partial class AshfallPrioritySlotCard : PanelContainer
         if (_pressProgress > 0.6f)
         {
             PanelOverride = PinnedFlashBox;
-            ModulateSelfOverride = new Color(0.72f, 0.68f, 0.6f);
         }
         else
         {
             ApplyPanel();
-            var release = _pressProgress / 0.6f;
-            ModulateSelfOverride = new Color(1f + 0.4f * release, 1f + 0.25f * release, 1f + 0.1f * release);
         }
-
-        if (_pressProgress <= 0f)
-            ModulateSelfOverride = null;
     }
 
     protected override void ExitedTree()

@@ -12,13 +12,13 @@
                 <ashfall:ProfileFullBodySpriteView Name="PreviewSprite" MinSize="64 64" SetSize="64 64" />
                     <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="3">
                         <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                            <Label Name="NameLabel" StyleClasses="FancyWindowTitle" HorizontalExpand="True" />
+                            <Label Name="NameLabel" StyleClasses="FancyWindowTitle" HorizontalExpand="True" ClipText="True" />
                             <!-- Tahoma has no U+2713 glyph, so the confirmed mark is a real icon. -->
                             <TextureRect Name="ConfirmedMark" TexturePath="/Textures/Interface/Nano/checkbox_checked.svg.96dpi.png"
                                          Visible="False" VerticalAlignment="Center" SetSize="16 16" ModulateSelfOverride="#D48944" />
                         </BoxContainer>
-                    <Label Name="BioLineLabel" FontColorOverride="#878C87" />
-                    <Label Name="QualificationLabel" FontColorOverride="#6B6E6B" />
+                    <Label Name="BioLineLabel" FontColorOverride="#878C87" ClipText="True" />
+                    <Label Name="QualificationLabel" FontColorOverride="#6B6E6B" ClipText="True" />
                 </BoxContainer>
             </BoxContainer>
         </Button>

@@ -57,6 +57,7 @@ public sealed partial class AshfallCandidateCard : PanelContainer
         CandidateIndex = index;
         _profile = candidate.Profile;
         NameLabel.Text = _profile.Name;
+        NameLabel.ToolTip = _profile.Name;
         NameLabel.FontColorOverride = isInspected ? Color.FromHex("#D48944") : Color.FromHex("#D8DDD8");
         var sex = _profile.Sex switch
         {
@@ -65,6 +66,7 @@ public sealed partial class AshfallCandidateCard : PanelContainer
             _ => Loc.GetString("ashfall-personal-files-sex-other"),
         };
         BioLineLabel.Text = Loc.GetString("ashfall-personal-files-card-bio", ("age", _profile.Age), ("sex", sex));
+        BioLineLabel.ToolTip = BioLineLabel.Text;
 
         // Established competency title; fresh graduates show their professional sphere instead.
         var qualificationSection = candidate.Dossier.Sections
@@ -72,7 +74,9 @@ public sealed partial class AshfallCandidateCard : PanelContainer
         QualificationLabel.Text = qualificationSection != null
             ? qualificationSection.Title
             : Loc.GetString($"ashfall-domain-{candidate.PrimaryDomain.ToLowerInvariant()}");
+        QualificationLabel.ToolTip = QualificationLabel.Text;
         ConfirmedMark.Visible = isPinned || isConfirmed;
+        ConfirmedMark.ModulateSelfOverride = Color.FromHex("#D48944");
         ConfirmedMark.ToolTip = Loc.GetString(isPinned
             ? "ashfall-personal-files-pinned-marker"
             : "ashfall-personal-files-confirmed-marker");

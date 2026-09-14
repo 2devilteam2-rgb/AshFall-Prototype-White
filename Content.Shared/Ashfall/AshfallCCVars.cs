@@ -9,6 +9,12 @@ namespace Content.Shared.Ashfall;
 public sealed class AshfallCCVars
 {
     /// <summary>
+    ///     Lobby background prototype used by Ashfall. An empty value restores random selection.
+    /// </summary>
+    public static readonly CVarDef<string> LobbyBackground =
+        CVarDef.Create("ashfall.lobby_background", "AshfallMain", CVar.SERVERONLY);
+
+    /// <summary>
     ///     Whether the roundstart character pool system is enabled.
     /// </summary>
     public static readonly CVarDef<bool> CharacterPoolEnabled =

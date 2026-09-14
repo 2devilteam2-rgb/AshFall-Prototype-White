@@ -22,3 +22,4 @@ popup-grab-retake-success = Вы отбираете {CAPITALIZE($pulled)} у {CA
 popup-grab-retake-success-puller = {CAPITALIZE($puller)} отбивает у вас {CAPITALIZE($pulled)}!
 popup-grabbed-cant-speak = Вы не можете дышать!
 popup-grab-need-hand = Нужна свободная рука!
+popup-grab-hands-busy = Ваши руки заняты удушающим захватом!

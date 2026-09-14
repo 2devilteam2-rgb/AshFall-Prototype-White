@@ -2,13 +2,19 @@
                 xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
                 HorizontalExpand="True">
     <PanelContainer.PanelOverride>
-        <graphics:StyleBoxFlat BackgroundColor="#1B1C1E"
-                               BorderColor="#2E3033"
-                               BorderThickness="0 1 0 0" />
+        <graphics:StyleBoxFlat BackgroundColor="#202123"
+                               BorderColor="#383A3D"
+                               BorderThickness="1" />
     </PanelContainer.PanelOverride>
-    <BoxContainer Orientation="Vertical" Margin="12 8" SeparationOverride="4">
-        <RichTextLabel Name="SectionHeader" HorizontalExpand="True" />
-        <BoxContainer Name="LinesContainer" Orientation="Vertical" HorizontalExpand="True"
-                      Margin="8 0 0 0" SeparationOverride="4" />
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+        <PanelContainer MinWidth="3" VerticalExpand="True" MouseFilter="Ignore">
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat BackgroundColor="#8A5B32" />
+            </PanelContainer.PanelOverride>
+        </PanelContainer>
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="10 8 12 9" SeparationOverride="4">
+            <RichTextLabel Name="SectionHeader" HorizontalExpand="True" />
+            <BoxContainer Name="LinesContainer" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4" />
+        </BoxContainer>
     </BoxContainer>
 </PanelContainer>

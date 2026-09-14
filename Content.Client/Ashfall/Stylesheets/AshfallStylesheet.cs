@@ -34,6 +34,7 @@ public sealed class AshfallStylesheet : NanotrasenStylesheet
     public const string ReadyActionClass = "AshfallReadyAction";
     public const string NavigationActionClass = "AshfallNavigationAction";
     public const string UtilityActionClass = "AshfallUtilityAction";
+    public const string InlineActionClass = "AshfallInlineAction";
     public const string DestructiveActionClass = "AshfallDestructiveAction";
 
     // Color calibration, "dead matrix" (2026-09-07): void background, cold cheap plastic
