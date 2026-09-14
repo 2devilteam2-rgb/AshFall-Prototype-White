@@ -11,6 +11,7 @@ species-name-skeleton = Скелет
 species-name-vox = Вокс
 species-name-gingerbread = вкуснейшая выпечка
 species-name-veiru = Вейру
+species-name-vulpkanin = Вульпканин
 
 ## Misc species things
 

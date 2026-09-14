@@ -1,4 +1,4 @@
-﻿## Species Names
+## Species Names
 
 species-name-human = Human
 species-name-dwarf = Dwarf
@@ -11,6 +11,7 @@ species-name-skeleton = Skeleton
 species-name-vox = Vox
 species-name-gingerbread = delicious baked good
 species-name-veiru = Veiru
+species-name-vulpkanin = Vulpkanin
 
 ## Misc species things
 
