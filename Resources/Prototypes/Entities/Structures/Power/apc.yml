@@ -19,7 +19,7 @@
     energy: 3.0
     color: "#3db83b"
     castShadows: false
-    lightMask: LanterLight
+    lightMask: LanterLight #AshFall-Tweak
     offset: "0, -0.5"
     netsync: false
   - type: AccessReader

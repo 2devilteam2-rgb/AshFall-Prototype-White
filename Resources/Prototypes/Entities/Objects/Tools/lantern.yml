@@ -42,7 +42,7 @@
       radius: 4.5
       energy: 2.5
       color: "#FFC458"
-      lightMask: LanterLight
+      lightMask: LanterLight #AshFall-Tweak
       netsync: false
     - type: Appearance
     - type: ToggleableVisuals

@@ -17,7 +17,7 @@
       - state: equipped-helmet
   - type: PointLight
     enabled: false
-    lightMask: ConeSingle
+    lightMask: ConeFlashLightB #AshFall-Tweak
     autoRot: true
     radius: 7
     netsync: false

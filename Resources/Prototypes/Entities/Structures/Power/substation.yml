@@ -92,7 +92,7 @@
     radius: 2
     energy: 1
     color: "#ff6900"
-    lightMask: LanterLight
+    lightMask: LanterLight #AshFall-Tweak
     castShadows: false
   - type: PowerMonitoringDevice
     sprite: Structures/Power/substation.rsi
