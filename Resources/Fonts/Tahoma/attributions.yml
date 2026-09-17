@@ -1,3 +1,4 @@
 - files: ["tahoma.ttf"]
-  license: "Provided for use in the ASHFALL project"
-  copyright: "Tahoma (Microsoft), from the WinXp pack by NullTale"
+  license: "Custom"
+  copyright: "Tahoma (Microsoft), from the WinXp pack by NullTale. Provided for use in the ASHFALL project."
+  source: "NA"
