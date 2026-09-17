@@ -1,9 +1,13 @@
-# Reporting a security vulnerability
-You can report a security vulnerability through Discord or through email.
+# Безопасность и сообщения об уязвимостях
 
-If you want to send an email, you can contact us at <support@spacestation14.com>.
-If you want to contact us through Discord, you can join [our server](https://discord.gg/MwDDf6t)
-and then **privately** message anyone with the `@Wizard` or `@SS14 Maintainer` role.
+Безопасность проекта и защита данных пользователей имеют высокий приоритет.
 
-In either case, **do not publicly disclose the vulnerability until we explicitly give
-you permission to do so**.
+## Сообщение об уязвимости
+
+Если вы обнаружили уязвимость безопасности в коде, серверной части или инфраструктуре ASHFALL, пожалуйста, не публикуйте информацию об этом в открытых Issues или публичных каналах.
+
+Свяжитесь напрямую с ведущей командой проекта:
+- Отправьте личное сообщение ведущему мейнтейнеру в Discord: `@mrjajkes`.
+- Или обратитесь к администрации на нашем [Discord-сервере](https://discord.gg/qC5nxGVeYN).
+
+Мы оперативно рассмотрим обращение и подготовим исправление.

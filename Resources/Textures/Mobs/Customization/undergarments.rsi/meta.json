@@ -102,6 +102,34 @@
     {
       "name": "binder_vulpkanin",
       "directions": 4
+    },
+    {
+      "name": "sports_veiru",
+      "directions": 4
+    },
+    {
+      "name": "satin_veiru",
+      "directions": 4
+    },
+    {
+      "name": "briefs_veiru",
+      "directions": 4
+    },
+    {
+      "name": "tanktop_veiru",
+      "directions": 4
+    },
+    {
+      "name": "classic_veiru",
+      "directions": 4
+    },
+    {
+      "name": "binder_veiru",
+      "directions": 4
+    },
+    {
+      "name": "boxers_veiru",
+      "directions": 4
     }
   ]
 }
