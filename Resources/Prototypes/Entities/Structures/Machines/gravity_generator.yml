@@ -39,7 +39,8 @@
   - type: Appearance
   - type: PointLight
     radius: 2.5
-    energy: 0.5
+    energy: 3
+    lightMask: LanterLight
     # Gravity generator is a large machine, not casting shadows is fine within the radius set above.
     castShadows: false
     color: "#a8ffd9"

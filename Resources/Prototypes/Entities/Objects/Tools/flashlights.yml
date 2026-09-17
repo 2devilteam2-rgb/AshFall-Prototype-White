@@ -60,9 +60,9 @@
     storedRotation: -90
   - type: PointLight
     enabled: false
-    lightMask: ConeSingle
+    lightMask: ConeFlashLightB
     autoRot: true
-    radius: 6
+    radius: 8
     netsync: false
   - type: Appearance
   - type: StaticPrice
@@ -119,7 +119,8 @@
     sprite: Objects/Tools/seclite.rsi
   - type: PointLight
     enabled: false
-    radius: 8
+    radius: 12
+    softness: 2
   - type: Clothing
     sprite: Objects/Tools/seclite.rsi
     quickEquip: false

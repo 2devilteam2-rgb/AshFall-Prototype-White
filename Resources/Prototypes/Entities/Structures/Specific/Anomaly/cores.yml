@@ -42,6 +42,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/pyro_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.7
     color: "#E25822"
@@ -58,6 +59,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/gravity_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 10
     color: "#1e070e"
@@ -71,6 +73,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/ice_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.7
     color: "#befaff"
@@ -85,6 +88,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/flesh_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#cb5b7e"
@@ -98,6 +102,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/rock_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#5ca8cb"
@@ -111,6 +116,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/liquid_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#ffffff"
@@ -124,6 +130,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#00ccff"
@@ -137,6 +144,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/electric_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#ffffaa"
@@ -153,6 +161,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/flora_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#6270bb"
@@ -166,6 +175,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/shadow_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#793a80"
@@ -179,6 +189,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/tech_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#56c1e8"
@@ -192,6 +203,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/santa_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#fc0303"
@@ -222,6 +234,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/pyro_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.7
     color: "#fca3c0"
@@ -235,6 +248,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/gravity_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 10
     color: "#1e070e"
@@ -248,6 +262,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/ice_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.7
     color: "#befaff"
@@ -262,6 +277,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/flesh_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#cb5b7e"
@@ -275,6 +291,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/rock_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#5ca8cb"
@@ -288,6 +305,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/liquid_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#ffffff"
@@ -301,6 +319,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/bluespace_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 3.5
     color: "#00ccff"
@@ -314,6 +333,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/electric_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#ffffaa"
@@ -329,6 +349,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/flora_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#6270bb"
@@ -342,6 +363,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/shadow_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#793a80"
@@ -355,6 +377,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/tech_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#56c1e8"
@@ -368,6 +391,7 @@
   - type: Sprite
     sprite: Structures/Specific/Anomalies/Cores/santa_core.rsi
   - type: PointLight
+    lightMask: AnomalyLight
     radius: 1.5
     energy: 2.0
     color: "#fc0303"

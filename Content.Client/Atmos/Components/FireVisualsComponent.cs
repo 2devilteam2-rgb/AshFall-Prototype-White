@@ -48,4 +48,12 @@ public sealed partial class FireVisualsComponent : Component
     /// </summary>
     [DataField]
     public ProtoId<DisplacementDataPrototype>? CurrentDisplacement;
+
+    /// </summary>
+    /// AshFall-Tweak
+    /// Применяемая маска света
+    /// Взято с ПРа https://github.com/SS14EchoProtocol/Echo-Protocol-SS14/pull/115/changes#diff-eb4bf1a50ed1bb17691f7739aec7b96499cd066a59b46c281511af2ac17d309f
+    /// </summary>
+    [DataField("mask")]
+    public string? LightMask;
 }
