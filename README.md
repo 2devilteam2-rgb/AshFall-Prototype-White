@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="1536" height="384" alt="AshFallLogo" src="https://github.com/user-attachments/assets/4ed25746-1ff0-4449-ad20-a23680c597e3" />
+  <img width="1536" height="384" alt="AshFallLogo" src="Resources/Textures/Ashfall/AshFallLogo.jpg" />
 </p>
 
 <p align="center">
