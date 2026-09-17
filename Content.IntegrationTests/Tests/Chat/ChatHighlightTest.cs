@@ -11,6 +11,7 @@ using Content.Shared.Roles;
 using NUnit.Framework;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Chat;
@@ -19,7 +20,24 @@ public sealed class ChatHighlightTest : GameTest
 {
     [SidedDependency(Side.Client)] private readonly IConfigurationManager _configManager = null!;
     [SidedDependency(Side.Client)] private readonly IUserInterfaceManager _uiManager = null!;
+    [SidedDependency(Side.Client)] private readonly ILocalizationManager _loc = null!;
     private static readonly ProtoId<JobPrototype> Captain = "Captain";
+
+    private (string Full, string Abbreviation) GetCaptainHighlights()
+    {
+        if (_loc.TryGetString("highlights-captain", out var match))
+        {
+            var parts = match.Split(',', System.StringSplitOptions.TrimEntries);
+            if (parts.Length >= 2)
+            {
+                var full = parts[0].Trim('"');
+                var abbr = "(?<!\\w)" + parts[1].Trim('"') + "(?!\\w)";
+                return (full, abbr);
+            }
+        }
+
+        return ("Captain", "(?<!\\w)Cap(?!\\w)");
+    }
 
     [Test]
     [RunOnSide(Side.Client)]
@@ -76,13 +94,15 @@ public sealed class ChatHighlightTest : GameTest
         Assert.That(highlightsField, Is.Not.Null);
         var activeHighlights = (List<string>)highlightsField.GetValue(chatController)!;
 
+        var (captainFull, captainAbbr) = GetCaptainHighlights();
+
         // Check that custom and auto highlights are loaded
         // Custom:
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
         // Auto:
-        Assert.That(activeHighlights, Contains.Item("Captain"));
-        Assert.That(activeHighlights, Contains.Item("(?<!\\w)Cap(?!\\w)")); // "Cap" becomes regex-escaped and word-bounded
+        Assert.That(activeHighlights, Contains.Item(captainFull));
+        Assert.That(activeHighlights, Contains.Item(captainAbbr)); // Abbreviation becomes regex-escaped and word-bounded
 
         // 5. Disable auto-fill highlights and verify auto-filled highlights are removed
         _configManager.SetCVar(CCVars.ChatAutoFillHighlights, false);
@@ -90,7 +110,7 @@ public sealed class ChatHighlightTest : GameTest
         activeHighlights = (List<string>)highlightsField.GetValue(chatController)!;
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
-        Assert.That(activeHighlights, Is.Not.Contains("Captain"));
+        Assert.That(activeHighlights, Is.Not.Contains(captainFull));
     }
 
     [Test]
@@ -151,11 +171,13 @@ public sealed class ChatHighlightTest : GameTest
         // - Config highlights MUST NOT be wiped and remain as custom highlights
         Assert.That(_configManager.GetCVar(CCVars.ChatHighlights), Is.EqualTo(customHighlights));
 
+        var (captainFull, captainAbbr) = GetCaptainHighlights();
+
         // - Active highlights list must now merge both custom and auto-filled ones
         activeHighlights = (List<string>)highlightsField.GetValue(chatController)!;
         Assert.That(activeHighlights, Contains.Item("ling"));
         Assert.That(activeHighlights, Contains.Item("rev"));
-        Assert.That(activeHighlights, Contains.Item("Captain"));
-        Assert.That(activeHighlights, Contains.Item("(?<!\\w)Cap(?!\\w)"));
+        Assert.That(activeHighlights, Contains.Item(captainFull));
+        Assert.That(activeHighlights, Contains.Item(captainAbbr));
     }
 }

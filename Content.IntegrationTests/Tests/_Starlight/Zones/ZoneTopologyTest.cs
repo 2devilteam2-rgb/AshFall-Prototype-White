@@ -5,6 +5,7 @@ using Content.Server._Starlight.Zones;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared._Starlight.Zones;
+using Content.Shared.Pinpointer;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -182,6 +183,7 @@ public sealed class ZoneTopologyTest : GameTest
         {
             var grid = mapSys.CreateGridEntity(testMap.MapId);
             _grid = grid.Owner;
+            entMan.EnsureComponent<NavMapComponent>(_grid);
 
             var plating = new Tile(tileDefs["Plating"].TileId);
 

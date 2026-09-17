@@ -166,6 +166,9 @@ public sealed partial class LegsSystem : EntitySystem
 
     private void OnMove(Entity<LegsParalyzedComponent> ent, ref MoveEvent args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         EnsureComp<KnockedDownComponent>(ent);
     }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Starlight.Zones;
 using Content.Shared._Starlight.Zones;
+using Content.Shared.Pinpointer;
 using Content.Shared.SprayPainter;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -236,6 +237,7 @@ public sealed class ZoneMarkerTest : GameTest
         {
             var grid = mapSys.CreateGridEntity(testMap.MapId);
             _grid = grid.Owner;
+            entMan.EnsureComponent<NavMapComponent>(_grid);
 
             var plating = new Tile(tileDefs["Plating"].TileId);
 
