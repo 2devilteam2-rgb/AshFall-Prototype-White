@@ -1,11 +1,31 @@
-# Space Station 14 Contributing Guidelines
+# Руководство по разработке и вкладу в ASHFALL
 
-Thanks for contributing to Space Station 14.
-When contributing, be sure to follow our [codebase conventions](https://docs.spacestation14.com/en/general-development/codebase-info/codebase-organization.html) and [PR guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
+Спасибо за интерес к проекту ASHFALL. Мы ценим помощь сообщества: от исправления небольших ошибок и багов до разработки новых игровых механик, создания спрайтов, карт и лора.
 
-Following these guidelines helps us increase review turnaround time, so be sure to review the linked documents in full.
+## С чего начать
 
-The last major guidelines update was on **December 6th, 2025**.
+1. Ознакомьтесь с [Кодексом поведения](CODE_OF_CONDUCT.md).
+2. Присоединитесь к нашему [Discord-серверу](https://discord.gg/qC5nxGVeYN) в канал для разработчиков, чтобы обсудить ваши идеи перед началом масштабной работы.
+3. Проверьте список открытых [Issues](https://github.com/he1acdvv/AshFall-Prototype/issues) на GitHub.
 
-### Why is this here?
-We put this here so that GitHub will notify you when submitting a pull request that the PR guidelines have changed, if you haven't read the latest version.
+## Процесс создания Pull Request
+
+1. Создайте форк (Fork) репозитория и клонируйте его на свой компьютер.
+2. Создайте новую ветку под вашу задачу (`git checkout -b feature/название` или `fix/название`).
+3. Выполните сборку и проверьте изменения локально:
+   - Запустите `python RUN_THIS.py` для инициализации движка RobustToolbox.
+   - Скомпилируйте проект командой `dotnet build`.
+   - Запустите сервер и клиент локально для тестирования (`./runclient.sh` / `./runserver.sh` на Linux или `.bat` аналоги на Windows).
+4. Проверьте, что в коде нет случайных изменений форматирования или незадействованных файлов.
+5. Отправьте Pull Request в ветку `master` основного репозитория. В описании PR подробно укажите суть изменений, приложите скриншоты или видео, если обновлялся интерфейс или спрайты.
+
+## Соглашения и стандарты
+
+- **Архитектура SS14**: следуйте общепринятой парадигме ECS (Entity Component System), избегайте жестко закодированных прототипов там, где подходят компоненты и теги.
+- **Код и идентификаторы**: имена классов, переменных, файлов и прототипов пишутся на английском языке.
+- **Локализация**: весь пользовательский текст (интерфейс, описания предметов, сообщения в чате) должен выноситься в файлы Fluent (`.ftl` в `Resources/Locale/ru-RU/`).
+- **Ресурсы и спрайты**: спрайты оформляются в формате DMI. Лицензии сторонних материалов обязательно указываются в метаданных файлов.
+
+## Помощь и связь
+
+Если у вас возникли сложности со сборкой или реализацией механики, задавайте вопросы в канале разработки в [Discord](https://discord.gg/qC5nxGVeYN).
