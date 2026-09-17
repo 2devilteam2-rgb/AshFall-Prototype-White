@@ -69,7 +69,7 @@
       supplyRampTolerance: 5000
       supplyRampRate: 1000
     - type: PointLight
-      lightMask: LanterLight
+      lightMask: LanterLight #AshFall-Tweak
       radius: 1.1
       energy: 3.0
       color: "#c9c042"
