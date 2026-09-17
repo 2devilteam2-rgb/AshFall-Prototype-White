@@ -3,10 +3,9 @@
 using System.Linq;
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
-using Content.Client.Popups;
 using Content.Client.UserInterface.Systems.Character.Windows;
-using Content.Shared.Popups;
 using Content.Client.Trauma.Knowledge.UI;
+using Content.Shared.Popups;
 using Content.Trauma.Common.CCVar;
 using Content.Trauma.Common.Knowledge;
 using Content.Trauma.Common.Knowledge.Components;
@@ -21,7 +20,6 @@ namespace Content.Client.Trauma.Knowledge;
 
 public sealed partial class KnowledgeSystem : SharedKnowledgeSystem
 {
-    [Dependency] private PopupSystem _popup = default!;
 
     private WeakReference<CharacterWindow>? _activeWindow;
     private bool _showPopups;
