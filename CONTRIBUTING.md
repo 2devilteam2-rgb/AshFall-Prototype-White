@@ -1,11 +1,14 @@
-# Space Station 14 Contributing Guidelines
+# Руководство по участию в разработке Ashfall
 
-Thanks for contributing to Space Station 14.
-When contributing, be sure to follow our [codebase conventions](https://docs.spacestation14.com/en/general-development/codebase-info/codebase-organization.html) and [PR guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
+Спасибо за вклад в развитие проекта.
 
-Following these guidelines helps us increase review turnaround time, so be sure to review the linked documents in full.
+При внесении изменений соблюдайте [соглашения кодовой базы](https://docs.spacestation14.com/en/general-development/codebase-info/codebase-organization.html) и [гайдлайны PR](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
 
-The last major guidelines update was on **December 6th, 2025**.
+**Важно для ассетов:** SS14 использует формат **RSI** (`.rsi`) вместо BYOND DMI. Новые спрайты должны быть в RSI.
 
-### Why is this here?
-We put this here so that GitHub will notify you when submitting a pull request that the PR guidelines have changed, if you haven't read the latest version.
+Соблюдение этих гайдлайнов помогает ускорить ревью — обязательно ознакомьтесь с документацией.
+
+Последнее крупное обновление гайдлайнов: **6 декабря 2025 года**.
+
+### Зачем это здесь?
+GitHub уведомляет вас при подаче PR, если эти гайдлайны изменились с момента вашего последнего PR.
