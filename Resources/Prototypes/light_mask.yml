@@ -22,3 +22,63 @@
   - direction: 180
     innerWidth: 30
     outerWidth: 60
+
+# AshFall-Tweak-start
+
+- type: lightMask
+  id: ConeFlashLightB
+  maskPath: /Textures/_ECHO/Effects/LightMasks/cone_composed_b.png
+  lightCones:
+  - direction: 0
+    innerWidth: 30
+    outerWidth: 60
+
+- type: lightMask
+  id: ThrusterLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/cone_composed_a.png
+  lightCones:
+  - direction: 0
+    innerWidth: 30
+    outerWidth: 60
+
+- type: lightMask
+  id: TubeBloomLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/bloom_tube.png
+  lightCones:
+    - direction: 0
+      innerWidth: 30
+      outerWidth: 60
+
+- type: lightMask
+  id: LanterLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/circle_c.png
+  lightCones:
+    - direction: 0
+      innerWidth: 30
+      outerWidth: 60
+
+- type: lightMask
+  id: AnomalyLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/circle_a.png
+  lightCones:
+    - direction: 0
+      innerWidth: 30
+      outerWidth: 60
+
+- type: lightMask
+  id: PortalLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/circle_rings.png
+  lightCones:
+    - direction: 0
+      innerWidth: 30
+      outerWidth: 60
+
+- type: lightMask
+  id: StarLight
+  maskPath: /Textures/_ECHO/Effects/LightMasks/star.png
+  lightCones:
+    - direction: 0
+      innerWidth: 30
+      outerWidth: 60
+
+# AshFall-Tweak-end

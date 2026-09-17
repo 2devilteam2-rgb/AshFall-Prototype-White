@@ -11,6 +11,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Dynamics.Joints;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Ashfall;
 
@@ -72,12 +73,13 @@ public sealed class GrabStateTests : GameTest
             Assert.That(SEntMan.System<StandingStateSystem>().Down(target), Is.True);
             var combo = SEntMan.EnsureComponent<CanPerformComboComponent>(puller);
             combo.AllowedCombos.Clear();
-            combo.AllowedCombos.Add(Server.ProtoMan.Index<Content.Trauma.Shared.MartialArts.ComboPrototype>("JudoArmbar"));
+            ProtoId<Content.Trauma.Shared.MartialArts.ComboPrototype> judoArmbar = "JudoArmbar";
+            combo.AllowedCombos.Add(Server.ProtoMan.Index(judoArmbar));
             combo.LastAttacks.Clear();
             combo.LastAttacks.Add(ComboAttackType.Disarm);
             combo.LastAttacks.Add(ComboAttackType.Disarm);
             if (queued)
-                SEntMan.EnsureComponent<ComboActionsComponent>(puller).QueuedPrototype = "JudoArmbar";
+                SEntMan.EnsureComponent<ComboActionsComponent>(puller).QueuedPrototype = judoArmbar;
 
             var grab = new ComboAttackPerformedEvent(puller, target, puller, ComboAttackType.Grab);
             SEntMan.EventBus.RaiseLocalEvent(puller, ref grab);

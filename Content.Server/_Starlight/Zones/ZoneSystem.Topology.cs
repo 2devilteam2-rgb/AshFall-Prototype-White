@@ -1,5 +1,6 @@
-﻿using Content.Server.Atmos.Components;
+using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Pinpointer;
 using Content.Shared._Starlight.Zones;
 using Content.Shared.Atmos;
 using Content.Shared.Pinpointer;
@@ -17,6 +18,7 @@ public sealed partial class ZoneSystem
         (new Vector2i(-1, 0), BlockMask(AtmosDirection.West), BlockMask(AtmosDirection.East)),
     ];
 
+    [Dependency] private NavMapSystem _navMap = default!;
     [Dependency] private EntityQuery<ZoneGridComponent> _zoneQuery = default!;
     [Dependency] private EntityQuery<NavMapComponent> _navQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
@@ -51,7 +53,10 @@ public sealed partial class ZoneSystem
 
     [SubscribeLocalEvent]
     private void OnMapInit(Entity<ZoneGridComponent> ent, ref MapInitEvent args)
-        => QueueFullRebuild(ent);
+    {
+        EnsureComp<NavMapComponent>(ent);
+        QueueFullRebuild(ent);
+    }
 
     [SubscribeLocalEvent]
     private void OnAirtightChanged(ref AirtightChanged args)
@@ -193,12 +198,15 @@ public sealed partial class ZoneSystem
         foreach (var gridUid in _gridBuffer)
         {
             if (!_zoneQuery.TryComp(gridUid, out var comp) ||
-                !_navQuery.TryComp(gridUid, out var nav) ||
                 !_mapGridQuery.TryComp(gridUid, out var grid))
             {
                 _dirtyGrids.Remove(gridUid);
                 continue;
             }
+
+            var nav = EnsureComp<NavMapComponent>(gridUid);
+            if (nav.Chunks.Count == 0)
+                _navMap.RefreshGrid(gridUid, nav, grid);
 
             var ent = (gridUid, comp);
             var ctx = new ZoneContext(gridUid, grid, nav);
@@ -266,8 +274,12 @@ public sealed partial class ZoneSystem
         comp.FreeRegions.Clear();
         comp.InvalidateCache();
 
-        if (!Resolve(ent.Owner, ref nav, false) || !_mapGridQuery.TryComp(ent.Owner, out var grid))
+        nav ??= EnsureComp<NavMapComponent>(ent);
+        if (!_mapGridQuery.TryComp(ent.Owner, out var grid))
             return;
+
+        if (nav.Chunks.Count == 0)
+            _navMap.RefreshGrid(ent.Owner, nav, grid);
 
         var ctx = new ZoneContext(ent.Owner, grid, nav);
 

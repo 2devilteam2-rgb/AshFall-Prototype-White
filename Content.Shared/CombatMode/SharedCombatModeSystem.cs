@@ -88,7 +88,12 @@ public abstract partial class SharedCombatModeSystem : EntitySystem
     {
         if (value)
         {
-            EnsureComp<MouseRotatorComponent>(uid);
+            // The global default AngleTolerance (2.5°) is tuned for turrets / ship guns.
+            // Human combat-mode rotation does not need sub-cardinal precision;
+            // 10° keeps smooth visuals while cutting network events by ~4x vs the default.
+            var rotator = EnsureComp<MouseRotatorComponent>(uid);
+            rotator.AngleTolerance = Angle.FromDegrees(10);
+            Dirty(uid, rotator);
             EnsureComp<NoRotateOnMoveComponent>(uid);
         }
         else

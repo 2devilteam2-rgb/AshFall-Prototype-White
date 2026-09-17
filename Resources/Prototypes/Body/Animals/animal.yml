@@ -12,7 +12,7 @@
   suffix: Animal
 
 - type: entity
-  parent: OrganAnimal
+  parent: [ OrganAnimal, OrganBaseChildInternal ]
   id: OrganAnimalInternal
   abstract: true
   components:

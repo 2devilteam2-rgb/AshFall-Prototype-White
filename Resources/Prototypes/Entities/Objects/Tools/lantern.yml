@@ -39,9 +39,10 @@
       delay: 1
     - type: PointLight
       enabled: false
-      radius: 3
+      radius: 4.5
       energy: 2.5
       color: "#FFC458"
+      lightMask: LanterLight #AshFall-Tweak
       netsync: false
     - type: Appearance
     - type: ToggleableVisuals

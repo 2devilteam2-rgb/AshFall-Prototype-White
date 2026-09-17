@@ -232,8 +232,8 @@
   - type: PointLight
     enabled: false
     radius: 3
-    energy: 2
-    lightMask: ConeSingle
+    energy: 4
+    lightMask: ConeFlashLightB
     autoRot: true
     netsync: false
   - type: Appearance

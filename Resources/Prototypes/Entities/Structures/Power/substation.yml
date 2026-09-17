@@ -89,9 +89,10 @@
     maxCharge: 2500000
     startingCharge: 0
   - type: PointLight
-    radius: 1.5
+    radius: 2
     energy: 1
     color: "#ff6900"
+    lightMask: LanterLight #AshFall-Tweak
     castShadows: false
   - type: PowerMonitoringDevice
     sprite: Structures/Power/substation.rsi

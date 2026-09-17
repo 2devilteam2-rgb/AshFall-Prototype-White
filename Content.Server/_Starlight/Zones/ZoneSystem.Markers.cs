@@ -1,4 +1,5 @@
 using Content.Shared._Starlight.Zones;
+using Content.Shared.Doors.Components;
 using Content.Shared.SprayPainter;
 using Content.Shared.SprayPainter.Components;
 
@@ -48,6 +49,36 @@ public sealed partial class ZoneSystem
     [SubscribeLocalEvent]
     private void OnMarkerAnchorChanged(Entity<ZoneMarkerComponent> ent, ref AnchorStateChangedEvent args)
         => DirtyMarkerArea(ent.Owner);
+
+    [SubscribeLocalEvent]
+    private void OnDoorMapInit(Entity<DoorComponent> ent, ref MapInitEvent args)
+    {
+        if (_markerQuery.HasComp(ent))
+            return;
+
+        if (GetDoorZone(MetaData(ent).EntityPrototype?.ID) != NoZone)
+            DirtyMarkerArea(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnDoorShutdown(Entity<DoorComponent> ent, ref ComponentShutdown args)
+    {
+        if (_markerQuery.HasComp(ent))
+            return;
+
+        if (GetDoorZone(MetaData(ent).EntityPrototype?.ID) != NoZone)
+            DirtyMarkerArea(ent.Owner);
+    }
+
+    [SubscribeLocalEvent]
+    private void OnDoorAnchorChanged(Entity<DoorComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (_markerQuery.HasComp(ent))
+            return;
+
+        if (GetDoorZone(MetaData(ent).EntityPrototype?.ID) != NoZone)
+            DirtyMarkerArea(ent.Owner);
+    }
 
     private void DirtyMarkerArea(EntityUid uid)
     {

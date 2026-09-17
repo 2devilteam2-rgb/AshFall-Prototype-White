@@ -106,6 +106,10 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         _lights.SetRadius(component.LightEntity.Value, Math.Clamp(1.5f + component.LightRadiusPerStack * fireStacks, 0f, component.MaxLightRadius), light);
         _lights.SetEnergy(component.LightEntity.Value, Math.Clamp(1 + component.LightEnergyPerStack * fireStacks, 0f, component.MaxLightEnergy), light);
 
+        // AshFall-Tweak: Light masks
+        // Взято с ПРа https://github.com/SS14EchoProtocol/Echo-Protocol-SS14/pull/115/changes#diff-eb4bf1a50ed1bb17691f7739aec7b96499cd066a59b46c281511af2ac17d309f
+        _lights.SetMask(component.LightMask, light);
+
         // TODO flickering animation? Or just add a noise mask to the light? But that requires an engine PR.
     }
 }
