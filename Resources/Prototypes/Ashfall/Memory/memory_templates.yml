@@ -1,0 +1,336 @@
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryFireRescue
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-fire-rescue-a-text
+  sideASummary: ashfall-memory-fire-rescue-a-summary
+  sideBText: ashfall-memory-fire-rescue-b-text
+  sideBSummary: ashfall-memory-fire-rescue-b-summary
+  requiredSharedTags:
+    - family-Engineering
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryGoodCoworkers
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.2
+  sideAText: ashfall-memory-good-coworkers-text
+  sideASummary: ashfall-memory-good-coworkers-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryDrinkingBuddies
+  category: PositivePersonal
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-drinking-buddies-text
+  sideASummary: ashfall-memory-drinking-buddies-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryHelpedWithMove
+  category: PositivePersonal
+  tier: Active
+  weight: 0.9
+  sideAText: ashfall-memory-helped-move-a-text
+  sideASummary: ashfall-memory-helped-move-a-summary
+  sideBText: ashfall-memory-helped-move-b-text
+  sideBSummary: ashfall-memory-helped-move-b-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryAcademicRival
+  category: NegativePersonal
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-academic-rival-a-text
+  sideASummary: ashfall-memory-academic-rival-a-summary
+  sideBText: ashfall-memory-academic-rival-b-text
+  sideBSummary: ashfall-memory-academic-rival-b-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryDebt250
+  category: NegativePersonal
+  tier: Active
+  weight: 1.0
+  sideAText: ashfall-memory-debt-debtor-text
+  sideASummary: ashfall-memory-debt-debtor-summary
+  sideBText: ashfall-memory-debt-creditor-text
+  sideBSummary: ashfall-memory-debt-creditor-summary
+  recognitionLineA: ashfall-memory-recognition-debt-debtor
+  recognitionLineB: ashfall-memory-recognition-debt-creditor
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryStolenCredit
+  category: NegativeWorkplace
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-stolen-credit-victim-text
+  sideASummary: ashfall-memory-stolen-credit-victim-summary
+  sideBText: ashfall-memory-stolen-credit-culprit-text
+  sideBSummary: ashfall-memory-stolen-credit-culprit-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryWhistleblower
+  category: NegativeWorkplace
+  tier: Active
+  weight: 0.7
+  sideAText: ashfall-memory-whistleblower-reported-text
+  sideASummary: ashfall-memory-whistleblower-reported-summary
+  sideBText: ashfall-memory-whistleblower-reporter-text
+  sideBSummary: ashfall-memory-whistleblower-reporter-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemorySameStation
+  category: NeutralAcquaintance
+  tier: Passive
+  weight: 1.2
+  sideAText: ashfall-memory-same-station-text
+  sideASummary: ashfall-memory-same-station-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryMutualAcquaintance
+  category: NeutralAcquaintance
+  tier: Active
+  weight: 1.0
+  sideAText: ashfall-memory-mutual-acquaintance-text
+  sideASummary: ashfall-memory-mutual-acquaintance-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryAsymmetricFriendship
+  category: ComplicatedHistory
+  tier: Passive
+  weight: 0.9
+  sideAText: ashfall-memory-asymmetric-friendship-a-text
+  sideASummary: ashfall-memory-asymmetric-friendship-a-summary
+  sideBText: ashfall-memory-asymmetric-friendship-b-text
+  sideBSummary: ashfall-memory-asymmetric-friendship-b-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryFormerPartner
+  category: ComplicatedHistory
+  tier: Active
+  weight: 0.7
+  sideAText: ashfall-memory-former-partner-a-text
+  sideASummary: ashfall-memory-former-partner-a-summary
+  sideBText: ashfall-memory-former-partner-b-text
+  sideBSummary: ashfall-memory-former-partner-b-summary
+
+# ── Pre-Mothballing Station Life & Cryo-sleep ─────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryOldShiftHandover
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-old-shift-handover-text
+  sideASummary: ashfall-memory-old-shift-handover-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCafeteriaLunchTable
+  category: PositivePersonal
+  tier: Passive
+  weight: 1.1
+  sideAText: ashfall-memory-cafeteria-lunch-table-text
+  sideASummary: ashfall-memory-cafeteria-lunch-table-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryMothballOrderRumors
+  category: NeutralAcquaintance
+  tier: Passive
+  weight: 1.2
+  sideAText: ashfall-memory-mothball-order-rumors-text
+  sideASummary: ashfall-memory-mothball-order-rumors-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCryoQueueHandshake
+  category: PositivePersonal
+  tier: Active
+  weight: 1.0
+  sideAText: ashfall-memory-cryo-queue-handshake-text
+  sideASummary: ashfall-memory-cryo-queue-handshake-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCryoPodPrepNeighbor
+  category: ComplicatedHistory
+  tier: Passive
+  weight: 0.9
+  sideAText: ashfall-memory-cryo-prep-neighbor-a-text
+  sideASummary: ashfall-memory-cryo-prep-neighbor-a-summary
+  sideBText: ashfall-memory-cryo-prep-neighbor-b-text
+  sideBSummary: ashfall-memory-cryo-prep-neighbor-b-summary
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryOvertimeDispute
+  category: NegativeWorkplace
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-overtime-dispute-a-text
+  sideASummary: ashfall-memory-overtime-dispute-a-summary
+  sideBText: ashfall-memory-overtime-dispute-b-text
+  sideBSummary: ashfall-memory-overtime-dispute-b-summary
+
+# ── Pre-Mothballing Medical ───────────────────────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryMedicalRoutineCheckup
+  category: NeutralAcquaintance
+  tier: Active
+  weight: 1.0
+  sideAText: ashfall-memory-medical-routine-checkup-doctor-text
+  sideASummary: ashfall-memory-medical-routine-checkup-doctor-summary
+  sideBText: ashfall-memory-medical-routine-checkup-patient-text
+  sideBSummary: ashfall-memory-medical-routine-checkup-patient-summary
+  sideARequiredTags:
+    - family-Medical
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryMedicalJointSurgery
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-medical-joint-surgery-text
+  sideASummary: ashfall-memory-medical-joint-surgery-summary
+  requiredSharedTags:
+    - family-Medical
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryMedicalSickLeavePass
+  category: PositivePersonal
+  tier: Active
+  weight: 0.9
+  sideAText: ashfall-memory-medical-sick-leave-doctor-text
+  sideASummary: ashfall-memory-medical-sick-leave-doctor-summary
+  sideBText: ashfall-memory-medical-sick-leave-worker-text
+  sideBSummary: ashfall-memory-medical-sick-leave-worker-summary
+  sideARequiredTags:
+    - family-Medical
+
+# ── Pre-Mothballing Security ──────────────────────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemorySecurityQuietNight
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-security-quiet-night-text
+  sideASummary: ashfall-memory-security-quiet-night-summary
+  requiredSharedTags:
+    - family-Security
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemorySecurityNoiseComplaint
+  category: NegativePersonal
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-security-noise-officer-text
+  sideASummary: ashfall-memory-security-noise-officer-summary
+  sideBText: ashfall-memory-security-noise-resident-text
+  sideBSummary: ashfall-memory-security-noise-resident-summary
+  sideARequiredTags:
+    - family-Security
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryLostKeycardFiling
+  category: NegativeWorkplace
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-lost-keycard-officer-text
+  sideASummary: ashfall-memory-lost-keycard-officer-summary
+  sideBText: ashfall-memory-lost-keycard-worker-text
+  sideBSummary: ashfall-memory-lost-keycard-worker-summary
+  sideARequiredTags:
+    - family-Security
+
+# ── Pre-Mothballing Cargo & Logistics ─────────────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCargoUnloadingFreighter
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-cargo-unloading-freighter-text
+  sideASummary: ashfall-memory-cargo-unloading-freighter-summary
+  requiredSharedTags:
+    - family-Cargo
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCargoSpecialOrder
+  category: PositivePersonal
+  tier: Active
+  weight: 0.9
+  sideAText: ashfall-memory-cargo-special-order-handler-text
+  sideASummary: ashfall-memory-cargo-special-order-handler-summary
+  sideBText: ashfall-memory-cargo-special-order-client-text
+  sideBSummary: ashfall-memory-cargo-special-order-client-summary
+  sideARequiredTags:
+    - family-Cargo
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryCargoCustomsHold
+  category: NegativePersonal
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-cargo-customs-inspector-text
+  sideASummary: ashfall-memory-cargo-customs-inspector-summary
+  sideBText: ashfall-memory-cargo-customs-passenger-text
+  sideBSummary: ashfall-memory-cargo-customs-passenger-summary
+  sideARequiredTags:
+    - family-Cargo
+
+# ── Pre-Mothballing Engineering & Science ─────────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryEngineeringGeneratorCommissioning
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 1.0
+  sideAText: ashfall-memory-engineering-generator-commissioning-text
+  sideASummary: ashfall-memory-engineering-generator-commissioning-summary
+  requiredSharedTags:
+    - family-Engineering
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryEngineeringToolboxBorrow
+  category: NegativePersonal
+  tier: Active
+  weight: 0.9
+  sideAText: ashfall-memory-engineering-toolbox-owner-text
+  sideASummary: ashfall-memory-engineering-toolbox-owner-summary
+  sideBText: ashfall-memory-engineering-toolbox-borrower-text
+  sideBSummary: ashfall-memory-engineering-toolbox-borrower-summary
+  requiredSharedTags:
+    - family-Engineering
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryScienceCalibrationAssistance
+  category: PositiveWorkplace
+  tier: Passive
+  weight: 0.9
+  sideAText: ashfall-memory-science-calibration-engineer-text
+  sideASummary: ashfall-memory-science-calibration-engineer-summary
+  sideBText: ashfall-memory-science-calibration-scientist-text
+  sideBSummary: ashfall-memory-science-calibration-scientist-summary
+  sideARequiredTags:
+    - family-Engineering
+  sideBRequiredTags:
+    - family-Science
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryScienceSymposiumDebate
+  category: ComplicatedHistory
+  tier: Active
+  weight: 0.8
+  sideAText: ashfall-memory-science-symposium-debate-text
+  sideASummary: ashfall-memory-science-symposium-debate-summary
+  requiredSharedTags:
+    - family-Science
+
+# ── Pre-Mothballing Transit ───────────────────────────────────
+
+- type: ashfallMemoryTemplate
+  id: AshfallMemoryTransportLoungeChess
+  category: NeutralAcquaintance
+  tier: Active
+  weight: 1.0
+  sideAText: ashfall-memory-transport-lounge-chess-text
+  sideASummary: ashfall-memory-transport-lounge-chess-summary
+

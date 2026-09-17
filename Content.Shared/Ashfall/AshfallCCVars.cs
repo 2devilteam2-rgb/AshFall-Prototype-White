@@ -55,4 +55,58 @@ public sealed class AshfallCCVars
     /// </summary>
     public static readonly CVarDef<bool> AgonyOverlayEnabled =
         CVarDef.Create("ashfall.agony_overlay", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Whether inter-character memory links are generated and active.
+    /// </summary>
+    public static readonly CVarDef<bool> MemoryEnabled =
+        CVarDef.Create("ashfall.memory_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Interval in seconds between proximity-based recognition checks.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryProximityInterval =
+        CVarDef.Create("ashfall.memory_proximity_interval", 2.0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum memory links to generate per character.
+    /// </summary>
+    public static readonly CVarDef<int> MemoryMinPerCharacter =
+        CVarDef.Create("ashfall.memory_min_per_character", 1, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum memory links to generate per character.
+    /// </summary>
+    public static readonly CVarDef<int> MemoryMaxPerCharacter =
+        CVarDef.Create("ashfall.memory_max_per_character", 3, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Base probability of forming a memory link between eligible characters.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryBaseProbability =
+        CVarDef.Create("ashfall.memory_base_probability", 0.6f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Distance range in meters for proximity-based recognition.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryProximityRange =
+        CVarDef.Create("ashfall.memory_proximity_range", 6.0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum discovery delay in seconds for pending recognition.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryMinDiscoveryDelay =
+        CVarDef.Create("ashfall.memory_min_discovery_delay", 1.5f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum discovery delay in seconds for pending recognition.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryMaxDiscoveryDelay =
+        CVarDef.Create("ashfall.memory_max_discovery_delay", 4.0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Voice range in meters for spoken recognition triggers.
+    /// </summary>
+    public static readonly CVarDef<float> MemoryVoiceRange =
+        CVarDef.Create("ashfall.memory_voice_range", 7.0f, CVar.SERVERONLY);
 }

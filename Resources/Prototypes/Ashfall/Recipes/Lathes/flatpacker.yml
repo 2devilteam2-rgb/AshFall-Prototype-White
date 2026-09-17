@@ -1,0 +1,8 @@
+- type: latheRecipe
+  id: AshfallFlatpacker
+  parent: BaseToolRecipe
+  result: AshfallFlatpacker
+  completetime: 5
+  materials:
+    Steel: 1500
+    Plastic: 500

@@ -1,0 +1,131 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+using Content.Shared.Alert;
+using Content.Shared.Ashfall.Audio;
+using Content.Shared.Ashfall.Combat.Concussion;
+using Content.Shared.Explosion;
+using Content.Shared.FixedPoint;
+using Content.Shared.Flash;
+using Content.Shared.Flash.Components;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Rejuvenate;
+using Content.Shared.Speech.Components;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+
+namespace Content.Server.Ashfall.Combat.Concussion;
+
+public sealed partial class ConcussionSystem : SharedConcussionSystem
+{
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AlertsSystem _alertsSystem = default!;
+    [Dependency] private SharedDeafnessSystem _deafness = default!;
+
+    private static readonly ProtoId<AlertPrototype> ConcussionAlert = "Concussion";
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<ConcussionThresholdComponent, BeforeExplodeEvent>(OnBeforeExplode);
+        SubscribeLocalEvent<ConcussionThresholdComponent, FlashAttemptEvent>(OnFlashAttempt);
+        SubscribeLocalEvent<ConcussionThresholdComponent, ConcussionStateChangedEvent>(OnConcussionStateChanged);
+        SubscribeLocalEvent<ConcussionThresholdComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<ConcussionThresholdComponent, RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<ConcussionThresholdComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
+
+        SubscribeLocalEvent<ConcussedComponent, ComponentInit>(OnConcussedInit);
+        SubscribeLocalEvent<ConcussedComponent, ComponentShutdown>(OnConcussedShutdown);
+    }
+
+    private void OnMapInit(EntityUid uid, ConcussionThresholdComponent comp, MapInitEvent args)
+    {
+        comp.NextUpdate = _timing.CurTime + comp.UpdateInterval;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var curTime = _timing.CurTime;
+        var query = EntityQueryEnumerator<ConcussionThresholdComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.StoredDamage <= FixedPoint2.Zero)
+                continue;
+
+            if (curTime < comp.NextUpdate)
+                continue;
+
+            var elapsed = (float)(curTime - (comp.NextUpdate - comp.UpdateInterval)).TotalSeconds;
+            var healing = comp.HealRate * elapsed;
+            comp.StoredDamage = FixedPoint2.Max(FixedPoint2.Zero, comp.StoredDamage - healing);
+
+            UpdateConcussionState(uid, comp);
+            Dirty(uid, comp);
+            comp.NextUpdate = curTime + comp.UpdateInterval;
+        }
+    }
+
+    private void OnConcussionStateChanged(EntityUid uid, ConcussionThresholdComponent comp, ConcussionStateChangedEvent args)
+    {
+        _movement.RefreshMovementSpeedModifiers(uid);
+
+        if (args.NewState != ConcussionState.Sane)
+        {
+            EnsureComp<ConcussedComponent>(uid);
+            EnsureComp<SlurredAccentComponent>(uid);
+        }
+        else
+        {
+            RemComp<ConcussedComponent>(uid);
+            RemComp<SlurredAccentComponent>(uid);
+        }
+    }
+
+    private void OnBeforeExplode(EntityUid uid, ConcussionThresholdComponent comp, ref BeforeExplodeEvent args)
+    {
+        var totalDmg = args.Damage.GetTotal().Float();
+        if (totalDmg <= 0)
+            return;
+
+        var concussionDmg = FixedPoint2.New(totalDmg * 1.5f);
+        AddConcussionDamage(uid, comp, concussionDmg);
+
+        var deafDuration = TimeSpan.FromSeconds(Math.Clamp(totalDmg * 0.15f, 2f, 15f));
+        _deafness.TryDeafen(uid, deafDuration);
+    }
+
+    private void OnFlashAttempt(EntityUid uid, ConcussionThresholdComponent comp, ref FlashAttemptEvent args)
+    {
+        // Flashbang or flash in close proximity causes head disorientation and deafening
+        AddConcussionDamage(uid, comp, FixedPoint2.New(35));
+        _deafness.TryDeafen(uid, TimeSpan.FromSeconds(8));
+    }
+
+    private void OnRefreshSpeed(EntityUid uid, ConcussionThresholdComponent comp, RefreshMovementSpeedModifiersEvent args)
+    {
+        if (!comp.SpeedModifierThresholds.TryGetValue(comp.CurrentState, out var speed))
+            return;
+
+        args.ModifySpeed(speed, speed);
+    }
+
+    private void OnRejuvenate(EntityUid uid, ConcussionThresholdComponent comp, RejuvenateEvent args)
+    {
+        comp.StoredDamage = FixedPoint2.Zero;
+        UpdateConcussionState(uid, comp);
+        Dirty(uid, comp);
+    }
+
+    private void OnConcussedInit(EntityUid uid, ConcussedComponent comp, ComponentInit args)
+    {
+        _alertsSystem.ShowAlert(uid, ConcussionAlert);
+    }
+
+    private void OnConcussedShutdown(EntityUid uid, ConcussedComponent comp, ComponentShutdown args)
+    {
+        _alertsSystem.ClearAlert(uid, ConcussionAlert);
+    }
+}

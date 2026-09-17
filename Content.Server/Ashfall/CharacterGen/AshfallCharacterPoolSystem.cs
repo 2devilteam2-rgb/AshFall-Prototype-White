@@ -423,4 +423,24 @@ public sealed partial class AshfallCharacterPoolSystem : EntitySystem
         RaiseLocalEvent(ref ev);
         return !ev.Cancelled;
     }
+
+    public bool TryGetSelectedCandidate(NetUserId userId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out AshfallCharacterCandidate? candidate)
+    {
+        if (_playerPools.TryGetValue(userId, out var pool) &&
+            pool.SelectedIndex >= 0 &&
+            pool.SelectedIndex < pool.Candidates.Count)
+        {
+            candidate = pool.Candidates[pool.SelectedIndex];
+            return true;
+        }
+
+        candidate = null;
+        return false;
+    }
+
+    public bool TryGetMemoryTags(Guid candidateId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out HashSet<string>? tags)
+    {
+        tags = null;
+        return false;
+    }
 }

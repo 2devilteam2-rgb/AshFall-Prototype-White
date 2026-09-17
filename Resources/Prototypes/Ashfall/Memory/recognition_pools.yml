@@ -1,0 +1,47 @@
+- type: ashfallRecognitionPool
+  id: RecognitionPoolPositiveWorkplace
+  category: PositiveWorkplace
+  lines:
+    - ashfall-memory-recog-pos-work-1
+    - ashfall-memory-recog-pos-work-2
+    - ashfall-memory-recog-pos-work-3
+
+- type: ashfallRecognitionPool
+  id: RecognitionPoolPositivePersonal
+  category: PositivePersonal
+  lines:
+    - ashfall-memory-recog-pos-pers-1
+    - ashfall-memory-recog-pos-pers-2
+    - ashfall-memory-recog-pos-pers-3
+
+- type: ashfallRecognitionPool
+  id: RecognitionPoolNegativeWorkplace
+  category: NegativeWorkplace
+  lines:
+    - ashfall-memory-recog-neg-work-1
+    - ashfall-memory-recog-neg-work-2
+    - ashfall-memory-recog-neg-work-3
+
+- type: ashfallRecognitionPool
+  id: RecognitionPoolNegativePersonal
+  category: NegativePersonal
+  lines:
+    - ashfall-memory-recog-neg-pers-1
+    - ashfall-memory-recog-neg-pers-2
+    - ashfall-memory-recog-neg-pers-3
+
+- type: ashfallRecognitionPool
+  id: RecognitionPoolNeutralAcquaintance
+  category: NeutralAcquaintance
+  lines:
+    - ashfall-memory-recog-neutral-1
+    - ashfall-memory-recog-neutral-2
+    - ashfall-memory-recog-neutral-3
+
+- type: ashfallRecognitionPool
+  id: RecognitionPoolComplicatedHistory
+  category: ComplicatedHistory
+  lines:
+    - ashfall-memory-recog-complicated-1
+    - ashfall-memory-recog-complicated-2
+    - ashfall-memory-recog-complicated-3
