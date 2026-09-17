@@ -88,7 +88,9 @@ public abstract partial class SharedCombatModeSystem : EntitySystem
     {
         if (value)
         {
-            EnsureComp<MouseRotatorComponent>(uid);
+            var rotator = EnsureComp<MouseRotatorComponent>(uid);
+            rotator.Simple4DirMode = true;
+            Dirty(uid, rotator);
             EnsureComp<NoRotateOnMoveComponent>(uid);
         }
         else
