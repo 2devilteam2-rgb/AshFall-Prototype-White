@@ -32,8 +32,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    // ── Internal link model ──────────────────────────────────────
-
     private sealed class MemoryLink
     {
         public EntityUid EntityA;
@@ -63,7 +61,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
     private float _proximityTimer;
     private ISawmill _sawmill = default!;
 
-    // ── Lifecycle ────────────────────────────────────────────────
 
     public override void Initialize()
     {
@@ -95,7 +92,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         CheckProximityDiscoveries();
     }
 
-    // ── Caching ──────────────────────────────────────────────────
 
     private void CacheRecognitionPools()
     {
@@ -125,7 +121,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         }
     }
 
-    // ── Spawn & cleanup ──────────────────────────────────────────
 
     private void OnPlayerSpawned(PlayerSpawnCompleteEvent ev)
     {
@@ -188,7 +183,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         _proximityTimer = 0;
     }
 
-    // ── Weaving ──────────────────────────────────────────────────
 
     private void WeaveMemoriesForNewCharacter(EntityUid newChar, CharacterMemoryComponent newComp)
     {
@@ -426,7 +420,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         return template.Weight;
     }
 
-    // ── Discovery: proximity ─────────────────────────────────────
 
     private void CheckProximityDiscoveries()
     {
@@ -511,7 +504,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         }
     }
 
-    // ── Discovery: examine ───────────────────────────────────────
 
     private void OnExamined(EntityUid uid, CharacterMemoryComponent component, ExaminedEvent args)
     {
@@ -547,7 +539,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         }
     }
 
-    // ── Discovery: examine verb ("Вспомнить") ────────────────────
 
     private void OnGetExamineVerbs(EntityUid uid, CharacterMemoryComponent component,
         GetVerbsEvent<ExamineVerb> args)
@@ -600,7 +591,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         args.Verbs.Add(verb);
     }
 
-    // ── Discovery: voice ─────────────────────────────────────────
 
     private void OnEntitySpoke(EntityUid uid, CharacterMemoryComponent component, EntitySpokeEvent args)
     {
@@ -632,7 +622,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         }
     }
 
-    // ── Discovery trigger ────────────────────────────────────────
 
     private void TriggerDiscovery(MemoryLink link, EntityUid discoverer, bool isSideA)
     {
@@ -698,7 +687,6 @@ public sealed partial class AshfallMemorySystem : EntitySystem
         return "...";
     }
 
-    // ── Helpers ───────────────────────────────────────────────────
 
     private int GetMemoryCount(EntityUid entity)
     {
