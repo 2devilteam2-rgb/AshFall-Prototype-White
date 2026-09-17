@@ -4,8 +4,6 @@
 
 <p align="center">
   <a href="https://discord.gg/qC5nxGVeYN"><img src="https://img.shields.io/badge/Discord-Присоединиться-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord" /></a>
-  <img src="https://img.shields.io/badge/Статус-В_разработке-f97316?style=flat-square" alt="Статус: В разработке" />
-  <img src="https://img.shields.io/badge/Режим-High_RP-292524?style=flat-square" alt="High RP" />
   <a href="https://github.com/space-wizards/space-station-14"><img src="https://img.shields.io/badge/База-Space_Station_14-44403c?style=flat-square" alt="Space Station 14" /></a>
   <a href="#лицензия"><img src="https://img.shields.io/badge/Лицензия-MIT_%2F_AGPLv3-ea580c?style=flat-square" alt="Лицензия" /></a>
 </p>
