@@ -73,8 +73,11 @@
     {
       "name": "dead"
     },
-	  {
+    {
       "name": "dead-unshaded"
+    },
+    {
+      "name": "crit-unshaded"
     }
   ]
 }

@@ -60,6 +60,14 @@
     {
       "name": "opened-equipped-MASK-vox",
       "directions": 4
+    },
+    {
+      "name": "equipped-MASK-vulpkanin",
+      "directions": 4
+    },
+    {
+      "name": "opened-equipped-MASK-vulpkanin",
+      "directions": 4
     }
   ]
 }
