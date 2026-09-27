@@ -1,7 +1,11 @@
-<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Vertical">
-        <Label Name="TitleLabel" Access="Public" />
-        <Label Name="ExampleLabel" Access="Public" />
-        <ColorSelectorSliders Name="Slider" Access="Public" HorizontalExpand="True" />
+<Control xmlns="https://spacestation14.io" HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal" Margin="0 4" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" MinWidth="260" HorizontalExpand="True" VerticalAlignment="Center">
+            <Label Name="TitleLabel" Access="Public" />
+            <Label Name="ExampleLabel" Access="Public" Margin="0 2 0 0" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" MinWidth="340" MaxWidth="340" HorizontalAlignment="Right">
+            <ColorSelectorSliders Name="Slider" Access="Public" HorizontalExpand="True" />
+        </BoxContainer>
     </BoxContainer>
 </Control>

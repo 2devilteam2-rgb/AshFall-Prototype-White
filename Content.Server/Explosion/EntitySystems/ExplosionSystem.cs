@@ -11,12 +11,15 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Ashfall.Camera;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
+using Content.Server.Ashfall.Fire.Components;
+using Content.Server.Ashfall.Fire.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
+using Content.Shared.Fluids.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
@@ -57,8 +60,12 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     [Dependency] private FlammableSystem _flammableSystem = default!;
     [Dependency] private DestructibleSystem _destructibleSystem = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private ReagentFireSystem _reagentFire = default!;
+    [Dependency] private SolidFuelSystem _solidFuel = default!;
 
     [Dependency] private EntityQuery<FlammableComponent> _flammableQuery = default!;
+    [Dependency] private EntityQuery<ReagentPuddleFireComponent> _reagentPuddleFireQuery = default!;
+    [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     [Dependency] private EntityQuery<ActorComponent> _actorQuery = default!;
     [Dependency] private EntityQuery<DestructibleComponent> _destructibleQuery = default!;

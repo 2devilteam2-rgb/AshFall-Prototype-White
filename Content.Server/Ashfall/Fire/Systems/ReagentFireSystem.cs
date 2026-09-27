@@ -25,6 +25,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -51,6 +52,7 @@ public sealed partial class ReagentFireSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
 
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
@@ -65,6 +67,7 @@ public sealed partial class ReagentFireSystem : EntitySystem
     private readonly List<Entity<ReagentPuddleFireComponent>> _exposedPuddles = [];
     private readonly List<Entity<ReagentPuddleFireComponent>> _spreadPuddles = [];
     private readonly HashSet<EntityUid> _standingEntities = [];
+    private readonly HashSet<Entity<PuddleComponent>> _puddles = [];
 
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
     [Dependency] private EntityQuery<GridAtmosphereComponent> _gridAtmosQuery = default!;
@@ -99,6 +102,7 @@ public sealed partial class ReagentFireSystem : EntitySystem
         SubscribeLocalEvent<SolutionContainerManagerComponent, SolutionChangedEvent>(OnSolutionContainerChanged);
         SubscribeLocalEvent<PuddleComponent, InteractUsingEvent>(OnPuddleInteractUsing);
         SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
+        SubscribeLocalEvent<IgnitionSourceComponent, AfterInteractEvent>(OnIgnitionAfterInteract);
     }
 
     private void OnFireStartup(EntityUid uid, ReagentPuddleFireComponent component, ref ComponentStartup args)
@@ -154,6 +158,25 @@ public sealed partial class ReagentFireSystem : EntitySystem
             && args.Temperature >= GetIgnitionTemperature(fireComp))
         {
             Ignite(ent.Owner, fireComp);
+        }
+    }
+
+    private void OnIgnitionAfterInteract(Entity<IgnitionSourceComponent> ent, ref AfterInteractEvent args)
+    {
+        if (args.Handled || !ent.Comp.Ignited || !args.CanReach)
+            return;
+
+        var coords = args.ClickLocation;
+        _puddles.Clear();
+        _lookup.GetEntitiesInRange(coords, 0.75f, _puddles);
+        foreach (var puddle in _puddles)
+        {
+            if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+            {
+                Ignite(puddle.Owner, fireComp);
+                args.Handled = true;
+                return;
+            }
         }
     }
 
@@ -322,14 +345,16 @@ public sealed partial class ReagentFireSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        if (_burningFires.Count == 0)
-            return;
-
         _updateAccumulator += frameTime;
         if (_updateAccumulator < UpdateInterval)
             return;
 
         _updateAccumulator -= UpdateInterval;
+
+        CheckLyingIgnitionSources();
+
+        if (_burningFires.Count == 0)
+            return;
 
         _dueFires.Clear();
         _dueFires.AddRange(_burningFires);
@@ -350,6 +375,43 @@ public sealed partial class ReagentFireSystem : EntitySystem
             }
 
             ProcessBurningPuddle(uid, fireComp, puddle, xform);
+        }
+    }
+
+    private void CheckLyingIgnitionSources()
+    {
+        var ignQuery = EntityQueryEnumerator<IgnitionSourceComponent, TransformComponent>();
+        while (ignQuery.MoveNext(out var uid, out var ignition, out var xform))
+        {
+            if (!ignition.Ignited || _containers.IsEntityOrParentInContainer(uid))
+                continue;
+
+            _puddles.Clear();
+            _lookup.GetEntitiesInRange(xform.Coordinates, 0.6f, _puddles);
+            foreach (var puddle in _puddles)
+            {
+                if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+                {
+                    Ignite(puddle.Owner, fireComp);
+                }
+            }
+        }
+
+        var flamQuery = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
+        while (flamQuery.MoveNext(out var uid, out var flammable, out var xform))
+        {
+            if (!flammable.OnFire || _containers.IsEntityOrParentInContainer(uid))
+                continue;
+
+            _puddles.Clear();
+            _lookup.GetEntitiesInRange(xform.Coordinates, 0.6f, _puddles);
+            foreach (var puddle in _puddles)
+            {
+                if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+                {
+                    Ignite(puddle.Owner, fireComp);
+                }
+            }
         }
     }
 

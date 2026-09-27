@@ -95,6 +95,14 @@ public sealed partial class OptionsTabControlRow : Control
     }
 
     /// <summary>
+    /// Add a checkbox option backed by a simple boolean CVar and an OptionCheckBox control row.
+    /// </summary>
+    public OptionCheckboxCVar AddOptionCheckBox(CVarDef<bool> cVar, OptionCheckBox checkBox, bool invert = false)
+    {
+        return AddOptionCheckBox(cVar, checkBox.CheckBox, invert);
+    }
+
+    /// <summary>
     /// Add a slider option, displayed in percent, backed by a simple float CVar.
     /// </summary>
     /// <param name="cVar">The CVar represented by the slider.</param>

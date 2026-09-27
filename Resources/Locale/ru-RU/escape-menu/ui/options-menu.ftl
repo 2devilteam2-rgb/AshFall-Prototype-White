@@ -57,6 +57,7 @@ ui-options-audio-hrtf = Включить обработку HRTF-аудио (т�
 ui-options-subtle-reverb = Акустика помещений станции (реверберация)
 ui-options-audio-muffle = Акустическое приглушение звука препятствиями
 ui-options-volume-label = Громкость
+ui-options-playback-effects-label = Воспроизведение и эффекты
 
 ## Graphics menu
 

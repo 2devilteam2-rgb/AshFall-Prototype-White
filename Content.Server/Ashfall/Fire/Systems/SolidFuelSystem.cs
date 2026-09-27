@@ -64,6 +64,7 @@ public sealed partial class SolidFuelSystem : EntitySystem
         SubscribeLocalEvent<SolidFuelComponent, ExtinguishedEvent>(OnExtinguished);
         SubscribeLocalEvent<SolidFuelComponent, ExtinguishEvent>(OnExtinguish);
         SubscribeLocalEvent<SolidFuelComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<IgnitionSourceComponent, AfterInteractEvent>(OnIgnitionAfterInteract);
     }
 
     private void OnExtinguished(Entity<SolidFuelComponent> ent, ref ExtinguishedEvent args)
@@ -154,6 +155,10 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (!_solutions.TryGetSolution(uid, solutionName, out _, out var solution))
             return false;
 
+        // Flammable liquids (alcohol, fuel, ethanol) do not count as extinguishing water
+        if (solution.GetSolutionFlammability(_prototypes) > 0)
+            return false;
+
         foreach (var (reagent, quantity) in solution.Contents)
         {
             if (quantity <= 0 || !_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto) ||
@@ -208,7 +213,17 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (rate <= 0)
             return;
 
-        Expose(ent, source, rate, args.User);
+        ent.Comp.Exposure += rate * 2.5f;
+        if (ent.Comp.Exposure >= ent.Comp.IgnitionTime)
+        {
+            _flammable.AdjustFireStacks(ent, 2f, fire);
+            _flammable.Ignite(ent, source, fire);
+        }
+        else
+        {
+            Expose(ent, source, rate, args.User);
+        }
+
         args.Handled = true;
         args.Repeat = true;
     }
@@ -248,6 +263,70 @@ public sealed partial class SolidFuelSystem : EntitySystem
         }
     }
 
+    public EntityUid? TryGetOrSpawnSolidFuelFloor(EntityCoordinates coords)
+    {
+        var tile = _turf.GetTileRef(coords);
+        if (tile is not { } floor ||
+            ((ContentTileDefinition) _tiles[floor.Tile.TypeId]).SolidFuelEntity is not { } prototype)
+            return null;
+
+        var center = new EntityCoordinates(floor.GridUid,
+            new Vector2(floor.GridIndices.X + 0.5f, floor.GridIndices.Y + 0.5f));
+
+        _floorCandidates.Clear();
+        _lookup.GetEntitiesInRange(center, 0.1f, _floorCandidates, LookupFlags.Uncontained);
+        foreach (var candidate in _floorCandidates)
+        {
+            if (candidate.Comp.TileType != null && !TerminatingOrDeleted(candidate) &&
+                !EntityManager.IsQueuedForDeletion(candidate))
+            {
+                return candidate.Owner;
+            }
+        }
+
+        var fuel = Spawn(prototype, center);
+        Comp<SolidFuelComponent>(fuel).TileType = ((ContentTileDefinition) _tiles[floor.Tile.TypeId]).ID;
+        return fuel;
+    }
+
+    public bool TryIgniteFloor(EntityUid gridUid, Vector2i indices, EntityUid? cause = null)
+    {
+        var center = new EntityCoordinates(gridUid, new Vector2(indices.X + 0.5f, indices.Y + 0.5f));
+        if (TryGetOrSpawnSolidFuelFloor(center) is not { } fuel)
+            return false;
+
+        if (TryComp<FlammableComponent>(fuel, out var fire) && !fire.OnFire && CanBurn((fuel, fire)))
+        {
+            _flammable.AdjustFireStacks(fuel, 2f, fire);
+            _flammable.Ignite(fuel, cause ?? fuel, fire);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void OnIgnitionAfterInteract(Entity<IgnitionSourceComponent> ent, ref AfterInteractEvent args)
+    {
+        if (args.Handled || !ent.Comp.Ignited || !args.CanReach || !Enabled)
+            return;
+
+        var target = TryGetOrSpawnSolidFuelFloor(args.ClickLocation);
+        if (target == null || !TryComp<SolidFuelComponent>(target.Value, out var fuel) ||
+            !TryComp<FlammableComponent>(target.Value, out var fire) || fire.OnFire || !CanBurn((target.Value, fire)))
+            return;
+
+        args.Handled = true;
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, 1f,
+            new SolidFuelIgnitionDoAfterEvent(), target.Value, target: target.Value, used: ent.Owner)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+            BreakOnHandChange = true,
+            AttemptFrequency = AttemptFrequency.EveryTick,
+        });
+    }
+
     private void HeatFloor(EntityUid source, float rate, float range)
     {
         var coords = Transform(source).Coordinates;
@@ -259,30 +338,9 @@ public sealed partial class SolidFuelSystem : EntitySystem
                 if (x * x + y * y > range * range)
                     continue;
 
-                var tile = _turf.GetTileRef(coords.Offset(new Vector2(x, y)));
-                if (tile is not { } floor ||
-                    ((ContentTileDefinition) _tiles[floor.Tile.TypeId]).SolidFuelEntity is not { } prototype)
+                var offsetCoords = coords.Offset(new Vector2(x, y));
+                if (TryGetOrSpawnSolidFuelFloor(offsetCoords) is not { } fuel)
                     continue;
-
-                var center = new EntityCoordinates(floor.GridUid,
-                    new Vector2(floor.GridIndices.X + 0.5f, floor.GridIndices.Y + 0.5f));
-
-                EntityUid? existing = null;
-                _floorCandidates.Clear();
-                _lookup.GetEntitiesInRange(center, 0.1f, _floorCandidates, LookupFlags.Uncontained);
-                foreach (var candidate in _floorCandidates)
-                {
-                    if (candidate.Comp.TileType != null && !TerminatingOrDeleted(candidate) &&
-                        !EntityManager.IsQueuedForDeletion(candidate))
-                    {
-                        existing = candidate.Owner;
-                        break;
-                    }
-                }
-
-                var fuel = existing ?? Spawn(prototype, center);
-                if (existing == null)
-                    Comp<SolidFuelComponent>(fuel).TileType = ((ContentTileDefinition) _tiles[floor.Tile.TypeId]).ID;
 
                 if (fuel != source && _interaction.InRangeUnobstructed(source, fuel, range: range + 0.71f))
                     Expose(fuel, source, rate);

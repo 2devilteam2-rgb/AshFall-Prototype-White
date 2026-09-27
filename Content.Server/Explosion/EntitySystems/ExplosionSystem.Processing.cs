@@ -240,6 +240,12 @@ public sealed partial class ExplosionSystem
             _atmosphere.HotspotExpose(grid.Owner, tile, temperature.Value, currentIntensity, cause, true);
         }
 
+        // ignite combustible floors
+        if ((fireStacks != null && fireStacks > 0) || (temperature != null && temperature >= 400f))
+        {
+            _solidFuel.TryIgniteFloor(grid.Owner, tile, cause);
+        }
+
         // We process anchored entities after the AABB lookup for performance reasons.
         // The AABB lookup cannot performantly check if each anchored entity is on this tile without a bunch of wasted CPU time
         // To get around this, we just skip them during the first loop.
@@ -472,6 +478,19 @@ public sealed partial class ExplosionSystem
             {
                 flammable.FireStacks += fireStacksOnIgnite.Value;
                 _flammableSystem.Ignite(uid, uid, flammable);
+            }
+
+            if (_reagentPuddleFireQuery.TryGetComponent(uid, out var puddleFire) && puddleFire.Flammability > 0)
+            {
+                _reagentFire.Ignite(uid, puddleFire);
+            }
+            else if (_puddleQuery.TryGetComponent(uid, out var puddle))
+            {
+                _reagentFire.UpdateFire((uid, puddle));
+                if (_reagentPuddleFireQuery.TryGetComponent(uid, out var newFire) && newFire.Flammability > 0)
+                {
+                    _reagentFire.Ignite(uid, newFire);
+                }
             }
         }
 

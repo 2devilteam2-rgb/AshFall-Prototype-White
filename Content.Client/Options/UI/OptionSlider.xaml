@@ -1,7 +1,7 @@
-<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal" Margin="0 2">
-        <Label Name="NameLabel" MinWidth="320" HorizontalExpand="True" />
-        <BoxContainer Orientation="Horizontal" MinWidth="340" MaxWidth="360">
+<Control xmlns="https://spacestation14.io" HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal" Margin="0 2" HorizontalExpand="True">
+        <Label Name="NameLabel" MinWidth="260" HorizontalExpand="True" />
+        <BoxContainer Orientation="Horizontal" MinWidth="340" MaxWidth="340" HorizontalAlignment="Right">
             <Slider Name="Slider" Access="Public" HorizontalExpand="True" />
             <Label Name="ValueLabel" Access="Public" Margin="8 0 0 0" MinWidth="48" Align="Right" />
         </BoxContainer>

@@ -57,6 +57,7 @@ ui-options-audio-hrtf = Enable HRTF Audio Processing (Requires Restart)
 ui-options-subtle-reverb = Station Room Acoustics (Reverb)
 ui-options-audio-muffle = Acoustic Sound Occlusion
 ui-options-volume-label = Volume
+ui-options-playback-effects-label = Playback & Effects
 
 ## Graphics menu
 

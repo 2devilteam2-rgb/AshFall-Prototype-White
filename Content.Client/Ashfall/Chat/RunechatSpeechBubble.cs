@@ -102,6 +102,32 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         };
     }
 
+    private static readonly Color SiliconVoiceColor = Color.FromHex("#C5E4FF");
+
+    private static readonly Color[] CharacterVoiceTints =
+    [
+        Color.FromHex("#EDEFEF"), // Neutral soft white
+        Color.FromHex("#F2ECE4"), // Warm ivory
+        Color.FromHex("#E5ECE8"), // Sage tint
+        Color.FromHex("#ECE8E4"), // Dusty warm
+        Color.FromHex("#E4E7EE"), // Cool silver
+        Color.FromHex("#EFEBE3"), // Light beige
+        Color.FromHex("#E8EAED"), // Slate mist
+        Color.FromHex("#F4EFEA"), // Cream
+    ];
+
+    private static Color GetCharacterVoiceColor(EntityUid senderEntity, IEntityManager entityManager)
+    {
+        if (entityManager.HasComponent<Content.Shared.Silicons.Borgs.Components.BorgChassisComponent>(senderEntity) ||
+            entityManager.HasComponent<Content.Shared.Silicons.Laws.Components.SiliconLawBoundComponent>(senderEntity))
+        {
+            return SiliconVoiceColor;
+        }
+
+        var hash = (uint) senderEntity.Id.GetHashCode();
+        return CharacterVoiceTints[hash % (uint) CharacterVoiceTints.Length];
+    }
+
     private static Color GetTextColor(SpeechType type, ChatMessage message, EntityUid senderEntity)
     {
         if (message.MessageColorOverride is { } color)
@@ -119,6 +145,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         var entityManager = IoCManager.Resolve<IEntityManager>();
         if (entityManager.HasComponent<GhostComponent>(senderEntity))
             return ObserverColor;
+
+        if (type is SpeechType.Say or SpeechType.Whisper)
+            return GetCharacterVoiceColor(senderEntity, entityManager);
 
         return DefaultColor;
     }

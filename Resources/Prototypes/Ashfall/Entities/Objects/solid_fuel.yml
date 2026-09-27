@@ -4,7 +4,7 @@
   abstract: true
   components:
   - type: SolidFuel
-    ignitionTime: 90
+    ignitionTime: 25
     burnTime: 60
     coolingRate: 2
   - type: Flammable
@@ -15,7 +15,11 @@
   - type: Appearance
   - type: FireVisuals
     sprite: Effects/fire.rsi
-    normalState: fire
+    normalState: "1"
+    alternateState: "2"
+    fireStackAlternateState: 0.5
+    lightRadiusPerStack: 1.5
+    lightEnergyPerStack: 1.2
   - type: Reactive
     groups:
       Flammable: [Touch]
@@ -27,7 +31,7 @@
   abstract: true
   components:
   - type: SolidFuel
-    ignitionTime: 240
+    ignitionTime: 25
     burnTime: 120
 
 - type: entity
@@ -36,7 +40,7 @@
   abstract: true
   components:
   - type: SolidFuel
-    ignitionTime: 180
+    ignitionTime: 15
     burnTime: 90
 
 # Invisible until ignited. Created for floor tiles currently exposed to heat.
@@ -48,6 +52,12 @@
   components:
   - type: Sprite
     noRot: true
+    drawdepth: Effects
+  - type: PointLight
+    radius: 3.5
+    energy: 1.5
+    color: "#FFAA44"
+    castShadows: false
   - type: Transform
     anchored: true
 
@@ -57,5 +67,5 @@
   name: burning carpet floor
   components:
   - type: SolidFuel
-    ignitionTime: 180
+    ignitionTime: 15
     burnTime: 90
