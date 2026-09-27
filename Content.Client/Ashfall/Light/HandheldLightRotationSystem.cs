@@ -40,39 +40,49 @@ public sealed partial class HandheldLightRotationSystem : EntitySystem
     {
         base.FrameUpdate(frameTime);
 
-        var query = EntityQueryEnumerator<PointLightComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var light, out var xform))
+        var handheldQuery = EntityQueryEnumerator<HandheldLightComponent, PointLightComponent, TransformComponent>();
+        while (handheldQuery.MoveNext(out var uid, out _, out var light, out var xform))
         {
-            if (!light.Enabled || light.LightMask == null)
-            {
-                _smoothedAngles.Remove(uid);
-                continue;
-            }
+            UpdateLightRotation(uid, light, xform, frameTime);
+        }
 
-            // Only smooth directional handheld lights / flashlights
-            if (!HasComp<HandheldLightComponent>(uid) && !HasComp<ItemTogglePointLightComponent>(uid))
+        var toggleQuery = EntityQueryEnumerator<ItemTogglePointLightComponent, PointLightComponent, TransformComponent>();
+        while (toggleQuery.MoveNext(out var uid, out _, out var light, out var xform))
+        {
+            if (HasComp<HandheldLightComponent>(uid))
                 continue;
+
+            UpdateLightRotation(uid, light, xform, frameTime);
+        }
+    }
+
+    private void UpdateLightRotation(EntityUid uid, PointLightComponent light, TransformComponent xform, float frameTime)
+    {
+        if (!light.Enabled || light.LightMask == null)
+        {
+            _smoothedAngles.Remove(uid);
+            return;
+        }
 
 #pragma warning disable RA0002
-            // Disable auto-rotation in Clyde so our smoothed light.Rotation is used directly as world angle
-            light.MaskAutoRotate = false;
+        // Disable auto-rotation in Clyde so our smoothed light.Rotation is used directly as world angle
+        light.MaskAutoRotate = false;
 
-            var targetAngle = GetTargetAngle(uid, xform);
+        var targetAngle = GetTargetAngle(uid, xform);
 
-            if (!_smoothedAngles.TryGetValue(uid, out var currentAngle))
-            {
-                currentAngle = targetAngle;
-            }
-            else
-            {
-                var factor = MathF.Min(1f, 16.0f * frameTime);
-                currentAngle = Angle.Lerp(currentAngle, targetAngle, factor).Reduced();
-            }
-
-            _smoothedAngles[uid] = currentAngle;
-            light.Rotation = currentAngle;
-#pragma warning restore RA0002
+        if (!_smoothedAngles.TryGetValue(uid, out var currentAngle))
+        {
+            currentAngle = targetAngle;
         }
+        else
+        {
+            var factor = MathF.Min(1f, 16.0f * frameTime);
+            currentAngle = Angle.Lerp(currentAngle, targetAngle, factor).Reduced();
+        }
+
+        _smoothedAngles[uid] = currentAngle;
+        light.Rotation = currentAngle;
+#pragma warning restore RA0002
     }
 
     private Angle GetTargetAngle(EntityUid uid, TransformComponent xform)

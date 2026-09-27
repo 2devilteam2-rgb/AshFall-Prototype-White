@@ -8,6 +8,7 @@ ui-options-tab-controls = Управление
 ui-options-tab-audio = Аудио
 ui-options-tab-network = Сеть
 ui-options-tab-misc = Основные
+ui-options-tab-chat = Чат и речь
 
 ui-options-apply = Сохранить и применить
 ui-options-reset-all = Сброс изменений
@@ -24,6 +25,14 @@ ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Доступность
+
+# Chat & Speech menu
+
+ui-options-chat-runechat = Облачка речи (Runechat)
+ui-options-runechat-enable = Использовать пиксельный Runechat
+ui-options-runechat-scale = Масштаб Runechat:
+ui-options-chat-bubbles = Классические облачка речи
+ui-options-chat-general = Чат и сообщения
 
 ## Audio menu
 
@@ -70,7 +79,7 @@ ui-options-fancy-name-background = Добавить фон облачкам с �
 ui-options-chat-follow-button = Показывать кнопку слежения рядом с сообщениями чата при игре за призрака
 ui-options-vsync = Вертикальная синхронизация
 ui-options-max-fps = Максимальная частота кадров:
-ui-options-max-fps-display-rate = Частота обновления экрана
+ui-options-max-fps-display-rate = Частота экрана
 ui-options-max-fps-tooltip = Максимальная частота кадров клиента. Значение 0 снимает ограничение. Не действует при включённой вертикальной синхронизации.
 ui-options-fullscreen = Полный экран
 ui-options-lighting-label = Качество освещения:

@@ -8,6 +8,7 @@ ui-options-tab-controls = Controls
 ui-options-tab-audio = Audio
 ui-options-tab-network = Network
 ui-options-tab-misc = General
+ui-options-tab-chat = Chat & Speech
 
 ui-options-apply = Save & apply
 ui-options-reset-all = Reset changed
@@ -24,6 +25,14 @@ ui-options-general-cursor = Cursor
 ui-options-general-speech = Speech
 ui-options-general-storage = Storage
 ui-options-general-accessibility = Accessibility
+
+# Chat & Speech menu
+
+ui-options-chat-runechat = Runechat Speech Bubbles
+ui-options-runechat-enable = Enable Pixel Runechat
+ui-options-runechat-scale = Runechat Scale:
+ui-options-chat-bubbles = Speech Bubbles
+ui-options-chat-general = Chat & Log
 
 ## Audio menu
 
