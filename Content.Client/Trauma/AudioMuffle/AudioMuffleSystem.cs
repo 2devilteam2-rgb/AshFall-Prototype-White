@@ -186,6 +186,13 @@ public sealed partial class AudioMuffleSystem : SharedAudioMuffleSystem
         if (HasComp<MapGridComponent>(uid))
             return;
 
+        var isRelevant = uid == player || _blockerQuery.HasComp(uid);
+        if (!isRelevant && _relayedQuery.TryComp(_player.LocalEntity, out var relay) && uid == relay.RelayEntity)
+            isRelevant = true;
+
+        if (!isRelevant && ev.Entity.Comp1.ChildCount == 0)
+            return;
+
         var oldMap = ev.OldPosition.IsValid(EntityManager)
             ? _xform.ToMapCoordinates(ev.OldPosition)
             : MapCoordinates.Nullspace;
@@ -196,12 +203,16 @@ public sealed partial class AudioMuffleSystem : SharedAudioMuffleSystem
         if (oldMap == MapCoordinates.Nullspace && newMap == MapCoordinates.Nullspace)
             return;
 
-        ProcessEntityMove(player, uid, oldMap, newMap);
+        if (isRelevant)
+            ProcessEntityMove(player, uid, oldMap, newMap);
 
-        var childEnumerator = ev.Entity.Comp1.ChildEnumerator;
-        while (childEnumerator.MoveNext(out var child))
+        if (ev.Entity.Comp1.ChildCount > 0)
         {
-            ProcessEntityMove(player, child, oldMap, newMap);
+            var childEnumerator = ev.Entity.Comp1.ChildEnumerator;
+            while (childEnumerator.MoveNext(out var child))
+            {
+                ProcessEntityMove(player, child, oldMap, newMap);
+            }
         }
     }
 

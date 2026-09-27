@@ -14,6 +14,7 @@ public sealed partial class ParticleOverlay : Overlay
 
     private readonly ParticleSystem _system;
     private readonly Dictionary<string, ShaderInstance> _shaderCache = new();
+    private readonly List<ActiveEmitter> _drawEmitters = new();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -25,17 +26,28 @@ public sealed partial class ParticleOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        var emitters = _system.GetEmitters();
+        if (emitters.Count == 0)
+            return;
+
         var handle = args.WorldHandle;
         var mapId = args.MapId;
         var eyeAngle = (float)_eye.CurrentEye.Rotation;
         var cosR = MathF.Cos(-eyeAngle);
         var sinR = MathF.Sin(-eyeAngle);
 
-        var sorted = _system.GetEmitters().OrderBy(e => e.Overrides?.RenderLayer ?? e.Proto.RenderLayer);
+        _drawEmitters.Clear();
+        _drawEmitters.AddRange(emitters);
+        _drawEmitters.Sort(static (a, b) =>
+        {
+            var layerA = a.Overrides?.RenderLayer ?? a.Proto.RenderLayer;
+            var layerB = b.Overrides?.RenderLayer ?? b.Proto.RenderLayer;
+            return layerA.CompareTo(layerB);
+        });
 
         string? activeShader = null;
 
-        foreach (var emitter in sorted)
+        foreach (var emitter in _drawEmitters)
         {
             if (emitter.MapCoords.MapId != mapId) continue;
             if (!args.WorldBounds.Contains(emitter.MapCoords.Position)) continue;

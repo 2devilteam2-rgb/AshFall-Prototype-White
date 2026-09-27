@@ -37,9 +37,6 @@ public sealed partial class AgonyOverlay : Overlay
         if (!_config.GetCVar(AshfallCCVars.AgonyOverlayEnabled))
             return false;
 
-        if (ScreenTexture == null)
-            return false;
-
         if (PainIntensity <= 0.005f && ShockIntensity <= 0.005f && CritIntensity <= 0.005f)
             return false;
 

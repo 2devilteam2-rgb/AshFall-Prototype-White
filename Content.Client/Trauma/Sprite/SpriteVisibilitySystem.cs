@@ -50,10 +50,7 @@ public sealed partial class SpriteVisibilitySystem : CommonSpriteVisibilitySyste
             return;
 
         if (!_query.Resolve(ent, ref ent.Comp2, false))
-        {
-            SetSpriteVisibility(ent!, 1f);
             return;
-        }
 
         ent.Comp2.VisibilityModifiers.Remove(key);
         if (ent.Comp2.VisibilityModifiers.Count == 0)

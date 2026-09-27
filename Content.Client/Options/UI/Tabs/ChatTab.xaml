@@ -1,0 +1,28 @@
+<tabs:ChatTab xmlns="https://spacestation14.io"
+              xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
+              xmlns:ui="clr-namespace:Content.Client.Options.UI">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="12 10 12 10" SeparationOverride="6" VerticalExpand="True">
+                <!-- Runechat -->
+                <Label Text="{Loc 'ui-options-chat-runechat'}" StyleClasses="LabelKeyText" />
+                <CheckBox Name="RunechatSpeechBubblesCheckBox" Text="{Loc 'ui-options-runechat-enable'}" />
+                <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-scale'}" />
+
+                <!-- Classic Bubbles -->
+                <Label Text="{Loc 'ui-options-chat-bubbles'}" StyleClasses="LabelKeyText" Margin="0 8 0 0" />
+                <CheckBox Name="FancySpeechBubblesCheckBox" Text="{Loc 'ui-options-fancy-speech'}" />
+                <CheckBox Name="FancyNameBackgroundsCheckBox" Text="{Loc 'ui-options-fancy-name-background'}" />
+                <CheckBox Name="ShowLoocAboveHeadCheckBox" Text="{Loc 'ui-options-show-looc-on-head'}" />
+
+                <!-- Chat & Log -->
+                <Label Text="{Loc 'ui-options-chat-general'}" StyleClasses="LabelKeyText" Margin="0 8 0 0" />
+                <CheckBox Name="ShowOocPatronColor" Text="{Loc 'ui-options-show-ooc-patron-color'}" />
+                <CheckBox Name="ChatFollowButton" Text="{Loc 'ui-options-chat-follow-button'}" />
+                <CheckBox Name="LogActionsInChatCheckBox" Text="{Loc 'ui-options-log-actions-in-chat'}" />
+                <CheckBox Name="CoalesceIdenticalMessagesCheckBox" Text="{Loc 'ui-options-coalesce-identical-messages'}" />
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</tabs:ChatTab>

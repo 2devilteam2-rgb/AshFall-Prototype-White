@@ -35,9 +35,6 @@ public sealed partial class SandevistanVisionOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        if (ScreenTexture == null)
-            return false;
-
         if (_playerManager.LocalEntity is not { Valid: true } player
             || !_entityManager.TryGetComponent<SandevistanVisionComponent>(player, out var comp)
             || !comp.Enabled)

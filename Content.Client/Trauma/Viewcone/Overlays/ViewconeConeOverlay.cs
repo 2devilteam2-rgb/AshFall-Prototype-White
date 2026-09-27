@@ -57,6 +57,9 @@ public sealed partial class ViewconeConeOverlay : Overlay
             if (args.Viewport.Eye != eye.Eye)
                 continue;
 
+            if (viewcone.CurrentConeAngle >= 360f)
+                return false;
+
             _coneAngle = viewcone.CurrentConeAngle;
             _coneFeather = viewcone.ConeFeather;
             _coneIgnoreRadius = (viewcone.ConeIgnoreRadius - viewcone.ConeIgnoreFeather) * 50f;

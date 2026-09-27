@@ -115,42 +115,56 @@ public sealed partial class TracerSystem : EntitySystem
             trail.MapId = xform.MapID;
             var currentPos = _transform.GetWorldPosition(xform);
 
-            if (trail.Positions.Count == 0 || Vector2.DistanceSquared(trail.Positions[^1], currentPos) > 0.0001f)
+            if (trail.Positions.Count == 0)
             {
                 trail.Positions.Add(currentPos);
             }
-
-            while (trail.Positions.Count > 2 && GetTrailLength(trail.Positions) > trail.Length)
+            else
             {
-                trail.Positions.RemoveAt(0);
+                var distSq = Vector2.DistanceSquared(trail.Positions[^1], currentPos);
+                if (distSq > 0.0001f)
+                {
+                    var segDist = MathF.Sqrt(distSq);
+                    trail.Positions.Add(currentPos);
+                    trail.TotalLength += segDist;
+                }
             }
 
-            if (trail.Positions.Count >= 2)
+            var removeCount = 0;
+            while (trail.Positions.Count - removeCount > 2)
             {
-                var trailLen = GetTrailLength(trail.Positions);
-                if (trailLen > trail.Length)
+                var p0 = trail.Positions[removeCount];
+                var p1 = trail.Positions[removeCount + 1];
+                var segLen = Vector2.Distance(p0, p1);
+                if (trail.TotalLength - segLen > trail.Length)
                 {
-                    var excess = trailLen - trail.Length;
-                    var seg = trail.Positions[1] - trail.Positions[0];
-                    var segLen = seg.Length();
-                    if (segLen > 0.0001f)
-                    {
-                        var t = MathF.Min(excess / segLen, 1f);
-                        trail.Positions[0] = Vector2.Lerp(trail.Positions[0], trail.Positions[1], t);
-                    }
+                    trail.TotalLength -= segLen;
+                    removeCount++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (removeCount > 0)
+            {
+                trail.Positions.RemoveRange(0, removeCount);
+            }
+
+            if (trail.Positions.Count >= 2 && trail.TotalLength > trail.Length)
+            {
+                var excess = trail.TotalLength - trail.Length;
+                var seg = trail.Positions[1] - trail.Positions[0];
+                var segLen = seg.Length();
+                if (segLen > 0.0001f)
+                {
+                    var t = MathF.Min(excess / segLen, 1f);
+                    trail.Positions[0] = Vector2.Lerp(trail.Positions[0], trail.Positions[1], t);
+                    trail.TotalLength = MathF.Max(0f, trail.TotalLength - excess);
                 }
             }
         }
-    }
-
-    private static float GetTrailLength(List<Vector2> positions)
-    {
-        var length = 0f;
-        for (var i = 1; i < positions.Count; i++)
-        {
-            length += Vector2.Distance(positions[i - 1], positions[i]);
-        }
-        return length;
     }
 
     public void Draw(DrawingHandleWorld handle, MapId currentMap)
@@ -218,5 +232,6 @@ public sealed partial class TracerSystem : EntitySystem
         public TimeSpan EndTime;
         public TimeSpan? FadeStartTime;
         public float FadeDuration = TrailFadeDuration;
+        public float TotalLength;
     }
 }

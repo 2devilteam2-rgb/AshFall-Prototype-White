@@ -582,7 +582,7 @@ namespace Content.Client.Options.UI.Tabs
             {
                 _tab = tab;
                 KeyControl = keyControl;
-                Button = new Button { StyleClasses = { styleClass } };
+                Button = new Button { StyleClasses = { styleClass }, HorizontalExpand = true, MinSize = new Vector2(130, 0) };
                 UpdateText();
                 AddChild(Button);
 
@@ -593,7 +593,7 @@ namespace Content.Client.Options.UI.Tabs
 
                 Button.OnKeyBindDown += ButtonOnOnKeyBindDown;
 
-                MinSize = new Vector2(200, 0);
+                MinSize = new Vector2(130, 0);
             }
 
             protected override void EnteredTree()
