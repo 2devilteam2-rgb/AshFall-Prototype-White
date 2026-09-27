@@ -278,6 +278,11 @@
     fireSpread: false
     firestackFade: 0
     damage: {}
+  - type: Appearance
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
   - type: FireVisuals
     sprite: Effects/fire.rsi
     normalState: fire

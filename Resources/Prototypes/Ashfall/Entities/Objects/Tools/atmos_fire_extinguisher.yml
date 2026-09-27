@@ -50,8 +50,3 @@
     sprayVelocity: 5.0
   - type: RefillableSolution
     solution: spray
-    reagentWhitelist:
-    - Water
-    - SpaceCleaner
-    - SyndicateSpaceCleaner
-    - Bleach

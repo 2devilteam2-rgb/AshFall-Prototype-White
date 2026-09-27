@@ -57,7 +57,8 @@ public sealed partial class SolidFuelSystem : EntitySystem
     {
         base.Initialize();
         UpdatesBefore.Add(typeof(FlammableSystem));
-        SubscribeLocalEvent<SolidFuelComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<SolidFuelComponent, InteractUsingEvent>(OnInteractUsing,
+            before: new[] { typeof(FlammableSystem) });
         SubscribeLocalEvent<SolidFuelComponent, SolidFuelIgnitionDoAfterEvent>(OnIgnitionDoAfter);
         SubscribeLocalEvent<SolidFuelComponent, DoAfterAttemptEvent<SolidFuelIgnitionDoAfterEvent>>(OnIgnitionAttempt);
         SubscribeLocalEvent<SolidFuelComponent, ExtinguishedEvent>(OnExtinguished);
@@ -172,10 +173,12 @@ public sealed partial class SolidFuelSystem : EntitySystem
     private void OnInteractUsing(Entity<SolidFuelComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled || GetIgnitionRate(args.Used) <= 0 ||
-            !TryComp<FlammableComponent>(ent, out var fire) || fire.OnFire || !CanBurn((ent, fire)))
+            !TryComp<FlammableComponent>(ent, out var fire) || fire.OnFire || !Enabled)
             return;
 
         args.Handled = true;
+        if (!CanBurn((ent, fire)))
+            return;
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, 1f,
             new SolidFuelIgnitionDoAfterEvent(), ent, target: ent, used: args.Used)
         {

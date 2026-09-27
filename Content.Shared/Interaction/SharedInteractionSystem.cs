@@ -1455,10 +1455,7 @@ namespace Content.Shared.Interaction
 
             if (_net.IsServer)
             {
-                var filter = predicted
-                    ? Filter.PvsExcept(uidA, entityManager: EntityManager)
-                    : Filter.Pvs(uidA, entityManager: EntityManager);
-
+                var filter = Filter.PvsExcept(uidA, entityManager: EntityManager);
                 RaiseNetworkEvent(new StellarInteractionParticleEvent(GetNetEntity(uidA), GetNetEntity(used), GetNetEntity(uidB.Value), false, interactionParticleType), filter);
             }
             else if (_gameTiming.IsFirstTimePredicted)

@@ -9,5 +9,5 @@ public sealed partial class ESSparkCooldownComponent : Component
     public TimeSpan SparkDelay = TimeSpan.FromSeconds(0.5);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan LastSparkTime = TimeSpan.Zero;
+    public TimeSpan? LastSparkTime;
 }

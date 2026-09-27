@@ -14,5 +14,4 @@
   - type: ReagentPuddleFireEffect
   - type: Tag
     tags:
-    - ReagentFire
     - HideContextMenu

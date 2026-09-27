@@ -166,7 +166,15 @@ public abstract partial class SharedContentEyeSystem : EntitySystem
         var ev = new ESGetEyeRotationEvent();
         RaiseLocalEvent(eye, ref ev);
 
-        _eye.SetRotation(eye, ev.Rotation, eye);
+        if (ev.Rotation == Angle.Zero && (!TryComp<ESScreenshakeComponent>(eye, out var shake) || shake.CurrentShake == Angle.Zero))
+            return;
+
+        if (TryComp<ESScreenshakeComponent>(eye, out var shakeComp))
+        {
+            var baseRotation = eye.Comp.Rotation - shakeComp.CurrentShake;
+            shakeComp.CurrentShake = ev.Rotation;
+            _eye.SetRotation(eye, baseRotation + ev.Rotation, eye);
+        }
     }
 
     public void UpdatePvsScale(EntityUid uid, ContentEyeComponent? contentEye = null, EyeComponent? eye = null)

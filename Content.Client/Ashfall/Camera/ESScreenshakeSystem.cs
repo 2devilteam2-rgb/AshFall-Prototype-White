@@ -14,6 +14,7 @@ public sealed partial class ESScreenshakeSystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedESScreenshakeSystem _shared = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
 
     private bool _disabled;
 
@@ -22,8 +23,18 @@ public sealed partial class ESScreenshakeSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<ESScreenshakeComponent, GetEyeOffsetEvent>(OnGetEyeOffset);
         SubscribeLocalEvent<ESScreenshakeComponent, ESGetEyeRotationEvent>(OnGetEyeRotation);
+        SubscribeLocalEvent<ESScreenshakeComponent, ComponentShutdown>(OnShutdown);
 
         _config.OnValueChanged(AshfallFireCVars.ScreenshakeDisabled, OnDisabledChanged, true);
+    }
+
+    private void OnShutdown(Entity<ESScreenshakeComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.CurrentShake != Angle.Zero && TryComp<EyeComponent>(ent, out var eye))
+        {
+            _eye.SetRotation(ent, eye.Rotation - ent.Comp.CurrentShake, eye);
+            ent.Comp.CurrentShake = Angle.Zero;
+        }
     }
 
     private void OnDisabledChanged(bool obj)

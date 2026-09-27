@@ -2,7 +2,6 @@
   id: BasePyrotechnic
   group: Pyrotechnic
   abstract: true
-  flammability: 2
   reactiveEffects:
     Flammable:
       methods: [ Touch ]
@@ -18,6 +17,7 @@
   id: Thermite
   name: reagent-name-thermite
   parent: BasePyrotechnic
+  flammability: 2
   desc: reagent-desc-thermite
   physicalDesc: reagent-physical-desc-grainy
   contrabandSeverity: Minor
@@ -146,6 +146,7 @@
   id: FoamingAgent
   name: reagent-name-foaming-agent
   parent: BasePyrotechnic
+  flammability: 0
   desc: reagent-desc-foaming-agent
   physicalDesc: reagent-physical-desc-foamy
   flavor: bitter
@@ -157,6 +158,7 @@
   id: WeldingFuel
   name: reagent-name-welding-fuel
   parent: BasePyrotechnic
+  flammability: 2
   desc: reagent-desc-welding-fuel
   physicalDesc: reagent-physical-desc-oily
   slipData:
@@ -237,6 +239,7 @@
   id: Fluorosurfactant
   name: reagent-name-fluorosurfactant
   parent: BasePyrotechnic
+  flammability: 0
   desc: reagent-desc-fluorosurfactant
   physicalDesc: reagent-physical-desc-opaque
   flavor: bitter

@@ -1,5 +1,6 @@
 using Content.Shared.Ashfall.Physics.PreventCollide;
 using Content.Shared.Ashfall.Sparks.Components;
+using Content.Shared.IgnitionSource;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Throwing;
@@ -42,7 +43,8 @@ public sealed partial class ESSparksSystem : EntitySystem
             number: ent.Comp.Count,
             ent.Comp.SparkPrototype,
             user: user,
-            cooldown: cooldown);
+            cooldown: cooldown,
+            tileFireChance: ent.Comp.TileFireChance);
     }
 
     [PublicAPI]
@@ -51,15 +53,16 @@ public sealed partial class ESSparksSystem : EntitySystem
         int number = 4,
         EntProtoId? sparksPrototype = null,
         EntityUid? user = null,
-        bool cooldown = true)
+        bool cooldown = true,
+        float tileFireChance = 0.5f)
     {
         var comp = EnsureComp<ESSparkCooldownComponent>(source);
-        if (cooldown && _timing.CurTime - comp.LastSparkTime < comp.SparkDelay)
+        if (cooldown && comp.LastSparkTime is { } lastTime && _timing.CurTime - lastTime < comp.SparkDelay)
             return;
         comp.LastSparkTime = _timing.CurTime;
 
         var coords = Transform(source).Coordinates;
-        DoSparks(coords, number, sparksPrototype, user, source);
+        DoSparks(coords, number, sparksPrototype, user, source, tileFireChance);
     }
 
     [PublicAPI]
@@ -68,7 +71,8 @@ public sealed partial class ESSparksSystem : EntitySystem
         int number = 4,
         EntProtoId? sparksPrototype = null,
         EntityUid? user = null,
-        EntityUid? ignored = null)
+        EntityUid? ignored = null,
+        float tileFireChance = 0.5f)
     {
         if (_net.IsClient)
             return;
@@ -83,6 +87,11 @@ public sealed partial class ESSparksSystem : EntitySystem
             angle += angleDelta;
             _throwing.TryThrow(sparks, angle.ToVec(), 2f, animated: false);
             _preventCollide.PreventCollide(sparks, ignored);
+
+            if (tileFireChance <= 0f || !_random.Prob(tileFireChance))
+            {
+                RemComp<IgnitionSourceComponent>(sparks);
+            }
         }
     }
 }

@@ -101,9 +101,9 @@ public sealed partial class FootprintSystem : EntitySystem
             var expireTime = _timing.CurTime + component.Lifetime;
             _decayingDecals.Add((gridUid, decalIndex, expireTime));
 
-            if (component.IsFlammable)
+            if (component.IsFlammable && _flammableFootprintsEnabled)
             {
-                _flammableDecals.Add(new FlammableFootprint(gridUid, decalIndex, footCoords, expireTime));
+                _flammableDecals.Add(new FlammableFootprint(gridUid, decalIndex, footCoords.Offset(new Vector2(0.5f, 0.5f)), expireTime));
             }
         }
 
@@ -131,21 +131,7 @@ public sealed partial class FootprintSystem : EntitySystem
             component.StepCount = component.MaxSteps;
 
             var flammability = solution.GetSolutionFlammability(ProtoMan);
-            var isFlammable = flammability > 0;
-            if (!isFlammable)
-            {
-                foreach (var quantity in solution.Contents)
-                {
-                    var id = quantity.Reagent.Prototype.Id.ToLowerInvariant();
-                    if (id.Contains("weldingfuel") || id.Contains("oil") || id.Contains("hydrocarbon") || id.Contains("napalm") || id.Contains("ethanol"))
-                    {
-                        isFlammable = true;
-                        break;
-                    }
-                }
-            }
-
-            component.IsFlammable = isFlammable;
+            component.IsFlammable = flammability > 0;
             Dirty(uid, component);
             break;
         }
@@ -194,7 +180,14 @@ public sealed partial class FootprintSystem : EntitySystem
         }
 
         // Flammable footprints handling
-        if (!_flammableFootprintsEnabled || _flammableDecals.Count == 0)
+        if (!_flammableFootprintsEnabled)
+        {
+            if (_flammableDecals.Count > 0)
+                _flammableDecals.Clear();
+            return;
+        }
+
+        if (_flammableDecals.Count == 0)
             return;
 
         // Remove expired flammable decals
@@ -229,9 +222,9 @@ public sealed partial class FootprintSystem : EntitySystem
                 continue;
 
             // Check if tile or nearby entities are on fire
-            var tilePos = _transform.GetGridTilePositionOrDefault((fp.Grid, Transform(fp.Grid)));
             var coords = fp.Coordinates;
-            if (_atmos.GetTileMixture(fp.Grid, null, new Vector2i((int) MathF.Floor(coords.X), (int) MathF.Floor(coords.Y))) is { } mix
+            var tilePos = new Vector2i((int) MathF.Floor(coords.X), (int) MathF.Floor(coords.Y));
+            if (_atmos.GetTileMixture(fp.Grid, null, tilePos) is { } mix
                 && mix.Temperature > 450f)
             {
                 IgniteFootprint(fp);

@@ -170,7 +170,7 @@ public sealed partial class StellarInteractionParticleSystem : EntitySystem
                     {
                         new AnimationTrackProperty.KeyFrame(color, 0f),
                         new AnimationTrackProperty.KeyFrame(color, (float)offsetLength.TotalSeconds),
-                        new AnimationTrackProperty.KeyFrame(endColor, (float)rotationLength.TotalSeconds, Easings.InOutCirc),
+                        new AnimationTrackProperty.KeyFrame(endColor, (float)(rotationLength - offsetLength).TotalSeconds, Easings.InOutCirc),
                     },
                 },
             },

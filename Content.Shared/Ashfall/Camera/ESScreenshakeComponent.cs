@@ -12,6 +12,9 @@ public sealed partial class ESScreenshakeComponent : Component
     [DataField, AutoNetworkedField]
     public HashSet<ESScreenshakeCommand> Commands = new();
 
+    [DataField, AutoNetworkedField]
+    public Angle CurrentShake = Angle.Zero;
+
     public override bool SendOnlyToOwner => true;
 }
 
