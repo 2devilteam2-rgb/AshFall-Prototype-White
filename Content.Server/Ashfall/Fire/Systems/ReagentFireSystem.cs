@@ -102,7 +102,6 @@ public sealed partial class ReagentFireSystem : EntitySystem
         SubscribeLocalEvent<SolutionContainerManagerComponent, SolutionChangedEvent>(OnSolutionContainerChanged);
         SubscribeLocalEvent<PuddleComponent, InteractUsingEvent>(OnPuddleInteractUsing);
         SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
-        SubscribeLocalEvent<IgnitionSourceComponent, AfterInteractEvent>(OnIgnitionAfterInteract);
     }
 
     private void OnFireStartup(EntityUid uid, ReagentPuddleFireComponent component, ref ComponentStartup args)
@@ -158,25 +157,6 @@ public sealed partial class ReagentFireSystem : EntitySystem
             && args.Temperature >= GetIgnitionTemperature(fireComp))
         {
             Ignite(ent.Owner, fireComp);
-        }
-    }
-
-    private void OnIgnitionAfterInteract(Entity<IgnitionSourceComponent> ent, ref AfterInteractEvent args)
-    {
-        if (args.Handled || !ent.Comp.Ignited || !args.CanReach)
-            return;
-
-        var coords = args.ClickLocation;
-        _puddles.Clear();
-        _lookup.GetEntitiesInRange(coords, 0.75f, _puddles);
-        foreach (var puddle in _puddles)
-        {
-            if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
-            {
-                Ignite(puddle.Owner, fireComp);
-                args.Handled = true;
-                return;
-            }
         }
     }
 

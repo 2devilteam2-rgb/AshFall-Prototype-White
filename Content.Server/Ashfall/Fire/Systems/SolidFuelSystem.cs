@@ -17,6 +17,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Smoking;
+using Content.Server.Ashfall.Fire.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -42,6 +43,8 @@ public sealed partial class SolidFuelSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tiles = default!;
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private TileSystem _tileSystem = default!;
+    [Dependency] private ReagentFireSystem _reagentFire = default!;
+    [Dependency] private EntityQuery<ReagentPuddleFireComponent> _puddleFireQuery = default!;
 
     public bool Enabled => _config.GetCVar(AshfallFireCVars.SolidFuelEnabled);
 
@@ -310,7 +313,23 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (args.Handled || !ent.Comp.Ignited || !args.CanReach || !Enabled)
             return;
 
-        var target = TryGetOrSpawnSolidFuelFloor(args.ClickLocation);
+        var coords = args.ClickLocation;
+
+        // 1. Try igniting flammable puddles at click location
+        _puddles.Clear();
+        _lookup.GetEntitiesInRange(coords, 0.75f, _puddles);
+        foreach (var puddle in _puddles)
+        {
+            if (_puddleFireQuery.TryComp(puddle, out var puddleFire) && !puddleFire.OnFire && puddleFire.Flammability > 0)
+            {
+                _reagentFire.Ignite(puddle.Owner, puddleFire);
+                args.Handled = true;
+                return;
+            }
+        }
+
+        // 2. Try igniting combustible floor at click location
+        var target = TryGetOrSpawnSolidFuelFloor(coords);
         if (target == null || !TryComp<SolidFuelComponent>(target.Value, out var fuel) ||
             !TryComp<FlammableComponent>(target.Value, out var fire) || fire.OnFire || !CanBurn((target.Value, fire)))
             return;
