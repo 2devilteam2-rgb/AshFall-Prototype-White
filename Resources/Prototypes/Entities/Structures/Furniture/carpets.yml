@@ -34,6 +34,17 @@
   - type: ToolRefinable
     refineResult:
     - id: MaterialCloth1
+  - type: SolidFuel
+    ignitionTime: 180
+    burnTime: 90
+  - type: Flammable
+    alwaysCombustible: true
+    fireSpread: false
+    firestackFade: 0
+    damage: {}
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: fire
 
 - type: entity
   id: Carpet

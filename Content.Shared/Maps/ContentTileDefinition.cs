@@ -62,6 +62,12 @@ public sealed partial class ContentTileDefinition : IPrototype, IInheritingProto
     public bool CanCrowbar => DeconstructTools.Contains(PryingToolQuality);
 
     /// <summary>
+    /// Prototype spawned when this tile is heated as solid fuel.
+    /// </summary>
+    [DataField("solidFuelEntity")]
+    public EntProtoId? SolidFuelEntity;
+
+    /// <summary>
     /// These play when the mob has shoes on.
     /// </summary>
     [DataField] public SoundSpecifier? FootstepSounds { get; private set; }

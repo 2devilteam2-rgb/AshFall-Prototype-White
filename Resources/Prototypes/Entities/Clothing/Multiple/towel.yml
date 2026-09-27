@@ -31,6 +31,17 @@
   - type: DnaSubstanceTrace
   - type: Item
     size: Small
+  - type: SolidFuel
+    ignitionTime: 60
+    burnTime: 45
+  - type: Flammable
+    alwaysCombustible: true
+    fireSpread: false
+    firestackFade: 0
+    damage: {}
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: fire
 
 - type: entity
   id: TowelColorWhite

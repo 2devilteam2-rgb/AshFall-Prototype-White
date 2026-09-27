@@ -19,6 +19,12 @@ public sealed partial class FootprintComponent : Component
     public int StepCount = 0;
 
     /// <summary>
+    /// Whether the current substance is flammable (fuel, oil, alcohol, napalm).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool IsFlammable;
+
+    /// <summary>
     /// Maximum steps made after stepping into puddle/dirt.
     /// </summary>
     [DataField]

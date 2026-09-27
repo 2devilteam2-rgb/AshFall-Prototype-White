@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.IgnitionSource;
 
@@ -19,4 +19,10 @@ public sealed partial class IgnitionSourceComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Temperature = 700f;
+
+    /// <summary>
+    /// Heating rate applied to combustible solid fuel materials.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float ContactIgnitionRate = 10f;
 }

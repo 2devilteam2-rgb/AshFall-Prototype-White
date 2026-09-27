@@ -41,6 +41,7 @@
   id: FloorWood
   parent: BaseStationTile
   name: tiles-wood
+  solidFuelEntity: SolidFuelFloorWood
   sprite: /Textures/Tiles/Wood/wood.png
   footstepSounds:
     collection: FootstepWood
@@ -169,6 +170,7 @@
   id: FloorCarpetClown
   parent: BaseStationTile
   name: tiles-clown-carpet-floor
+  solidFuelEntity: SolidFuelFloorCarpet
   sprite: /Textures/Tiles/carpetclown.png
   footstepSounds:
     collection: FootstepCarpet
@@ -181,6 +183,7 @@
   id: FloorCarpetOffice
   parent: BaseStationTile
   name: tiles-office-carpet-floor
+  solidFuelEntity: SolidFuelFloorCarpet
   sprite: /Textures/Tiles/carpetoffice.png
   footstepSounds:
     collection: FootstepCarpet
@@ -280,6 +283,7 @@
   id: FloorWoodTile
   parent: BaseStationTile
   name: tiles-wood2
+  solidFuelEntity: SolidFuelFloorWood
   sprite: /Textures/Tiles/Wood/wood-tile.png
   footstepSounds:
     collection: FootstepWood
@@ -291,6 +295,7 @@
   id: FloorBrokenWood
   parent: BaseStationTile
   name: tiles-wood3
+  solidFuelEntity: SolidFuelFloorWood
   sprite: /Textures/Tiles/Wood/wood-broken.png
   variants: 7
   footstepSounds:
@@ -303,6 +308,7 @@
   id: FloorWoodLarge
   parent: BaseStationTile
   name: tiles-wood-large
+  solidFuelEntity: SolidFuelFloorWood
   sprite: /Textures/Tiles/Wood/wood-large.png
   footstepSounds:
     collection: FootstepWood

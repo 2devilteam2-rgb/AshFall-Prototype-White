@@ -1,0 +1,57 @@
+- type: entity
+  parent: SolutionSpray
+  id: SolutionFireExtinguisherVeryLarge
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Solution
+    solution:
+      maxVol: 360
+      reagents:
+      - ReagentId: Water
+        Quantity: 360
+
+- type: entity
+  parent: [SolutionFireExtinguisherVeryLarge, FireExtinguisher]
+  id: FireExtinguisherAtmos
+  name: atmos fire extinguisher
+  description: A high-capacity pressurized fire extinguisher for atmospheric technicians and engineers. Can be worn on the back.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/fire_extinguisher.rsi
+    color: "#FFCC44"
+    layers:
+    - state: fire_extinguisher_closed
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Item
+    sprite: Objects/Misc/fire_extinguisher.rsi
+    size: Large
+  - type: Clothing
+    quickEquip: false
+    sprite: Objects/Misc/fire_extinguisher.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: MeleeWeapon
+    wideAnimationRotation: 0
+    damage:
+      types:
+        Blunt: 12
+        Structural: 5
+    soundHit:
+      path: /Audio/Weapons/smash.ogg
+  - type: Spray
+    transferAmount: 20
+    pushbackAmount: 60
+    spraySound:
+      path: /Audio/Effects/extinguish.ogg
+    sprayedPrototype: ExtinguisherSpray
+    vaporAmount: 5
+    vaporSpread: 110
+    sprayVelocity: 5.0
+  - type: RefillableSolution
+    solution: spray
+    reagentWhitelist:
+    - Water
+    - SpaceCleaner
+    - SyndicateSpaceCleaner
+    - Bleach

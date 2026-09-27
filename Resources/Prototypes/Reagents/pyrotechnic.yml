@@ -1,7 +1,8 @@
-﻿- type: reagent
+- type: reagent
   id: BasePyrotechnic
   group: Pyrotechnic
   abstract: true
+  flammability: 2
   reactiveEffects:
     Flammable:
       methods: [ Touch ]
@@ -45,6 +46,7 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#FA00AF"
+  flammability: 4
   tileReactions:
   - !type:FlammableTileReaction
     temperatureMultiplier: 5
@@ -75,6 +77,8 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#D4872A"
+  flammability: 5
+  selfOxidizing: true
   metabolisms:
     Bloodstream:
       effects:
@@ -105,6 +109,8 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#FFC8C8"
+  flammability: 5
+  selfOxidizing: true
   tileReactions:
   - !type:PryTileReaction
   metabolisms:

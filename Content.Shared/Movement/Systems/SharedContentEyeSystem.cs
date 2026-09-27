@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Managers;
+using Content.Shared.Ashfall.Camera;
 using Content.Shared.Camera;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Input;
@@ -158,6 +159,14 @@ public abstract partial class SharedContentEyeSystem : EntitySystem
         RaiseLocalEvent(eye, ref evRelayed);
 
         _eye.SetOffset(eye, ev.Offset + evRelayed.Offset, eye);
+    }
+
+    public void UpdateEyeRotation(Entity<EyeComponent> eye)
+    {
+        var ev = new ESGetEyeRotationEvent();
+        RaiseLocalEvent(eye, ref ev);
+
+        _eye.SetRotation(eye, ev.Rotation, eye);
     }
 
     public void UpdatePvsScale(EntityUid uid, ContentEyeComponent? contentEye = null, EyeComponent? eye = null)
