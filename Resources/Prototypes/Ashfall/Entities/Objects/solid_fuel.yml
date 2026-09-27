@@ -17,7 +17,7 @@
     sprite: Effects/fire.rsi
     normalState: "1"
     alternateState: "2"
-    fireStackAlternateState: 0.5
+    fireStackAlternateState: 1
     lightRadiusPerStack: 1.5
     lightEnergyPerStack: 1.2
   - type: Reactive
