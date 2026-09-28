@@ -4,6 +4,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Destructible;
+using Content.Server.Fluids.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
 using Content.Shared.Armor;
@@ -62,6 +63,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private ReagentFireSystem _reagentFire = default!;
     [Dependency] private SolidFuelSystem _solidFuel = default!;
+    [Dependency] private PuddleSystem _puddle = default!;
 
     [Dependency] private EntityQuery<FlammableComponent> _flammableQuery = default!;
     [Dependency] private EntityQuery<ReagentPuddleFireComponent> _reagentPuddleFireQuery = default!;

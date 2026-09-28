@@ -52,7 +52,7 @@
   components:
   - type: Sprite
     noRot: true
-    drawdepth: Effects
+    drawdepth: FloorObjects
   - type: PointLight
     radius: 3.5
     energy: 1.5

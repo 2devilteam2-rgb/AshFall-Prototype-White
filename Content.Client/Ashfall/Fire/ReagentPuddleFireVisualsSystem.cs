@@ -21,7 +21,13 @@ public sealed partial class ReagentPuddleFireVisualsSystem : EntitySystem
 
         if (_appearance.TryGetData<int>(uid, ReagentPuddleFireVisuals.FireState, out var fireState, args.Component))
         {
-            var stateStr = Math.Clamp(fireState, 1, 3).ToString();
+            var stateStr = fireState switch
+            {
+                1 => "4",
+                2 => "5",
+                3 => "6",
+                _ => Math.Clamp(fireState, 4, 6).ToString()
+            };
             args.Sprite.LayerSetState(0, stateStr);
         }
 

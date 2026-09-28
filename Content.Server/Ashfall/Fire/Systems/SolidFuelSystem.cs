@@ -320,7 +320,13 @@ public sealed partial class SolidFuelSystem : EntitySystem
         _lookup.GetEntitiesInRange(coords, 0.75f, _puddles);
         foreach (var puddle in _puddles)
         {
-            if (_puddleFireQuery.TryComp(puddle, out var puddleFire) && !puddleFire.OnFire && puddleFire.Flammability > 0)
+            if (!_puddleFireQuery.TryComp(puddle, out var puddleFire))
+            {
+                _reagentFire.UpdateFire((puddle.Owner, puddle.Comp));
+                _puddleFireQuery.TryComp(puddle, out puddleFire);
+            }
+
+            if (puddleFire is { OnFire: false } && puddleFire.Flammability > 0)
             {
                 _reagentFire.Ignite(puddle.Owner, puddleFire);
                 args.Handled = true;

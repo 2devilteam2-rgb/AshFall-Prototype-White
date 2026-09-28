@@ -4,12 +4,12 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: Effects/fire_greyscale.rsi
+    sprite: Effects/reagentfire.rsi
     layers:
-    - state: "2"
+    - state: "4"
       shader: unshaded
     visible: true
-    drawdepth: Overlays
+    drawdepth: FloorObjects
   - type: Appearance
   - type: ReagentPuddleFireEffect
   - type: Tag

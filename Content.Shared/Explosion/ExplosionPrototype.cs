@@ -1,3 +1,4 @@
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -36,6 +37,24 @@ public sealed partial class ExplosionPrototype : IPrototype
     /// </summary>
     [DataField]
     public float? Temperature;
+
+    /// <summary>
+    ///     Reagent to spray in the explosion radius as burning fuel puddles.
+    /// </summary>
+    [DataField]
+    public ProtoId<ReagentPrototype>? SpillReagent;
+
+    /// <summary>
+    ///     Volume of reagent spilled per tile multiplied by explosion intensity.
+    /// </summary>
+    [DataField]
+    public float SpillVolumePerIntensity = 0f;
+
+    /// <summary>
+    ///     Whether spilled puddles should ignite immediately upon detonation.
+    /// </summary>
+    [DataField]
+    public bool IgnitePuddles = true;
 
     /// <summary>
     ///     This set of points, together with <see cref="_tileBreakIntensity"/> define a function that maps the

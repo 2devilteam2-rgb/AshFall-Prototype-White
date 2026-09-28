@@ -1,6 +1,7 @@
 using Content.Client.Atmos.EntitySystems;
 using Content.Client.Graphics;
 using Content.Client.Resources;
+using Content.Shared.Ashfall.Fire.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
@@ -190,6 +191,44 @@ public sealed partial class GasTileHeatBlurOverlay : Overlay
                                 new Color(strength, 0f, 0f));
                         }
                     }
+                }
+
+                // Draw heat distortion for all burning entities and puddles in world space
+                worldHandle.SetTransform(worldToViewportLocal);
+
+                var flamQuery = _entManager.EntityQueryEnumerator<FlammableComponent, TransformComponent>();
+                while (flamQuery.MoveNext(out var uid, out var flammable, out var xform))
+                {
+                    if (!flammable.OnFire || xform.MapID != mapId)
+                        continue;
+
+                    var worldPos = _xformSys.GetWorldPosition(xform);
+                    if (!worldBounds.Contains(worldPos))
+                        continue;
+
+                    anyDistortion = true;
+                    var strength = Math.Clamp(flammable.FireStacks / 4f, 0.4f, 1.0f);
+                    worldHandle.DrawTextureRect(
+                        _heatGradientTexture,
+                        Box2.CenteredAround(worldPos, new Vector2(2.2f, 2.2f)),
+                        new Color(strength, 0f, 0f));
+                }
+
+                var puddleQuery = _entManager.EntityQueryEnumerator<ReagentPuddleFireEffectComponent, TransformComponent>();
+                while (puddleQuery.MoveNext(out var uid, out _, out var xform))
+                {
+                    if (xform.MapID != mapId)
+                        continue;
+
+                    var worldPos = _xformSys.GetWorldPosition(xform);
+                    if (!worldBounds.Contains(worldPos))
+                        continue;
+
+                    anyDistortion = true;
+                    worldHandle.DrawTextureRect(
+                        _heatGradientTexture,
+                        Box2.CenteredAround(worldPos, new Vector2(2.5f, 2.5f)),
+                        new Color(0.85f, 0f, 0f));
                 }
             },
             // This clears the buffer to all zero first...

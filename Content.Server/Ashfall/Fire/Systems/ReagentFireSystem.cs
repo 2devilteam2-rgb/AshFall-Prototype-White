@@ -99,7 +99,7 @@ public sealed partial class ReagentFireSystem : EntitySystem
 
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentStartup>(OnFireStartup);
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentShutdown>(OnFireShutdown);
-        SubscribeLocalEvent<SolutionContainerManagerComponent, SolutionChangedEvent>(OnSolutionContainerChanged);
+        SubscribeLocalEvent<PuddleComponent, SolutionChangedEvent>(OnPuddleSolutionChanged);
         SubscribeLocalEvent<PuddleComponent, InteractUsingEvent>(OnPuddleInteractUsing);
         SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
     }
@@ -127,12 +127,9 @@ public sealed partial class ReagentFireSystem : EntitySystem
         }
     }
 
-    private void OnSolutionContainerChanged(Entity<SolutionContainerManagerComponent> ent, ref SolutionChangedEvent args)
+    private void OnPuddleSolutionChanged(Entity<PuddleComponent> ent, ref SolutionChangedEvent args)
     {
-        if (TryComp<PuddleComponent>(ent, out var puddle))
-        {
-            UpdateFire((ent.Owner, puddle));
-        }
+        UpdateFire(ent);
     }
 
     private void OnPuddleInteractUsing(Entity<PuddleComponent> ent, ref InteractUsingEvent args)
@@ -142,7 +139,13 @@ public sealed partial class ReagentFireSystem : EntitySystem
 
         if (TryComp<IgnitionSourceComponent>(args.Used, out var ignition) && ignition.Ignited)
         {
-            if (_fireQuery.TryComp(ent, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+            if (!_fireQuery.TryComp(ent, out var fireComp))
+            {
+                UpdateFire(ent);
+                _fireQuery.TryComp(ent, out fireComp);
+            }
+
+            if (fireComp is { OnFire: false } && fireComp.Flammability > 0)
             {
                 Ignite(ent, fireComp);
                 args.Handled = true;
@@ -152,8 +155,13 @@ public sealed partial class ReagentFireSystem : EntitySystem
 
     private void OnPuddleTileFire(Entity<PuddleComponent> ent, ref TileFireEvent args)
     {
-        if (_fireQuery.TryComp(ent, out var fireComp)
-            && !fireComp.OnFire
+        if (!_fireQuery.TryComp(ent, out var fireComp))
+        {
+            UpdateFire(ent);
+            _fireQuery.TryComp(ent, out fireComp);
+        }
+
+        if (fireComp is { OnFire: false }
             && args.Temperature >= GetIgnitionTemperature(fireComp))
         {
             Ignite(ent.Owner, fireComp);
@@ -370,7 +378,13 @@ public sealed partial class ReagentFireSystem : EntitySystem
             _lookup.GetEntitiesInRange(xform.Coordinates, 0.6f, _puddles);
             foreach (var puddle in _puddles)
             {
-                if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+                if (!_fireQuery.TryComp(puddle, out var fireComp))
+                {
+                    UpdateFire(puddle);
+                    _fireQuery.TryComp(puddle, out fireComp);
+                }
+
+                if (fireComp is { OnFire: false } && fireComp.Flammability > 0)
                 {
                     Ignite(puddle.Owner, fireComp);
                 }
@@ -387,7 +401,13 @@ public sealed partial class ReagentFireSystem : EntitySystem
             _lookup.GetEntitiesInRange(xform.Coordinates, 0.6f, _puddles);
             foreach (var puddle in _puddles)
             {
-                if (_fireQuery.TryComp(puddle, out var fireComp) && !fireComp.OnFire && fireComp.Flammability > 0)
+                if (!_fireQuery.TryComp(puddle, out var fireComp))
+                {
+                    UpdateFire(puddle);
+                    _fireQuery.TryComp(puddle, out fireComp);
+                }
+
+                if (fireComp is { OnFire: false } && fireComp.Flammability > 0)
                 {
                     Ignite(puddle.Owner, fireComp);
                 }
@@ -651,7 +671,16 @@ public sealed partial class ReagentFireSystem : EntitySystem
         var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
         while (anchored.MoveNext(out var ent))
         {
-            if (!_fireQuery.TryComp(ent, out var fireComp) || fireComp.OnFire)
+            if (!_fireQuery.TryComp(ent, out var fireComp))
+            {
+                if (TryComp<PuddleComponent>(ent, out var puddle))
+                {
+                    UpdateFire((ent.Value, puddle));
+                    _fireQuery.TryComp(ent, out fireComp);
+                }
+            }
+
+            if (fireComp == null || fireComp.OnFire)
                 continue;
 
             if (temperature is { } temp && temp < GetIgnitionTemperature(fireComp))
