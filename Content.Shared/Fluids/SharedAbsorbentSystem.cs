@@ -49,7 +49,7 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnAfterInteract(Entity<AbsorbentComponent> ent, ref AfterInteractEvent args)
+    protected virtual void OnAfterInteract(Entity<AbsorbentComponent> ent, ref AfterInteractEvent args)
     {
         if (!args.CanReach || args.Handled || args.Target is not { } target)
             return;

@@ -28,7 +28,6 @@ public sealed partial class AbsorbentSystem : SharedAbsorbentSystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<AbsorbentComponent, AfterInteractEvent>(OnAbsorbentAfterInteract);
         SubscribeLocalEvent<AbsorbentComponent, MeleeHitEvent>(OnAbsorbentMeleeHit);
     }
 
@@ -53,7 +52,7 @@ public sealed partial class AbsorbentSystem : SharedAbsorbentSystem
         return false;
     }
 
-    private void OnAbsorbentAfterInteract(Entity<AbsorbentComponent> ent, ref AfterInteractEvent args)
+    protected override void OnAfterInteract(Entity<AbsorbentComponent> ent, ref AfterInteractEvent args)
     {
         if (!args.CanReach || args.Handled)
             return;
@@ -126,7 +125,10 @@ public sealed partial class AbsorbentSystem : SharedAbsorbentSystem
 
             _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-mop"), ent, args.User);
             args.Handled = true;
+            return;
         }
+
+        base.OnAfterInteract(ent, ref args);
     }
 
     private void OnAbsorbentMeleeHit(Entity<AbsorbentComponent> ent, ref MeleeHitEvent args)
