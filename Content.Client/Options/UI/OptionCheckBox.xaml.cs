@@ -70,7 +70,7 @@ public sealed partial class OptionCheckBox : Control
         set => CheckBox.Disabled = value;
     }
 
-    public event Action<BaseButton.ButtonEventArgs>? OnToggled
+    public event Action<BaseButton.ButtonToggledEventArgs>? OnToggled
     {
         add => CheckBox.OnToggled += value;
         remove => CheckBox.OnToggled -= value;
