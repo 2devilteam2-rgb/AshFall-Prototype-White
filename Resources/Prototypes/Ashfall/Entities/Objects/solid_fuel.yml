@@ -54,11 +54,6 @@
   - type: Sprite
     noRot: true
     drawdepth: FloorObjects
-  - type: PointLight
-    radius: 2.5
-    energy: 1.0
-    color: "#FFAA44"
-    castShadows: false
   - type: Transform
     anchored: true
   - type: Physics

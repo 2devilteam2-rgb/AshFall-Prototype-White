@@ -9,31 +9,31 @@
                     <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionCheckBox Name="ReducedMotionCheckBox"
                                        Title="{Loc 'ui-options-reduced-motion'}"
-                                       ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
+                                       Description="{Loc 'ui-options-reduced-motion-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableAiStaticCheckBox"
                                        Title="{Loc 'ui-options-disable-ai-static'}"
-                                       ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-ai-static-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableBlurryVisionCheckBox"
                                        Title="{Loc 'ui-options-disable-blurry-vision'}"
-                                       ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableDrunkOverlayCheckBox"
                                        Title="{Loc 'ui-options-disable-drunk-overlay'}"
-                                       ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableFlashEffectCheckBox"
                                        Title="{Loc 'ui-options-disable-flash-effect'}"
-                                       ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableHeatDistortionCheckBox"
                                        Title="{Loc 'ui-options-disable-heat-distortion'}"
-                                       ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableNightVisionNoiseCheckBox"
                                        Title="{Loc 'ui-options-disable-nv-noise'}"
-                                       ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableRainbowOverlayCheckBox"
                                        Title="{Loc 'ui-options-disable-rainbow-overlay'}"
-                                       ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
                     <ui:OptionCheckBox Name="DisableSinguloWarpCheckBox"
                                        Title="{Loc 'ui-options-disable-singulo-warp'}"
-                                       ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
+                                       Description="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
                 </BoxContainer>
 
                 <!-- Visuals & Text -->
@@ -67,7 +67,7 @@
                     <Label Text="{Loc 'ui-options-accessibility-header-content'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionCheckBox Name="CensorNudityCheckBox"
                                        Title="{Loc 'ui-options-censor-nudity'}"
-                                       ToolTip="{Loc 'ui-options-censor-nudity-tooltip'}" />
+                                       Description="{Loc 'ui-options-censor-nudity-tooltip'}" />
                 </BoxContainer>
             </BoxContainer>
         </ScrollContainer>

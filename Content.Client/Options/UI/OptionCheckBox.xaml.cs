@@ -5,14 +5,13 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Input;
-using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 
 namespace Content.Client.Options.UI;
 
 /// <summary>
 /// Standard UI control used for check boxes and toggles in the options menu.
-/// Features modern toggle switch, clickable row, and hover-activated description accordion.
+/// Features a two-column layout aligning with OptionSlider and OptionDropDown.
 /// </summary>
 [GenerateTypedNameReferences]
 public sealed partial class OptionCheckBox : Control
@@ -20,71 +19,45 @@ public sealed partial class OptionCheckBox : Control
     private static readonly StyleBoxFlat HoverStyle = new()
     {
         BackgroundColor = Color.FromHex("#1E2229"),
-        BorderColor = Color.FromHex("#E58229"),
+        BorderColor = Color.FromHex("#D48944"),
         BorderThickness = new Thickness(2, 0, 0, 0),
-        ContentMarginLeftOverride = 4
+        ContentMarginLeftOverride = 4,
     };
 
     private string? _description;
+
+    public event Action<bool>? OnRowToggled;
+    public event Action<BaseButton.ButtonToggledEventArgs>? OnToggled;
 
     public OptionCheckBox()
     {
         RobustXamlLoader.Load(this);
 
         RowPanel.MouseFilter = MouseFilterMode.Pass;
-        NameLabel.MouseFilter = MouseFilterMode.Pass;
+        NameLabel.MouseFilter = MouseFilterMode.Stop;
 
-        RowPanel.OnMouseEntered += _ =>
-        {
-            RowPanel.PanelOverride = HoverStyle;
-            if (!string.IsNullOrWhiteSpace(_description))
-                DescriptionLabel.Visible = true;
-        };
-
-        RowPanel.OnMouseExited += _ =>
-        {
-            RowPanel.PanelOverride = null;
-            DescriptionLabel.Visible = false;
-        };
-
-        RowPanel.OnKeyBindDown += args =>
-        {
-            if (args.Function == EngineKeyFunctions.UIClick && !Disabled)
-            {
-                Pressed = !Pressed;
-                args.Handle();
-            }
-        };
-
-        ToggleSwitch.OnToggled += args =>
-        {
-            if (CheckBox.Pressed != args.Pressed)
-                CheckBox.Pressed = args.Pressed;
-            UpdateToggleVisual();
-        };
+        RowPanel.OnMouseEntered += _ => RowPanel.PanelOverride = HoverStyle;
+        RowPanel.OnMouseExited += _ => RowPanel.PanelOverride = null;
+        NameLabel.OnMouseEntered += _ => RowPanel.PanelOverride = HoverStyle;
+        NameLabel.OnMouseExited += _ => RowPanel.PanelOverride = null;
 
         CheckBox.OnToggled += args =>
         {
-            if (ToggleSwitch.Pressed != args.Pressed)
-                ToggleSwitch.Pressed = args.Pressed;
-            UpdateToggleVisual();
+            OnToggled?.Invoke(args);
+            OnRowToggled?.Invoke(args.Pressed);
         };
 
-        UpdateToggleVisual();
-    }
-
-    private void UpdateToggleVisual()
-    {
-        if (ToggleSwitch.Pressed)
+        NameLabel.OnKeyBindDown += args =>
         {
-            ToggleSwitch.Text = Loc.GetString("ashfall-options-on");
-            ToggleSwitch.Modulate = Color.FromHex("#FFAA44");
-        }
-        else
-        {
-            ToggleSwitch.Text = Loc.GetString("ashfall-options-off");
-            ToggleSwitch.Modulate = Color.FromHex("#888899");
-        }
+            if (args.Function == EngineKeyFunctions.UIClick && !Disabled)
+            {
+                CheckBox.SetClickPressed(!CheckBox.Pressed);
+                var toggledArgs = new BaseButton.ButtonToggledEventArgs(CheckBox.Pressed, CheckBox, args);
+                OnToggled?.Invoke(toggledArgs);
+                OnRowToggled?.Invoke(CheckBox.Pressed);
+                args.Handle();
+            }
+        };
     }
 
     /// <summary>
@@ -106,37 +79,33 @@ public sealed partial class OptionCheckBox : Control
         {
             base.ToolTip = value;
             NameLabel.ToolTip = value;
-            ToggleSwitch.ToolTip = value;
             CheckBox.ToolTip = value;
+            RowPanel.ToolTip = value;
         }
     }
 
     /// <summary>
-    /// Tooltip/description text for the option, displayed in accordion on hover.
+    /// Subtitle/description text for the option, displayed right under the title.
     /// </summary>
     public string? Description
     {
-        get => _description;
+        get => _description ?? ToolTip;
         set
         {
             _description = value;
             DescriptionLabel.Text = value;
+            DescriptionLabel.Visible = !string.IsNullOrWhiteSpace(value);
             ToolTip = value;
         }
     }
 
     /// <summary>
-    /// Whether the toggle switch is currently pressed / checked.
+    /// Whether the check box is currently pressed / checked.
     /// </summary>
     public bool Pressed
     {
         get => CheckBox.Pressed;
-        set
-        {
-            CheckBox.Pressed = value;
-            ToggleSwitch.Pressed = value;
-            UpdateToggleVisual();
-        }
+        set => CheckBox.Pressed = value;
     }
 
     /// <summary>
@@ -145,17 +114,7 @@ public sealed partial class OptionCheckBox : Control
     public bool Disabled
     {
         get => CheckBox.Disabled;
-        set
-        {
-            CheckBox.Disabled = value;
-            ToggleSwitch.Disabled = value;
-        }
-    }
-
-    public event Action<BaseButton.ButtonToggledEventArgs>? OnToggled
-    {
-        add => CheckBox.OnToggled += value;
-        remove => CheckBox.OnToggled -= value;
+        set => CheckBox.Disabled = value;
     }
 
     public static implicit operator CheckBox(OptionCheckBox row) => row.CheckBox;

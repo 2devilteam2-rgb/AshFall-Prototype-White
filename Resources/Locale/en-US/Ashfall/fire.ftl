@@ -10,7 +10,5 @@ ent-SolidFuelFloorCarpet = burning carpet floor
 reagent-fire-ignite-success = The puddle bursts into flames!
 solid-fuel-ignite-doafter = You attempt to ignite {THE($target)}...
 
-ashfall-options-on = ON
-ashfall-options-off = OFF
 ashfall-fire-extinguished-mop = You smother the fire with the mop!
 ashfall-fire-extinguished-water = Water extinguishes the fire!

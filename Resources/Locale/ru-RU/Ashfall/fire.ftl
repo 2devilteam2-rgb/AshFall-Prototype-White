@@ -10,7 +10,5 @@ ent-SolidFuelFloorCarpet = горящий ковёр
 reagent-fire-ignite-success = Лужа воспламеняется!
 solid-fuel-ignite-doafter = Вы пытаетесь поджечь {THE($target)}...
 
-ashfall-options-on = ВКЛ
-ashfall-options-off = ВЫКЛ
 ashfall-fire-extinguished-mop = Вы сбиваете пламя шваброй!
 ashfall-fire-extinguished-water = Вода гасит пламя!

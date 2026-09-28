@@ -190,24 +190,32 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (!_solutions.TryGetSolution(uid, solutionName, out _, out var solution))
             return false;
 
-        // Flammable liquids (alcohol, fuel, ethanol) do not count as extinguishing water
-        if (solution.GetSolutionFlammability(_prototypes) > 0)
-            return false;
+        var extinguishAmount = FixedPoint2.Zero;
+        var flammableAmount = FixedPoint2.Zero;
 
         foreach (var (reagent, quantity) in solution.Contents)
         {
-            if (quantity <= 0 || !_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto) ||
-                proto.ReactiveEffects == null || !proto.ReactiveEffects.TryGetValue("Extinguish", out var reaction))
+            if (quantity <= 0 || !_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto))
                 continue;
 
-            foreach (var effect in reaction.Effects)
+            if (proto.ReactiveEffects != null && proto.ReactiveEffects.TryGetValue("Extinguish", out var reaction))
             {
-                if (effect is Extinguish)
-                    return true;
+                foreach (var effect in reaction.Effects)
+                {
+                    if (effect is Extinguish)
+                    {
+                        extinguishAmount += quantity;
+                        break;
+                    }
+                }
             }
+
+            if (proto.Flammability > 0)
+                flammableAmount += quantity;
         }
 
-        return false;
+        // Only count as wet/extinguishing if extinguishing liquid clearly exceeds flammable content
+        return extinguishAmount > FixedPoint2.Zero && extinguishAmount >= flammableAmount;
     }
 
     private bool IsMopWetWithExtinguisher(EntityUid mop, AbsorbentComponent comp)
@@ -215,20 +223,22 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (!_solutions.TryGetSolution(mop, comp.SolutionName, out _, out var solution))
             return false;
 
-        if (solution.GetSolutionFlammability(_prototypes) > 0)
-            return false;
+        var extinguishAmount = FixedPoint2.Zero;
+        var flammableAmount = FixedPoint2.Zero;
 
         foreach (var (reagent, quantity) in solution.Contents)
         {
-            if (quantity <= 0)
+            if (quantity <= 0 || !_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto))
                 continue;
-            if (_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto) &&
-                proto.ReactiveEffects != null && proto.ReactiveEffects.ContainsKey("Extinguish"))
-            {
-                return true;
-            }
+
+            if (proto.ReactiveEffects != null && proto.ReactiveEffects.ContainsKey("Extinguish"))
+                extinguishAmount += quantity;
+
+            if (proto.Flammability > 0)
+                flammableAmount += quantity;
         }
-        return false;
+
+        return extinguishAmount > FixedPoint2.Zero && extinguishAmount >= flammableAmount;
     }
 
     private void OnInteractUsing(Entity<SolidFuelComponent> ent, ref InteractUsingEvent args)
@@ -335,7 +345,7 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (rate <= 0)
             return;
 
-        ent.Comp.Exposure += rate * 2.5f;
+        ent.Comp.Exposure += rate * 2.5f * MathF.Max(0, _config.GetCVar(AshfallFireCVars.SolidFuelIgnitionMultiplier));
         if (ent.Comp.Exposure >= ent.Comp.IgnitionTime)
         {
             _flammable.AdjustFireStacks(ent, 2f, fire);

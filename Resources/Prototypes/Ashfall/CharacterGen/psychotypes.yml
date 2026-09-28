@@ -1,0 +1,158 @@
+# Psychotypes for procedural Ashfall personnel records.
+# Biases the generation of character demeanor, crisis/stress reactions, and behavioral quirks.
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypePragmatist
+  name: ashfall-psychotype-pragmatist
+  tag: psychotype-pragmatist
+  weight: 1.0
+  weightModifiers:
+  - tag: senior-career
+    multiplier: 1.4
+  - tag: leadership
+    multiplier: 1.3
+  - tag: domain-engineering
+    multiplier: 1.2
+  - tag: domain-security
+    multiplier: 1.2
+  - tag: origin-penal
+    multiplier: 1.4
+  - tag: origin-debt
+    multiplier: 1.4
+  - tag: age-young
+    multiplier: 0.7
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeIdealist
+  name: ashfall-psychotype-idealist
+  tag: psychotype-idealist
+  weight: 1.0
+  weightModifiers:
+  - tag: age-young
+    multiplier: 2.0
+  - tag: age-elder
+    multiplier: 0.4
+  - tag: senior-career
+    multiplier: 0.5
+  - tag: domain-medical
+    multiplier: 1.5
+  - tag: domain-science
+    multiplier: 1.3
+  - tag: domain-service
+    multiplier: 1.2
+  - tag: origin-corporate
+    multiplier: 0.6
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeParanoid
+  name: ashfall-psychotype-paranoid
+  tag: psychotype-paranoid
+  weight: 1.0
+  weightModifiers:
+  - tag: domain-security
+    multiplier: 1.6
+  - tag: origin-penal
+    multiplier: 1.5
+  - tag: origin-deepspace
+    multiplier: 1.5
+  - tag: origin-frontier
+    multiplier: 1.3
+  - tag: domain-medical
+    multiplier: 0.7
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeBurnout
+  name: ashfall-psychotype-burnout
+  tag: psychotype-burnout
+  weight: 1.0
+  weightModifiers:
+  - tag: age-young
+    multiplier: 0.1
+  - tag: age-elder
+    multiplier: 2.5
+  - tag: senior-career
+    multiplier: 2.2
+  - tag: leadership
+    multiplier: 1.4
+  - tag: domain-security
+    multiplier: 1.3
+  - tag: domain-medical
+    multiplier: 1.3
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypePedant
+  name: ashfall-psychotype-pedant
+  tag: psychotype-pedant
+  weight: 1.0
+  weightModifiers:
+  - tag: domain-science
+    multiplier: 1.6
+  - tag: domain-engineering
+    multiplier: 1.4
+  - tag: domain-command
+    multiplier: 1.3
+  - tag: exp-adminwork
+    multiplier: 1.5
+  - tag: origin-corporate
+    multiplier: 1.4
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeDiplomat
+  name: ashfall-psychotype-diplomat
+  tag: psychotype-diplomat
+  weight: 1.0
+  weightModifiers:
+  - tag: domain-command
+    multiplier: 1.8
+  - tag: domain-service
+    multiplier: 1.6
+  - tag: leadership
+    multiplier: 1.5
+  - tag: exp-adminwork
+    multiplier: 1.4
+  - tag: origin-urban
+    multiplier: 1.3
+  - tag: origin-corporate
+    multiplier: 1.3
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeDaredevil
+  name: ashfall-psychotype-daredevil
+  tag: psychotype-daredevil
+  weight: 1.0
+  weightModifiers:
+  - tag: age-young
+    multiplier: 2.2
+  - tag: age-elder
+    multiplier: 0.3
+  - tag: senior-career
+    multiplier: 0.5
+  - tag: domain-supply
+    multiplier: 1.5
+  - tag: domain-security
+    multiplier: 1.3
+  - tag: origin-salvage
+    multiplier: 1.6
+  - tag: origin-frontier
+    multiplier: 1.5
+
+- type: ashfallPsychotype
+  id: AshfallPsychotypeStoic
+  name: ashfall-psychotype-stoic
+  tag: psychotype-stoic
+  weight: 1.0
+  weightModifiers:
+  - tag: senior-career
+    multiplier: 1.6
+  - tag: age-elder
+    multiplier: 1.5
+  - tag: domain-engineering
+    multiplier: 1.3
+  - tag: domain-supply
+    multiplier: 1.3
+  - tag: species-unathi
+    multiplier: 1.6
+  - tag: origin-mining
+    multiplier: 1.5
+  - tag: origin-industrial
+    multiplier: 1.4

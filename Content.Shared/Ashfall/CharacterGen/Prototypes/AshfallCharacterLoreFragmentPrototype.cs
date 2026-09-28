@@ -16,6 +16,8 @@ public enum AshfallCharacterLoreCategory : byte
     Evaluation,
     PersonalHook,
     PreCryo,
+    PersonalityStress,
+    PersonalityQuirk,
 }
 
 /// <summary>

@@ -3,26 +3,28 @@
             Title="{Loc 'ashfall-options-title'}"
             MinSize="1040 680"
             SetSize="1060 700">
-    <BoxContainer Orientation="Horizontal" SeparationOverride="0" VerticalExpand="True" HorizontalExpand="True">
-        <!-- Sidebar Navigation -->
-        <PanelContainer StyleClasses="PanelBackground" MinWidth="220" MaxWidth="220" VerticalExpand="True">
-            <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="6 8 6 8" VerticalExpand="True">
-                <BoxContainer Name="SidebarContainer" Orientation="Vertical" SeparationOverride="3" VerticalExpand="True" />
-            </BoxContainer>
-        </PanelContainer>
+    <PanelContainer StyleClasses="AshfallPanelDeep" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="0" VerticalExpand="True" HorizontalExpand="True">
+            <!-- Sidebar Navigation -->
+            <PanelContainer StyleClasses="AshfallPanel" MinWidth="220" MaxWidth="220" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="6 8 6 8" VerticalExpand="True">
+                    <BoxContainer Name="SidebarContainer" Orientation="Vertical" SeparationOverride="3" VerticalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
 
-        <!-- Vertical Divider -->
-        <PanelContainer StyleClasses="LowDivider" MinWidth="2" MaxWidth="2" VerticalExpand="True" Margin="0 0 4 0" />
+            <!-- Vertical Divider -->
+            <PanelContainer StyleClasses="LowDivider" MinWidth="1" MaxWidth="1" VerticalExpand="True" Margin="0 0 2 0" />
 
-        <!-- Tab Content -->
-        <TabContainer Name="Tabs" Access="Public" TabsVisible="False" VerticalExpand="True" HorizontalExpand="True">
-            <tabs:MiscTab Name="MiscTab" />
-            <tabs:ChatTab Name="ChatTab" />
-            <tabs:GraphicsTab Name="GraphicsTab" />
-            <tabs:KeyRebindTab Name="KeyRebindTab" />
-            <tabs:AudioTab Name="AudioTab" />
-            <tabs:AccessibilityTab Name="AccessibilityTab" />
-            <tabs:AdminOptionsTab Name="AdminOptionsTab" />
-        </TabContainer>
-    </BoxContainer>
+            <!-- Tab Content -->
+            <TabContainer Name="Tabs" Access="Public" TabsVisible="False" VerticalExpand="True" HorizontalExpand="True">
+                <tabs:MiscTab Name="MiscTab" />
+                <tabs:ChatTab Name="ChatTab" />
+                <tabs:GraphicsTab Name="GraphicsTab" />
+                <tabs:KeyRebindTab Name="KeyRebindTab" />
+                <tabs:AudioTab Name="AudioTab" />
+                <tabs:AccessibilityTab Name="AccessibilityTab" />
+                <tabs:AdminOptionsTab Name="AdminOptionsTab" />
+            </TabContainer>
+        </BoxContainer>
+    </PanelContainer>
 </DefaultWindow>

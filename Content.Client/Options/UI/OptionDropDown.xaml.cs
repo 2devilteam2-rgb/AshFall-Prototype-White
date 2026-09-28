@@ -17,9 +17,9 @@ public sealed partial class OptionDropDown : Control
     private static readonly StyleBoxFlat HoverStyle = new()
     {
         BackgroundColor = Color.FromHex("#1E2229"),
-        BorderColor = Color.FromHex("#E58229"),
+        BorderColor = Color.FromHex("#D48944"),
         BorderThickness = new Thickness(2, 0, 0, 0),
-        ContentMarginLeftOverride = 4
+        ContentMarginLeftOverride = 4,
     };
 
     private string? _description;
@@ -31,18 +31,8 @@ public sealed partial class OptionDropDown : Control
         RowPanel.MouseFilter = MouseFilterMode.Pass;
         NameLabel.MouseFilter = MouseFilterMode.Pass;
 
-        RowPanel.OnMouseEntered += _ =>
-        {
-            RowPanel.PanelOverride = HoverStyle;
-            if (!string.IsNullOrWhiteSpace(_description))
-                DescriptionLabel.Visible = true;
-        };
-
-        RowPanel.OnMouseExited += _ =>
-        {
-            RowPanel.PanelOverride = null;
-            DescriptionLabel.Visible = false;
-        };
+        RowPanel.OnMouseEntered += _ => RowPanel.PanelOverride = HoverStyle;
+        RowPanel.OnMouseExited += _ => RowPanel.PanelOverride = null;
     }
 
     /// <summary>
@@ -65,19 +55,21 @@ public sealed partial class OptionDropDown : Control
             base.ToolTip = value;
             NameLabel.ToolTip = value;
             Button.ToolTip = value;
+            RowPanel.ToolTip = value;
         }
     }
 
     /// <summary>
-    /// Tooltip/description text for the option.
+    /// Subtitle/description text for the option, displayed right under the title.
     /// </summary>
     public string? Description
     {
-        get => _description;
+        get => _description ?? ToolTip;
         set
         {
             _description = value;
             DescriptionLabel.Text = value;
+            DescriptionLabel.Visible = !string.IsNullOrWhiteSpace(value);
             ToolTip = value;
         }
     }

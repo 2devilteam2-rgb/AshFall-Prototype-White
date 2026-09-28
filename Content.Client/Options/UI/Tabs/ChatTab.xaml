@@ -23,7 +23,7 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
                     <Label Text="{Loc 'ui-options-chat-general'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2" />
                     <ui:OptionCheckBox Name="ShowOocPatronColor" Title="{Loc 'ui-options-show-ooc-patron-color'}" />
-                    <ui:OptionCheckBox Name="ChatFollowButton" Title="{Loc 'ui-options-chat-follow-button'}" />
+                    <ui:OptionCheckBox Name="ChatFollowButton" Title="{Loc 'ui-options-chat-follow-button'}" Description="{Loc 'ui-options-chat-follow-button-desc'}" />
                     <ui:OptionCheckBox Name="LogActionsInChatCheckBox" Title="{Loc 'ui-options-log-actions-in-chat'}" />
                     <ui:OptionCheckBox Name="CoalesceIdenticalMessagesCheckBox" Title="{Loc 'ui-options-coalesce-identical-messages'}" />
                 </BoxContainer>

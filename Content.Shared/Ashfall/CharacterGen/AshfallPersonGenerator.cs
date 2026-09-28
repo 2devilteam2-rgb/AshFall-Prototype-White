@@ -210,6 +210,22 @@ public sealed class AshfallPersonGenerator
         ComputeCurrentIdentity(person, education);
         person.PrimaryDomain = ComputePrimaryDomain(person, education);
 
+        if (person.Age < 28)
+            person.StructureTags.Add("age-young");
+        else if (person.Age >= 50)
+            person.StructureTags.Add("age-elder");
+
+        // 10. Psychotype selection: biases demeanor, stress responses and quirks.
+        var psychotype = PickPsychotype(person.StructureTags, random);
+        if (psychotype != null)
+        {
+            person.Psychotype = psychotype.ID;
+            var ptTag = string.IsNullOrEmpty(psychotype.Tag)
+                ? $"psychotype-{psychotype.ID.ToLowerInvariant()}"
+                : psychotype.Tag;
+            person.StructureTags.Add(ptTag);
+        }
+
         var eligible = AshfallJobScorer.ScoreEligibleJobs(person, _prototypes);
 
         return (profile, person, sex, morphology, eligible);
@@ -903,7 +919,7 @@ public sealed class AshfallPersonGenerator
             });
         }
 
-        AddFragmentSection(sections, person, random, AshfallCharacterLoreCategory.Personality, "personality", "ashfall-lore-title-personality", sexKey);
+        AddPersonalitySection(sections, person, random, sexKey);
         AddFragmentSection(sections, person, random, AshfallCharacterLoreCategory.Evaluation, "evaluation", "ashfall-lore-title-evaluation", sexKey);
         AddFragmentSection(sections, person, random, AshfallCharacterLoreCategory.PersonalHook, "hook", "ashfall-lore-title-personalhook", sexKey);
         AddFragmentSection(sections, person, random, AshfallCharacterLoreCategory.PreCryo, "precryo", "ashfall-lore-title-precryo", sexKey);
@@ -917,6 +933,90 @@ public sealed class AshfallPersonGenerator
             Morphology = morphology,
             Sections = sections,
         };
+    }
+
+    private void AddPersonalitySection(
+        List<AshfallDossierSection> sections,
+        AshfallPersonStructure person,
+        IRobustRandom random,
+        string sexKey)
+    {
+        AshfallPsychotypePrototype? psychotype = null;
+        if (person.Psychotype is { } ptId && _prototypes.TryIndex(ptId, out var indexedPt))
+        {
+            psychotype = indexedPt;
+        }
+        else
+        {
+            psychotype = PickPsychotype(person.StructureTags, random);
+            if (psychotype != null)
+            {
+                person.Psychotype = psychotype.ID;
+                var ptTag = string.IsNullOrEmpty(psychotype.Tag)
+                    ? $"psychotype-{psychotype.ID.ToLowerInvariant()}"
+                    : psychotype.Tag;
+                person.StructureTags.Add(ptTag);
+            }
+        }
+
+        var lines = new List<string>();
+        if (psychotype != null)
+        {
+            lines.Add(Loc.GetString("ashfall-lore-psychotype-line", ("type", Loc.GetString(psychotype.Name))));
+        }
+
+        // Slot 1: Demeanor (Category: Personality)
+        var demeanor = PickFragment(AshfallCharacterLoreCategory.Personality, person.Age, person.StructureTags, sexKey, random);
+        if (demeanor != null)
+        {
+            lines.Add(Loc.GetString("ashfall-lore-trait-demeanor-line",
+                ("text", Loc.GetString(demeanor.Text, ("sex", sexKey)))));
+        }
+
+        // Slot 2: Under stress (Category: PersonalityStress)
+        var stress = PickFragment(AshfallCharacterLoreCategory.PersonalityStress, person.Age, person.StructureTags, sexKey, random);
+        if (stress != null)
+        {
+            lines.Add(Loc.GetString("ashfall-lore-trait-stress-line",
+                ("text", Loc.GetString(stress.Text, ("sex", sexKey)))));
+        }
+
+        // Slot 3: Quirk / Habit (Category: PersonalityQuirk)
+        var quirk = PickFragment(AshfallCharacterLoreCategory.PersonalityQuirk, person.Age, person.StructureTags, sexKey, random);
+        if (quirk != null)
+        {
+            lines.Add(Loc.GetString("ashfall-lore-trait-quirk-line",
+                ("text", Loc.GetString(quirk.Text, ("sex", sexKey)))));
+        }
+
+        if (lines.Count > 0)
+        {
+            sections.Add(new AshfallDossierSection
+            {
+                Kind = "personality",
+                Title = Loc.GetString("ashfall-lore-title-personality"),
+                Lines = lines,
+            });
+        }
+    }
+
+    private AshfallPsychotypePrototype? PickPsychotype(
+        HashSet<string> tags,
+        IRobustRandom random)
+    {
+        var eligible = _prototypes
+            .EnumeratePrototypes<AshfallPsychotypePrototype>()
+            .Where(proto =>
+                proto.RequiredTags.IsSubsetOf(tags) &&
+                !proto.ExcludedTags.Overlaps(tags))
+            .Select(proto => (Proto: proto, Weight: GetWeight(proto.Weight, proto.WeightModifiers, tags)))
+            .Where(entry => entry.Weight > 0f)
+            .ToList();
+
+        if (eligible.Count == 0)
+            return _prototypes.EnumeratePrototypes<AshfallPsychotypePrototype>().FirstOrDefault();
+
+        return PickWeighted(eligible, random);
     }
 
     private static string DomainTag(string domain)

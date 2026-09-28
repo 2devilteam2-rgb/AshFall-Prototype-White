@@ -85,7 +85,8 @@ public sealed partial class AbsorbentSystem : SharedAbsorbentSystem
                 }
             }
 
-            if (TryComp<SolidFuelComponent>(candidate, out var fuel))
+            if (TryComp<SolidFuelComponent>(candidate, out var fuel)
+                && TryComp<FlammableComponent>(candidate, out var fuelFlam) && fuelFlam.OnFire)
             {
                 extinguished = true;
                 if (wet)
@@ -159,7 +160,8 @@ public sealed partial class AbsorbentSystem : SharedAbsorbentSystem
                 }
             }
 
-            if (TryComp<SolidFuelComponent>(candidate, out var fuel))
+            if (TryComp<SolidFuelComponent>(candidate, out var fuel)
+                && TryComp<FlammableComponent>(candidate, out var fuelFlam2) && fuelFlam2.OnFire)
             {
                 extinguished = true;
                 if (wet)
