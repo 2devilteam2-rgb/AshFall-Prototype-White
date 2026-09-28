@@ -9,6 +9,7 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -21,6 +22,7 @@ using Content.Shared.IgnitionSource;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -53,6 +55,7 @@ public sealed partial class ReagentFireSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedPopupSystem _popups = default!;
 
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
@@ -99,8 +102,20 @@ public sealed partial class ReagentFireSystem : EntitySystem
 
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentStartup>(OnFireStartup);
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentShutdown>(OnFireShutdown);
+        SubscribeLocalEvent<ReagentPuddleFireComponent, ExtinguishEvent>(OnPuddleExtinguish);
+        SubscribeLocalEvent<PuddleComponent, ExtinguishEvent>(OnPuddleCompExtinguish);
         SubscribeLocalEvent<PuddleComponent, InteractUsingEvent>(OnPuddleInteractUsing);
         SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
+    }
+
+    private void OnPuddleExtinguish(Entity<ReagentPuddleFireComponent> ent, ref ExtinguishEvent args)
+    {
+        Extinguish(ent.Owner);
+    }
+
+    private void OnPuddleCompExtinguish(Entity<PuddleComponent> ent, ref ExtinguishEvent args)
+    {
+        Extinguish(ent.Owner);
     }
 
     private void OnFireStartup(EntityUid uid, ReagentPuddleFireComponent component, ref ComponentStartup args)
@@ -130,6 +145,43 @@ public sealed partial class ReagentFireSystem : EntitySystem
     {
         if (args.Handled)
             return;
+
+        if (_fireQuery.TryComp(ent, out var burningComp) && burningComp.OnFire)
+        {
+            if (TryComp<AbsorbentComponent>(args.Used, out _))
+            {
+                Extinguish(ent.Owner);
+                _audio.PlayPvs("/Audio/Effects/sizzle.ogg", ent);
+                _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-mop"), ent, args.User);
+                args.Handled = true;
+                return;
+            }
+
+            if (TryComp<SolutionContainerManagerComponent>(args.Used, out _))
+            {
+                foreach (var (_, solRef) in _solutionContainerSystem.EnumerateSolutions(args.Used))
+                {
+                    var extinguishVol = 0f;
+                    foreach (var (reagent, quantity) in solRef.Comp.Solution.Contents)
+                    {
+                        if (_prototypeManager.TryIndex<ReagentPrototype>(reagent.Prototype, out var p) &&
+                            p.ReactiveEffects != null && p.ReactiveEffects.ContainsKey("Extinguish"))
+                        {
+                            extinguishVol += quantity.Float();
+                        }
+                    }
+
+                    if (extinguishVol > 0)
+                    {
+                        Extinguish(ent.Owner);
+                        _audio.PlayPvs("/Audio/Effects/sizzle.ogg", ent);
+                        _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-water"), ent, args.User);
+                        args.Handled = true;
+                        return;
+                    }
+                }
+            }
+        }
 
         if (TryComp<IgnitionSourceComponent>(args.Used, out var ignition) && ignition.Ignited)
         {
@@ -216,6 +268,20 @@ public sealed partial class ReagentFireSystem : EntitySystem
     {
         var flammability = solution.GetSolutionFlammability(_prototypeManager);
         if (flammability <= 0)
+            return false;
+
+        // If extinguishing reagents (water, foam) make up >= 20% of the puddle, quench it
+        var extinguishVolume = 0f;
+        foreach (var (reagent, quantity) in solution.Contents)
+        {
+            if (_prototypeManager.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto) &&
+                proto.ReactiveEffects != null && proto.ReactiveEffects.ContainsKey("Extinguish"))
+            {
+                extinguishVolume += quantity.Float();
+            }
+        }
+
+        if (solution.Volume > 0 && (extinguishVolume / solution.Volume.Float()) >= 0.20f)
             return false;
 
         fireComp.Flammability = flammability;

@@ -119,6 +119,14 @@ public sealed partial class RespiratorSystem : EntitySystem
                         ChatTransmitRange.HideChat,
                         ignoreActionBlocker: true);
                 }
+                else if (_gameTiming.CurTime >= respirator.LastCoughEmoteTime + respirator.CoughEmoteCooldown)
+                {
+                    respirator.LastCoughEmoteTime = _gameTiming.CurTime;
+                    _chat.TryEmoteWithChat(uid,
+                        respirator.CoughEmote,
+                        ChatTransmitRange.HideChat,
+                        ignoreActionBlocker: true);
+                }
 
                 TakeSuffocationDamage((uid, respirator));
                 respirator.SuffocationCycles += 1;
@@ -161,6 +169,15 @@ public sealed partial class RespiratorSystem : EntitySystem
             return;
 
         var gas = ev.Gas.RemoveVolume(entity.Comp.BreathVolume);
+
+        if (gas.Temperature > 335f || gas.GetMoles(Gas.CarbonDioxide) > 0.5f)
+        {
+            if (_gameTiming.CurTime >= entity.Comp.LastCoughEmoteTime + entity.Comp.CoughEmoteCooldown)
+            {
+                entity.Comp.LastCoughEmoteTime = _gameTiming.CurTime;
+                _chat.TryEmoteWithChat(entity.Owner, entity.Comp.CoughEmote, ignoreActionBlocker: true);
+            }
+        }
 
         var inhaleEv = new InhaledGasEvent(gas);
         RaiseLocalEvent(entity, ref inhaleEv);

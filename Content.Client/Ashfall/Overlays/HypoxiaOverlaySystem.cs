@@ -81,12 +81,12 @@ public sealed partial class HypoxiaOverlaySystem : EntitySystem
         _targetIntensity = calculatedIntensity;
 
         // Smooth transition
-        _overlay.HypoxiaIntensity = MathHelper.Lerp(_overlay.HypoxiaIntensity, _targetIntensity, Math.Clamp(frameTime * 4f, 0f, 1f));
+        _overlay.HypoxiaIntensity = MathHelper.Lerp(_overlay.HypoxiaIntensity, _targetIntensity, Math.Clamp(frameTime * 3f, 0f, 1f));
 
-        if (MathF.Abs(_overlay.HypoxiaIntensity - _targetIntensity) < 0.005f)
+        if (MathF.Abs(_overlay.HypoxiaIntensity - _targetIntensity) < 0.001f)
             _overlay.HypoxiaIntensity = _targetIntensity;
 
-        if (_overlay.HypoxiaIntensity > 0.005f)
+        if (_overlay.HypoxiaIntensity > 0.001f)
         {
             if (!_overlayMan.HasOverlay<HypoxiaOverlay>())
                 _overlayMan.AddOverlay(_overlay);

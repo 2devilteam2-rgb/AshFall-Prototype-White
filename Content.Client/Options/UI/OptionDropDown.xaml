@@ -1,6 +1,11 @@
 <Control xmlns="https://spacestation14.io" HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal" Margin="0 2" HorizontalExpand="True">
-        <Label Name="NameLabel" ClipText="True" HorizontalExpand="True" />
-        <OptionButton Name="Button" Access="Public" MinWidth="260" MaxWidth="260" HorizontalAlignment="Right" />
-    </BoxContainer>
+    <PanelContainer Name="RowPanel" HorizontalExpand="True" MouseFilter="Pass">
+        <BoxContainer Orientation="Vertical" Margin="8 4" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Label Name="NameLabel" ClipText="True" HorizontalExpand="True" VerticalAlignment="Center" />
+                <OptionButton Name="Button" Access="Public" MinWidth="260" MaxWidth="260" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            </BoxContainer>
+            <Label Name="DescriptionLabel" Visible="False" Margin="0 4 0 0" ClipText="False" FontColorOverride="#A0ADB8" />
+        </BoxContainer>
+    </PanelContainer>
 </Control>

@@ -33,7 +33,7 @@ public sealed partial class HypoxiaOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        if (HypoxiaIntensity <= 0.005f)
+        if (HypoxiaIntensity <= 0.001f)
             return false;
 
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))

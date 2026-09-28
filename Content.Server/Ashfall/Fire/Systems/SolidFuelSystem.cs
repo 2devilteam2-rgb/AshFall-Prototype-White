@@ -6,6 +6,7 @@ using Content.Shared.Ashfall.Fire.Components;
 using Content.Shared.Ashfall.Fire.Events;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
@@ -16,8 +17,10 @@ using Content.Shared.IgnitionSource;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Nutrition.Components;
+using Content.Shared.Popups;
 using Content.Shared.Smoking;
 using Content.Server.Ashfall.Fire.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -44,6 +47,8 @@ public sealed partial class SolidFuelSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private TileSystem _tileSystem = default!;
     [Dependency] private ReagentFireSystem _reagentFire = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] private EntityQuery<ReagentPuddleFireComponent> _puddleFireQuery = default!;
 
     public bool Enabled => _config.GetCVar(AshfallFireCVars.SolidFuelEnabled);
@@ -178,14 +183,101 @@ public sealed partial class SolidFuelSystem : EntitySystem
         return false;
     }
 
+    private bool IsMopWetWithExtinguisher(EntityUid mop, AbsorbentComponent comp)
+    {
+        if (!_solutions.TryGetSolution(mop, comp.SolutionName, out _, out var solution))
+            return false;
+
+        if (solution.GetSolutionFlammability(_prototypes) > 0)
+            return false;
+
+        foreach (var (reagent, quantity) in solution.Contents)
+        {
+            if (quantity <= 0)
+                continue;
+            if (_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto) &&
+                proto.ReactiveEffects != null && proto.ReactiveEffects.ContainsKey("Extinguish"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void OnInteractUsing(Entity<SolidFuelComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || GetIgnitionRate(args.Used) <= 0 ||
-            !TryComp<FlammableComponent>(ent, out var fire) || fire.OnFire || !Enabled)
+        if (args.Handled)
+            return;
+
+        if (TryComp<FlammableComponent>(ent, out var fire) && fire.OnFire)
+        {
+            if (TryComp<AbsorbentComponent>(args.Used, out var absorbent))
+            {
+                var wet = IsMopWetWithExtinguisher(args.Used, absorbent);
+                if (wet)
+                {
+                    _flammable.AdjustFireStacks(ent, -fire.FireStacks, fire);
+                    _flammable.Extinguish(ent, fire);
+                    ent.Comp.WetTime = MathF.Max(ent.Comp.WetTime, 8f);
+                    ent.Comp.Exposure = 0;
+                    _exposures.Remove(ent);
+                    _audio.PlayPvs("/Audio/Effects/sizzle.ogg", ent);
+                    _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-mop"), ent, args.User);
+                    args.Handled = true;
+                    return;
+                }
+                else
+                {
+                    _flammable.AdjustFireStacks(ent, -1f, fire);
+                    if (fire.FireStacks <= 0)
+                    {
+                        _flammable.Extinguish(ent, fire);
+                        ent.Comp.Exposure = 0;
+                        _exposures.Remove(ent);
+                    }
+                    _audio.PlayPvs("/Audio/Effects/thudswoosh.ogg", ent);
+                    _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-mop"), ent, args.User);
+                    args.Handled = true;
+                    return;
+                }
+            }
+
+            if (TryComp<SolutionContainerManagerComponent>(args.Used, out _))
+            {
+                foreach (var (_, solRef) in _solutions.EnumerateSolutions(args.Used))
+                {
+                    var extinguishVol = 0f;
+                    foreach (var (reagent, quantity) in solRef.Comp.Solution.Contents)
+                    {
+                        if (_prototypes.TryIndex<ReagentPrototype>(reagent.Prototype, out var p) &&
+                            p.ReactiveEffects != null && p.ReactiveEffects.ContainsKey("Extinguish"))
+                        {
+                            extinguishVol += quantity.Float();
+                        }
+                    }
+
+                    if (extinguishVol > 0)
+                    {
+                        _flammable.AdjustFireStacks(ent, -fire.FireStacks, fire);
+                        _flammable.Extinguish(ent, fire);
+                        ent.Comp.WetTime = MathF.Max(ent.Comp.WetTime, 10f);
+                        ent.Comp.Exposure = 0;
+                        _exposures.Remove(ent);
+                        _audio.PlayPvs("/Audio/Effects/sizzle.ogg", ent);
+                        _popups.PopupEntity(Loc.GetString("ashfall-fire-extinguished-water"), ent, args.User);
+                        args.Handled = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (GetIgnitionRate(args.Used) <= 0 ||
+            !TryComp<FlammableComponent>(ent, out var flammable) || flammable.OnFire || !Enabled)
             return;
 
         args.Handled = true;
-        if (!CanBurn((ent, fire)))
+        if (!CanBurn((ent, flammable)))
             return;
         _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, 1f,
             new SolidFuelIgnitionDoAfterEvent(), ent, target: ent, used: args.Used)

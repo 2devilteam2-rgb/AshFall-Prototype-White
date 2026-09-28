@@ -14,12 +14,12 @@
     damage: {}
   - type: Appearance
   - type: FireVisuals
-    sprite: Effects/fire.rsi
-    normalState: "1"
-    alternateState: "2"
-    fireStackAlternateState: 1
-    lightRadiusPerStack: 1.5
-    lightEnergyPerStack: 1.2
+    sprite: Effects/reagentfire.rsi
+    normalState: "4"
+    alternateState: "5"
+    fireStackAlternateState: 2
+    lightRadiusPerStack: 1.0
+    lightEnergyPerStack: 0.8
   - type: Reactive
     groups:
       Flammable: [Touch]
@@ -54,8 +54,8 @@
     noRot: true
     drawdepth: FloorObjects
   - type: PointLight
-    radius: 3.5
-    energy: 1.5
+    radius: 2.5
+    energy: 1.0
     color: "#FFAA44"
     castShadows: false
   - type: Transform

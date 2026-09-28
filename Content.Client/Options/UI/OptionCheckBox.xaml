@@ -1,8 +1,14 @@
 <Control xmlns="https://spacestation14.io" HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal" Margin="0 2" HorizontalExpand="True">
-        <Label Name="NameLabel" ClipText="True" HorizontalExpand="True" />
-        <BoxContainer Orientation="Horizontal" MinWidth="260" MaxWidth="260" HorizontalAlignment="Right">
-            <CheckBox Name="CheckBox" Access="Public" HorizontalAlignment="Right" />
+    <PanelContainer Name="RowPanel" HorizontalExpand="True" MouseFilter="Pass">
+        <BoxContainer Orientation="Vertical" Margin="8 4" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Label Name="NameLabel" ClipText="True" HorizontalExpand="True" VerticalAlignment="Center" />
+                <BoxContainer Orientation="Horizontal" MinWidth="260" MaxWidth="260" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Name="ToggleSwitch" Access="Public" ToggleMode="True" HorizontalAlignment="Right" MinWidth="84" MinHeight="26" />
+                    <CheckBox Name="CheckBox" Access="Public" Visible="False" />
+                </BoxContainer>
+            </BoxContainer>
+            <Label Name="DescriptionLabel" Visible="False" Margin="0 4 0 0" ClipText="False" FontColorOverride="#A0ADB8" />
         </BoxContainer>
-    </BoxContainer>
+    </PanelContainer>
 </Control>
