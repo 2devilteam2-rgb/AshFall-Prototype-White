@@ -3,69 +3,63 @@
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="10" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
                 <!-- Reduced Motion & Effects -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="ReducedMotionCheckBox"
-                                           Title="{Loc 'ui-options-reduced-motion'}"
-                                           ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableAiStaticCheckBox"
-                                           Title="{Loc 'ui-options-disable-ai-static'}"
-                                           ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableBlurryVisionCheckBox"
-                                           Title="{Loc 'ui-options-disable-blurry-vision'}"
-                                           ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableDrunkOverlayCheckBox"
-                                           Title="{Loc 'ui-options-disable-drunk-overlay'}"
-                                           ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableFlashEffectCheckBox"
-                                           Title="{Loc 'ui-options-disable-flash-effect'}"
-                                           ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableHeatDistortionCheckBox"
-                                           Title="{Loc 'ui-options-disable-heat-distortion'}"
-                                           ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableNightVisionNoiseCheckBox"
-                                           Title="{Loc 'ui-options-disable-nv-noise'}"
-                                           ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableRainbowOverlayCheckBox"
-                                           Title="{Loc 'ui-options-disable-rainbow-overlay'}"
-                                           ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
-                        <ui:OptionCheckBox Name="DisableSinguloWarpCheckBox"
-                                           Title="{Loc 'ui-options-disable-singulo-warp'}"
-                                           ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="ReducedMotionCheckBox"
+                                       Title="{Loc 'ui-options-reduced-motion'}"
+                                       ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableAiStaticCheckBox"
+                                       Title="{Loc 'ui-options-disable-ai-static'}"
+                                       ToolTip="{Loc 'ui-options-disable-ai-static-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableBlurryVisionCheckBox"
+                                       Title="{Loc 'ui-options-disable-blurry-vision'}"
+                                       ToolTip="{Loc 'ui-options-disable-blurry-vision-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableDrunkOverlayCheckBox"
+                                       Title="{Loc 'ui-options-disable-drunk-overlay'}"
+                                       ToolTip="{Loc 'ui-options-disable-drunk-overlay-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableFlashEffectCheckBox"
+                                       Title="{Loc 'ui-options-disable-flash-effect'}"
+                                       ToolTip="{Loc 'ui-options-disable-flash-effect-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableHeatDistortionCheckBox"
+                                       Title="{Loc 'ui-options-disable-heat-distortion'}"
+                                       ToolTip="{Loc 'ui-options-disable-heat-distortion-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableNightVisionNoiseCheckBox"
+                                       Title="{Loc 'ui-options-disable-nv-noise'}"
+                                       ToolTip="{Loc 'ui-options-disable-nv-noise-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableRainbowOverlayCheckBox"
+                                       Title="{Loc 'ui-options-disable-rainbow-overlay'}"
+                                       ToolTip="{Loc 'ui-options-disable-rainbow-overlay-tooltip'}" />
+                    <ui:OptionCheckBox Name="DisableSinguloWarpCheckBox"
+                                       Title="{Loc 'ui-options-disable-singulo-warp'}"
+                                       ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
+                </BoxContainer>
 
                 <!-- Visuals & Text -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-accessibility-header-visuals'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="EnableColorNameCheckBox" Title="{Loc 'ui-options-enable-color-name'}" />
-                        <ui:OptionCheckBox Name="ColorblindFriendlyCheckBox" Title="{Loc 'ui-options-colorblind-friendly'}" />
-                        <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
-                        <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
-                        <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
-                        <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
-                        <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
-                        <ui:OptionCheckBox Name="AutoFillHighlightsCheckBox" Title="{Loc 'ui-options-auto-fill-highlights'}" />
-                        <ui:OptionColorSlider Name="HighlightsColorSlider"
-                                              Title="{Loc 'ui-options-highlights-color'}"
-                                              Example="{Loc 'ui-options-highlights-color-example'}"/>
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-visuals'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="EnableColorNameCheckBox" Title="{Loc 'ui-options-enable-color-name'}" />
+                    <ui:OptionCheckBox Name="ColorblindFriendlyCheckBox" Title="{Loc 'ui-options-colorblind-friendly'}" />
+                    <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
+                    <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
+                    <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
+                    <ui:OptionCheckBox Name="AutoFillHighlightsCheckBox" Title="{Loc 'ui-options-auto-fill-highlights'}" />
+                    <ui:OptionColorSlider Name="HighlightsColorSlider"
+                                          Title="{Loc 'ui-options-highlights-color'}"
+                                          Example="{Loc 'ui-options-highlights-color-example'}"/>
+                </BoxContainer>
 
                 <!-- Content -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-accessibility-header-content'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="CensorNudityCheckBox" Title="{Loc 'ui-options-censor-nudity'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-content'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="CensorNudityCheckBox" Title="{Loc 'ui-options-censor-nudity'}" />
+                </BoxContainer>
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

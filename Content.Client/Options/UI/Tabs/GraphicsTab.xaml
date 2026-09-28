@@ -3,70 +3,62 @@
           xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="10" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
                 <!-- Display -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-display-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="FullscreenCheckBox" Title="{Loc 'ui-options-fullscreen'}" />
-                        <ui:OptionCheckBox Name="VSyncCheckBox" Title="{Loc 'ui-options-vsync'}" />
-                        <BoxContainer Name="MaxFpsContainer"
-                                      Orientation="Horizontal"
-                                      Margin="0 2"
-                                      HorizontalExpand="True"
-                                      ToolTip="{Loc 'ui-options-max-fps-tooltip'}">
-                            <Label Text="{Loc 'ui-options-max-fps'}" MinWidth="260" HorizontalExpand="True" />
-                            <BoxContainer Orientation="Horizontal" MinWidth="340" MaxWidth="340" HorizontalAlignment="Right">
-                                <ui:OptionIntInput Name="MaxFpsInput" HorizontalExpand="True" />
-                                <Button Name="MaxFpsDisplayRateButton"
-                                        Text="{Loc 'ui-options-max-fps-display-rate'}"
-                                        Margin="8 0 0 0" />
-                            </BoxContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-display-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="FullscreenCheckBox" Title="{Loc 'ui-options-fullscreen'}" />
+                    <ui:OptionCheckBox Name="VSyncCheckBox" Title="{Loc 'ui-options-vsync'}" />
+                    <BoxContainer Name="MaxFpsContainer"
+                                  Orientation="Horizontal"
+                                  Margin="0 2"
+                                  HorizontalExpand="True"
+                                  ToolTip="{Loc 'ui-options-max-fps-tooltip'}">
+                        <Label Text="{Loc 'ui-options-max-fps'}" MinWidth="260" HorizontalExpand="True" />
+                        <BoxContainer Orientation="Horizontal" MinWidth="340" MaxWidth="340" HorizontalAlignment="Right">
+                            <ui:OptionIntInput Name="MaxFpsInput" HorizontalExpand="True" />
+                            <Button Name="MaxFpsDisplayRateButton"
+                                    Text="{Loc 'ui-options-max-fps-display-rate'}"
+                                    Margin="8 0 0 0" />
                         </BoxContainer>
                     </BoxContainer>
-                </PanelContainer>
+                </BoxContainer>
 
                 <!-- Quality -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-quality-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionDropDown Name="DropDownLightingQuality" Title="{Loc 'ui-options-lighting-label'}" />
-                        <ui:OptionCheckBox Name="ViewportLowResCheckBox" Title="{Loc 'ui-options-vp-low-res'}" />
-                        <ui:OptionCheckBox Name="ParallaxLowQualityCheckBox" Title="{Loc 'ui-options-parallax-low-quality'}" />
-                        <ui:OptionCheckBox Name="AmbientOcclusionCheckBox" Title="{Loc 'ui-options-ambient-occlusion'}" />
-                        <ui:OptionSlider Name="SharpnessSlider" Title="{Loc 'ui-options-sharpness'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-quality-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionDropDown Name="DropDownLightingQuality" Title="{Loc 'ui-options-lighting-label'}" />
+                    <ui:OptionCheckBox Name="ViewportLowResCheckBox" Title="{Loc 'ui-options-vp-low-res'}" />
+                    <ui:OptionCheckBox Name="ParallaxLowQualityCheckBox" Title="{Loc 'ui-options-parallax-low-quality'}" />
+                    <ui:OptionCheckBox Name="AmbientOcclusionCheckBox" Title="{Loc 'ui-options-ambient-occlusion'}" />
+                    <ui:OptionSlider Name="SharpnessSlider" Title="{Loc 'ui-options-sharpness'}" />
+                </BoxContainer>
 
                 <!-- Interface -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
-                        <ui:OptionCheckBox Name="ViewportStretchCheckBox" Title="{Loc 'ui-options-vp-stretch'}" />
-                        <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
-                        <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />
-                        <ui:OptionCheckBox Name="IntegerScalingCheckBox"
-                                           Title="{Loc 'ui-options-vp-integer-scaling'}"
-                                           ToolTip="{Loc 'ui-options-vp-integer-scaling-tooltip'}" />
-                        <ui:OptionDropDown Name="DropDownFilterMode" Title="{Loc 'ui-options-filter-label'}" />
-                        <ui:OptionCheckBox Name="ViewportVerticalFitCheckBox"
-                                           Title="{Loc 'ui-options-vp-vertical-fit'}"
-                                           ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
+                    <ui:OptionCheckBox Name="ViewportStretchCheckBox" Title="{Loc 'ui-options-vp-stretch'}" />
+                    <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
+                    <ui:OptionSlider Name="ViewportWidthSlider" Title="{Loc ui-options-vp-width}" />
+                    <ui:OptionCheckBox Name="IntegerScalingCheckBox"
+                                       Title="{Loc 'ui-options-vp-integer-scaling'}"
+                                       ToolTip="{Loc 'ui-options-vp-integer-scaling-tooltip'}" />
+                    <ui:OptionDropDown Name="DropDownFilterMode" Title="{Loc 'ui-options-filter-label'}" />
+                    <ui:OptionCheckBox Name="ViewportVerticalFitCheckBox"
+                                       Title="{Loc 'ui-options-vp-vertical-fit'}"
+                                       ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />
+                </BoxContainer>
 
                 <!-- Misc -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-misc-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="FpsCounterCheckBox" Title="{Loc 'ui-options-fps-counter'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-misc-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="FpsCounterCheckBox" Title="{Loc 'ui-options-fps-counter'}" />
+                </BoxContainer>
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

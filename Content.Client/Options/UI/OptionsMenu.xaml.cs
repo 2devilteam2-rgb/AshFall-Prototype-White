@@ -92,7 +92,7 @@ public sealed partial class OptionsMenu : DefaultWindow
                 MinWidth = 4,
                 MaxWidth = 4,
                 VerticalExpand = true,
-                PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#5288cc") },
+                PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#D48944") },
                 Visible = false,
             };
 

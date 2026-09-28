@@ -3,41 +3,37 @@
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="10" HorizontalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
                 <!-- Volume & Devices -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-volume-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}" />
-                        <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeCombatMusic" Title="{Loc 'ui-options-combat-music-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'ui-options-ambience-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'ui-options-lobby-volume'}" />
-                        <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'ui-options-interface-volume'}" />
-                        <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'ui-options-ambience-max-sounds'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-volume-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionDropDown Name="DropDownAudioDevice" Title="{Loc 'ui-options-audio-device'}" />
+                    <ui:OptionSlider Name="SliderVolumeMaster" Title="{Loc 'ui-options-master-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeMidi" Title="{Loc 'ui-options-midi-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbientMusic" Title="{Loc 'ui-options-ambient-music-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeCombatMusic" Title="{Loc 'ui-options-combat-music-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeAmbience" Title="{Loc 'ui-options-ambience-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeLobby" Title="{Loc 'ui-options-lobby-volume'}" />
+                    <ui:OptionSlider Name="SliderVolumeInterface" Title="{Loc 'ui-options-interface-volume'}" />
+                    <ui:OptionSlider Name="SliderMaxAmbienceSounds" Title="{Loc 'ui-options-ambience-max-sounds'}" />
+                </BoxContainer>
 
                 <!-- Audio Features & Effects -->
-                <PanelContainer StyleClasses="AshfallPanel" HorizontalExpand="True">
-                    <BoxContainer Orientation="Vertical" Margin="12 10" SeparationOverride="4" HorizontalExpand="True">
-                        <Label Text="{Loc 'ui-options-playback-effects-label'}" StyleClasses="AshfallSectionHeader"/>
-                        <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                        <ui:OptionCheckBox Name="CombatMusicCheckBox" Title="{Loc 'ui-options-combat-music'}" />
-                        <ui:OptionCheckBox Name="LobbyMusicCheckBox" Title="{Loc 'ui-options-lobby-music'}" />
-                        <ui:OptionCheckBox Name="RestartSoundsCheckBox" Title="{Loc 'ui-options-restart-sounds'}" />
-                        <ui:OptionCheckBox Name="EventMusicCheckBox" Title="{Loc 'ui-options-event-music'}" />
-                        <ui:OptionCheckBox Name="AdminSoundsCheckBox" Title="{Loc 'ui-options-admin-sounds'}" />
-                        <ui:OptionCheckBox Name="BwoinkSoundCheckBox" Title="{Loc 'ui-options-bwoink-sound'}" />
-                        <ui:OptionCheckBox Name="AudioHrtfCheckBox" Title="{Loc 'ui-options-audio-hrtf'}" />
-                        <ui:OptionCheckBox Name="MuteUnfocusedCheckBox" Title="{Loc 'ui-options-mute-unfocused'}" />
-                        <ui:OptionCheckBox Name="SubtleReverbCheckBox" Title="{Loc 'ui-options-subtle-reverb'}" />
-                        <ui:OptionCheckBox Name="AudioMuffleCheckBox" Title="{Loc 'ui-options-audio-muffle'}" />
-                    </BoxContainer>
-                </PanelContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-playback-effects-label'}" StyleClasses="AshfallSectionHeader"/>
+                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                    <ui:OptionCheckBox Name="CombatMusicCheckBox" Title="{Loc 'ui-options-combat-music'}" />
+                    <ui:OptionCheckBox Name="LobbyMusicCheckBox" Title="{Loc 'ui-options-lobby-music'}" />
+                    <ui:OptionCheckBox Name="RestartSoundsCheckBox" Title="{Loc 'ui-options-restart-sounds'}" />
+                    <ui:OptionCheckBox Name="EventMusicCheckBox" Title="{Loc 'ui-options-event-music'}" />
+                    <ui:OptionCheckBox Name="AdminSoundsCheckBox" Title="{Loc 'ui-options-admin-sounds'}" />
+                    <ui:OptionCheckBox Name="BwoinkSoundCheckBox" Title="{Loc 'ui-options-bwoink-sound'}" />
+                    <ui:OptionCheckBox Name="AudioHrtfCheckBox" Title="{Loc 'ui-options-audio-hrtf'}" />
+                    <ui:OptionCheckBox Name="MuteUnfocusedCheckBox" Title="{Loc 'ui-options-mute-unfocused'}" />
+                    <ui:OptionCheckBox Name="SubtleReverbCheckBox" Title="{Loc 'ui-options-subtle-reverb'}" />
+                    <ui:OptionCheckBox Name="AudioMuffleCheckBox" Title="{Loc 'ui-options-audio-muffle'}" />
+                </BoxContainer>
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />
