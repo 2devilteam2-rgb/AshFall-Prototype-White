@@ -1,4 +1,4 @@
-﻿- type: reagent
+- type: reagent
   id: BasePyrotechnic
   group: Pyrotechnic
   abstract: true
@@ -17,6 +17,7 @@
   id: Thermite
   name: reagent-name-thermite
   parent: BasePyrotechnic
+  flammability: 2
   desc: reagent-desc-thermite
   physicalDesc: reagent-physical-desc-grainy
   contrabandSeverity: Minor
@@ -45,6 +46,7 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#FA00AF"
+  flammability: 4
   tileReactions:
   - !type:FlammableTileReaction
     temperatureMultiplier: 5
@@ -75,6 +77,8 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#D4872A"
+  flammability: 5
+  selfOxidizing: true
   metabolisms:
     Bloodstream:
       effects:
@@ -105,6 +109,8 @@
   contrabandSeverity: Major
   flavor: bitter
   color: "#FFC8C8"
+  flammability: 5
+  selfOxidizing: true
   tileReactions:
   - !type:PryTileReaction
   metabolisms:
@@ -140,6 +146,7 @@
   id: FoamingAgent
   name: reagent-name-foaming-agent
   parent: BasePyrotechnic
+  flammability: 0
   desc: reagent-desc-foaming-agent
   physicalDesc: reagent-physical-desc-foamy
   flavor: bitter
@@ -151,6 +158,7 @@
   id: WeldingFuel
   name: reagent-name-welding-fuel
   parent: BasePyrotechnic
+  flammability: 2
   desc: reagent-desc-welding-fuel
   physicalDesc: reagent-physical-desc-oily
   slipData:
@@ -231,6 +239,7 @@
   id: Fluorosurfactant
   name: reagent-name-fluorosurfactant
   parent: BasePyrotechnic
+  flammability: 0
   desc: reagent-desc-fluorosurfactant
   physicalDesc: reagent-physical-desc-opaque
   flavor: bitter

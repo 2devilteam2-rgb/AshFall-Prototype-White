@@ -88,6 +88,18 @@ namespace Content.Server.Body.Components
         [DataField]
         public ProtoId<EmotePrototype> GaspEmote = "Gasp";
 
+        [DataField]
+        public TimeSpan CoughEmoteCooldown = TimeSpan.FromSeconds(5);
+
+        [ViewVariables]
+        public TimeSpan LastCoughEmoteTime;
+
+        /// <summary>
+        ///     The emote when coughing from bad air or smoke
+        /// </summary>
+        [DataField]
+        public ProtoId<EmotePrototype> CoughEmote = "Cough";
+
         /// <summary>
         ///     How many cycles in a row has the mob been under-saturated?
         /// </summary>

@@ -68,7 +68,7 @@ namespace Content.Shared.Chemistry.Reaction
         [DataField(serverOnly: true)] public LogImpact Impact = LogImpact.Low;
 
         // TODO SERV3: Empty on the client, (de)serialize on the server with module manager is server module
-        [DataField(serverOnly: true)] public SoundSpecifier Sound { get; private set; } = new SoundPathSpecifier("/Audio/Effects/Chemistry/bubbles.ogg");
+        [DataField(serverOnly: true)] public SoundSpecifier Sound { get; private set; } = new SoundPathSpecifier("/Audio/Effects/Chemistry/bubbles.ogg", AudioParams.Default.WithVolume(-8f).WithMaxDistance(5f));
 
         /// <summary>
         /// If true, this reaction will only consume only integer multiples of the reactant amounts. If there are not

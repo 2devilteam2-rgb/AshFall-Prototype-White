@@ -4,18 +4,23 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Destructible;
+using Content.Server.Fluids.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
 using Content.Shared.Armor;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Ashfall.Camera;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
+using Content.Server.Ashfall.Fire.Components;
+using Content.Server.Ashfall.Fire.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
+using Content.Shared.Fluids.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
 using Content.Shared.Maps;
@@ -47,6 +52,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     [Dependency] private NodeGroupSystem _nodeGroupSystem = default!;
     [Dependency] private PathfindingSystem _pathfindingSystem = default!;
     [Dependency] private SharedCameraRecoilSystem _recoilSystem = default!;
+    [Dependency] private SharedESScreenshakeSystem _shake = default!;
     [Dependency] private ThrowingSystem _throwingSystem = default!;
     [Dependency] private PvsOverrideSystem _pvsSys = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -55,8 +61,13 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     [Dependency] private FlammableSystem _flammableSystem = default!;
     [Dependency] private DestructibleSystem _destructibleSystem = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private ReagentFireSystem _reagentFire = default!;
+    [Dependency] private SolidFuelSystem _solidFuel = default!;
+    [Dependency] private PuddleSystem _puddle = default!;
 
     [Dependency] private EntityQuery<FlammableComponent> _flammableQuery = default!;
+    [Dependency] private EntityQuery<ReagentPuddleFireComponent> _reagentPuddleFireQuery = default!;
+    [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     [Dependency] private EntityQuery<ActorComponent> _actorQuery = default!;
     [Dependency] private EntityQuery<DestructibleComponent> _destructibleQuery = default!;
@@ -414,7 +425,17 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             var distance = delta.Length();
             var effect = 5 * MathF.Pow(totalIntensity, 0.5f) * (1 - distance / range);
             if (effect > 0.01f)
+            {
                 _recoilSystem.KickCamera(uid, -delta.Normalized() * effect);
+
+                var shakeParams = new ESScreenshakeParameters()
+                {
+                    Trauma = MathF.Min(1.0f, 0.6f * (1 - distance / range)),
+                    DecayRate = 0.8f,
+                    Frequency = 0.014f,
+                };
+                _shake.Screenshake(uid, shakeParams, null);
+            }
         }
     }
 }

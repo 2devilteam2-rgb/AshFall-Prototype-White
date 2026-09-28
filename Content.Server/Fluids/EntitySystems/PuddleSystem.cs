@@ -1,3 +1,4 @@
+using Content.Server.Ashfall.Fire.Systems;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
 using Content.Shared.Chemistry;
@@ -11,6 +12,7 @@ using Content.Shared.Fluids;
 using Content.Shared.Fluids.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Slippery;
 using Robust.Shared.Collections;
@@ -33,6 +35,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private ReagentFireSystem _reagentFire = default!;
 
     [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
     [Dependency] private EntityQuery<EvaporationSparkleComponent> _evaporationSparklesQuery = default!;
@@ -49,6 +52,12 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         SubscribeLocalEvent<PuddleComponent, SpreadNeighborsEvent>(OnPuddleSpread);
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
+    }
+
+    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionChangedEvent args)
+    {
+        base.OnSolutionUpdate(entity, ref args);
+        _reagentFire.UpdateFire(entity);
     }
 
     // TODO: This can be predicted once https://github.com/space-wizards/RobustToolbox/pull/5849 is merged
@@ -426,11 +435,15 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
             targets.Add(owner);
             Reactive.DoEntityReaction(owner, splitSolution, ReactionMethod.Touch);
-            Popups.PopupEntity(Loc.GetString("spill-land-spilled-on-other",
-                    ("spillable", entity),
-                    ("target", Identity.Entity(owner, EntityManager))),
-                owner,
-                PopupType.SmallCaution);
+
+            if (HasComp<MobStateComponent>(owner))
+            {
+                Popups.PopupEntity(Loc.GetString("spill-land-spilled-on-other",
+                        ("spillable", entity),
+                        ("target", Identity.Entity(owner, EntityManager))),
+                    owner,
+                    PopupType.SmallCaution);
+            }
         }
 
         _color.RaiseEffect(spilled.GetColor(ProtoMan), targets,

@@ -1,9 +1,11 @@
 using Content.Shared.CCVar;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
+using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Robust.Shared.Map;
@@ -198,9 +200,7 @@ public sealed partial class ExplosionSystem
         DamageSpecifier damage,
         MapCoordinates epicenter,
         HashSet<EntityUid> processed,
-        string id,
-        float? fireStacks,
-        float? temperature,
+        ExplosionPrototype type,
         float currentIntensity,
         EntityUid? cause)
     {
@@ -228,6 +228,10 @@ public sealed partial class ExplosionSystem
         lookup.SundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
         lookup.StaticSundriesTree.QueryAabb(ref state, GridQueryCallback, gridBox, true);
 
+        var id = type.ID;
+        var fireStacks = type.FireStacks;
+        var temperature = type.Temperature;
+
         // process those entities
         foreach (var (uid, xform) in list)
         {
@@ -238,6 +242,33 @@ public sealed partial class ExplosionSystem
         if (temperature != null)
         {
             _atmosphere.HotspotExpose(grid.Owner, tile, temperature.Value, currentIntensity, cause, true);
+        }
+
+        // ignite combustible floors
+        if ((fireStacks != null && fireStacks > 0) || (temperature != null && temperature >= 400f))
+        {
+            _solidFuel.TryIgniteFloor(grid.Owner, tile, cause);
+        }
+
+        // spill incendiary fuel puddles
+        if (type.SpillReagent is { } reagent && type.SpillVolumePerIntensity > 0f)
+        {
+            var volume = FixedPoint2.New(Math.Clamp(currentIntensity * type.SpillVolumePerIntensity, 4f, 25f));
+            var solution = new Solution(reagent, volume);
+            if (_map.TryGetTileRef(grid.Owner, grid.Comp, tile, out var tileRef) && !tileRef.Tile.IsEmpty)
+            {
+                if (_puddle.TrySpillAt(tileRef, solution, out var puddleUid, sound: false))
+                {
+                    if (type.IgnitePuddles && _puddleQuery.TryGetComponent(puddleUid, out var puddleComp))
+                    {
+                        _reagentFire.UpdateFire((puddleUid, puddleComp));
+                        if (_reagentPuddleFireQuery.TryGetComponent(puddleUid, out var fireComp))
+                        {
+                            _reagentFire.Ignite(puddleUid, fireComp);
+                        }
+                    }
+                }
+            }
         }
 
         // We process anchored entities after the AABB lookup for performance reasons.
@@ -472,6 +503,19 @@ public sealed partial class ExplosionSystem
             {
                 flammable.FireStacks += fireStacksOnIgnite.Value;
                 _flammableSystem.Ignite(uid, uid, flammable);
+            }
+
+            if (_reagentPuddleFireQuery.TryGetComponent(uid, out var puddleFire) && puddleFire.Flammability > 0)
+            {
+                _reagentFire.Ignite(uid, puddleFire);
+            }
+            else if (_puddleQuery.TryGetComponent(uid, out var puddle))
+            {
+                _reagentFire.UpdateFire((uid, puddle));
+                if (_reagentPuddleFireQuery.TryGetComponent(uid, out var newFire) && newFire.Flammability > 0)
+                {
+                    _reagentFire.Ignite(uid, newFire);
+                }
             }
         }
 
@@ -897,9 +941,7 @@ sealed class Explosion
                     _currentDamage,
                     Epicenter,
                     ProcessedEntities,
-                    ExplosionType.ID,
-                    ExplosionType.FireStacks,
-                    ExplosionType.Temperature,
+                    ExplosionType,
                     _currentIntensity,
                     Cause);
 

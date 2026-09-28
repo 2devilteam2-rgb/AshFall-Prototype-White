@@ -24,6 +24,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Timing.Systems;
 using JetBrains.Annotations;
 using Robust.Server.Audio;
+using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
@@ -50,6 +51,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private AudioSystem _audio = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private IGameTiming _timing = default!;
+        [Dependency] private SharedContainerSystem _containers = default!;
 
         [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
         [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
@@ -151,6 +153,9 @@ namespace Content.Server.Atmos.EntitySystems
         private void OnInteractUsing(EntityUid uid, FlammableComponent flammable, InteractUsingEvent args)
         {
             if (args.Handled)
+                return;
+
+            if (args.User == uid)
                 return;
 
             var isHotEvent = new IsHotEvent();
@@ -355,6 +360,9 @@ namespace Content.Server.Atmos.EntitySystems
             EntityUid? ignitionSourceUser = null)
         {
             if (!Resolve(uid, ref flammable))
+                return;
+
+            if (_containers.TryGetContainingContainer((ignitionSource, null), out var container) && container.Owner == uid)
                 return;
 
             if (flammable.AlwaysCombustible)

@@ -95,6 +95,16 @@ public sealed partial class OptionsTabControlRow : Control
     }
 
     /// <summary>
+    /// Add a checkbox option backed by a simple boolean CVar and an OptionCheckBox control row.
+    /// </summary>
+    public OptionCheckboxCVar AddOptionCheckBox(CVarDef<bool> cVar, OptionCheckBox checkBox, bool invert = false)
+    {
+        var opt = AddOptionCheckBox(cVar, checkBox.CheckBox, invert);
+        checkBox.OnRowToggled += _ => opt.NotifyValueChanged();
+        return opt;
+    }
+
+    /// <summary>
     /// Add a slider option, displayed in percent, backed by a simple float CVar.
     /// </summary>
     /// <param name="cVar">The CVar represented by the slider.</param>
@@ -217,6 +227,19 @@ public sealed partial class OptionsTabControlRow : Control
         DefaultButton.Disabled = !anyModifiedFromDefault;
         ApplyButton.Disabled = !anyModified;
         ResetButton.Disabled = !anyModified;
+
+        if (anyModified)
+        {
+            if (!ApplyButton.HasStyleClass(global::Ashfall.Client.Stylesheets.AshfallStylesheet.AccentActionClass))
+                ApplyButton.AddStyleClass(global::Ashfall.Client.Stylesheets.AshfallStylesheet.AccentActionClass);
+            if (!ApplyButton.HasStyleClass(StyleClass.Positive))
+                ApplyButton.AddStyleClass(StyleClass.Positive);
+        }
+        else
+        {
+            ApplyButton.RemoveStyleClass(global::Ashfall.Client.Stylesheets.AshfallStylesheet.AccentActionClass);
+            ApplyButton.RemoveStyleClass(StyleClass.Positive);
+        }
     }
 
     private void ApplyButtonPressed(BaseButton.ButtonEventArgs obj)
@@ -453,6 +476,8 @@ public sealed class OptionCheckboxCVar : BaseOptionCVar<bool>
             ValueChanged();
         };
     }
+
+    public void NotifyValueChanged() => ValueChanged();
 }
 
 /// <summary>

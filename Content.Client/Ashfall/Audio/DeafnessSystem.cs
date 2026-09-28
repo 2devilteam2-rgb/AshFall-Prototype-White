@@ -1,7 +1,7 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.Shared.Ashfall.Audio;
 using Content.Shared.CCVar;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Robust.Client.Audio;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
@@ -21,7 +21,7 @@ public sealed partial class DeafnessSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
 
-    private const float BaseTinnitusGain = 0.65f;
+    private const float BaseTinnitusGain = 0.35f;
     private const float FadeDuration = 2.0f;
 
     private float _originalVolume = 0.5f;
@@ -33,7 +33,8 @@ public sealed partial class DeafnessSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<DeafenedComponent, ComponentShutdown>(OnDeafShutdown);
-        SubscribeLocalEvent<DeafenedComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
 
         Subs.CVar(_cfg, CCVars.AudioMasterVolume, value =>
         {
@@ -48,7 +49,12 @@ public sealed partial class DeafnessSystem : EntitySystem
             ResetAudio();
     }
 
-    private void OnPlayerDetached(EntityUid uid, DeafenedComponent component, LocalPlayerDetachedEvent args)
+    private void OnPlayerDetached(LocalPlayerDetachedEvent args)
+    {
+        ResetAudio();
+    }
+
+    private void OnPlayerAttached(LocalPlayerAttachedEvent args)
     {
         ResetAudio();
     }
@@ -57,16 +63,24 @@ public sealed partial class DeafnessSystem : EntitySystem
     {
         if (_tinnitusStream != null)
         {
-            _audioSystem.Stop(_tinnitusStream.Value.Entity, _tinnitusStream.Value.Component);
+            if (TryComp<AudioComponent>(_tinnitusStream.Value.Entity, out var audioComp))
+            {
+                _audioSystem.SetVolume(_tinnitusStream.Value.Entity, float.NegativeInfinity, audioComp);
+            }
+            _audioSystem.Stop(_tinnitusStream.Value.Entity);
             _tinnitusStream = null;
         }
+        _currentMasterGain = _originalVolume;
+        _audio.SetMasterGain(_originalVolume);
     }
 
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
 
-        if (_player.LocalEntity is not { } player || !TryComp<DeafenedComponent>(player, out var deaf))
+        if (_player.LocalEntity is not { } player ||
+            !TryComp<DeafenedComponent>(player, out var deaf) ||
+            (TryComp<MobStateComponent>(player, out var mob) && (mob.CurrentState == MobState.Dead || mob.CurrentState == MobState.Critical)))
         {
             if (_tinnitusStream != null)
                 ResetAudio();
@@ -89,6 +103,11 @@ public sealed partial class DeafnessSystem : EntitySystem
             _currentMasterGain = MathHelper.Lerp(_currentMasterGain, _originalVolume, MathF.Min(1f, 4.0f * frameTime));
             _audio.SetMasterGain(Math.Clamp(_currentMasterGain, 0f, _originalVolume));
             return;
+        }
+
+        if (_tinnitusStream != null && (!Exists(_tinnitusStream.Value.Entity) || TerminatingOrDeleted(_tinnitusStream.Value.Entity)))
+        {
+            _tinnitusStream = null;
         }
 
         if (_tinnitusStream == null)

@@ -1,0 +1,16 @@
+- type: entity
+  parent: BaseFoam
+  id: AshfallFireSteam
+  name: fire steam
+  description: A cloud of hot vapor and steam from combustion.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke
+    color: "#FFFFFF4D"
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Tag
+    tags:
+    - HideContextMenu

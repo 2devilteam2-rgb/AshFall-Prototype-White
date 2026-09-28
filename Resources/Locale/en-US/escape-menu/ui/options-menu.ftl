@@ -57,6 +57,7 @@ ui-options-audio-hrtf = Enable HRTF Audio Processing (Requires Restart)
 ui-options-subtle-reverb = Station Room Acoustics (Reverb)
 ui-options-audio-muffle = Acoustic Sound Occlusion
 ui-options-volume-label = Volume
+ui-options-playback-effects-label = Playback & Effects
 
 ## Graphics menu
 
@@ -76,7 +77,8 @@ ui-options-show-ooc-patron-color = Show OOC Patreon color
 ui-options-show-looc-on-head = Show LOOC chat above characters head
 ui-options-fancy-speech = Show names in speech bubbles
 ui-options-fancy-name-background = Add background to speech bubble names
-ui-options-chat-follow-button = As ghost, show a follow button next to chat messages
+ui-options-chat-follow-button = Ghost chat follow button
+ui-options-chat-follow-button-desc = Shows a follow button next to chat messages while observing as ghost.
 ui-options-vsync = VSync
 ui-options-max-fps = Maximum FPS:
 ui-options-max-fps-display-rate = Display Rate
@@ -105,24 +107,23 @@ ui-options-hud-theme-minimalist = Minimalist
 ui-options-hud-theme-ashen = Ashen
 ui-options-hud-layout-default = Default
 ui-options-hud-layout-separated = Separated
-ui-options-vp-stretch = Stretch viewport to fit game window
+ui-options-vp-stretch = Stretch viewport
+ui-options-vp-stretch-tooltip = Stretches the viewport to fit the game window.
 ui-options-vp-scale = Fixed viewport scale:
 ui-options-vp-scale-value = x{ $scale }
-ui-options-vp-integer-scaling = Prefer integer scaling (might cause black bars/clipping)
-ui-options-vp-integer-scaling-tooltip = If this option is enabled, the viewport will be scaled using an integer value
-                                        at specific resolutions. While this results in crisp textures, it also often
-                                        means that black bars appear at the top/bottom of the screen or that part
-                                        of the viewport is not visible.
+ui-options-vp-integer-scaling = Integer scaling
+ui-options-vp-integer-scaling-tooltip = Scales the viewport using integer factors for crisp pixels.
 ui-options-filter-label = Scaling filter:
 ui-options-filter-nearest = Nearest (no smoothing)
 ui-options-filter-bilinear = Bilinear (smoothed)
 ui-options-vp-vertical-fit = Vertical viewport fitting
-ui-options-vp-vertical-fit-tooltip = When enabled, the main viewport will ignore the horizontal axis entirely when
-                                     fitting to your screen. If your screen is smaller than the viewport, then this
-                                     will cause the viewport to be cut off on the horizontal axis.
-ui-options-vp-low-res = Low-resolution viewport
-ui-options-parallax-low-quality = Low-quality Parallax (background)
-ui-options-ambient-occlusion = Show Ambient Occlusion
+ui-options-vp-vertical-fit-tooltip = Fits viewport vertically without considering horizontal axis.
+ui-options-vp-low-res = Low resolution
+ui-options-vp-low-res-tooltip = Reduces internal render resolution to increase performance.
+ui-options-parallax-low-quality = Simplified parallax
+ui-options-parallax-low-quality-tooltip = Lowers background space parallax quality for better performance.
+ui-options-ambient-occlusion = Ambient Occlusion (AO)
+ui-options-ambient-occlusion-tooltip = Soft shading around entities and walls.
 ui-options-fps-counter = Show FPS counter
 ui-options-vp-width = Viewport width:
 ui-options-hud-layout = HUD layout:
@@ -413,31 +414,40 @@ ui-options-disable-singulo-warp = Singularity
 ui-options-disable-singulo-warp-tooltip = Disables the screen warping effect on the singularity.
 
 ui-options-screen-shake-intensity = Screen shake intensity
+ui-options-screen-shake-intensity-tooltip = Adjusts screen shake intensity from explosions and recoil.
 
 ui-options-chat-window-opacity = Chat window opacity
+ui-options-chat-window-opacity-tooltip = Adjusts the chat panel background opacity.
 ui-options-speech-bubble-text-opacity = Speech bubble text opacity
+ui-options-speech-bubble-text-opacity-tooltip = Adjusts text opacity in speech bubbles.
 ui-options-speech-bubble-speaker-opacity = Speech bubble speaker opacity
+ui-options-speech-bubble-speaker-opacity-tooltip = Adjusts speaker name opacity in speech bubbles.
 ui-options-speech-bubble-background-opacity = Speech bubble background opacity
+ui-options-speech-bubble-background-opacity-tooltip = Adjusts background opacity in speech bubbles.
 
 ui-options-censor-nudity = Censor character nudity
+ui-options-censor-nudity-tooltip = Censors naked characters in game.
 
 ## Admin menu
 
 ui-options-admin-player-panel = Admin Menu Players List
 
-ui-options-admin-player-tab-symbol-setting = Character column antag symbols
+ui-options-admin-player-tab-symbol-setting = Antagonist symbol
+ui-options-admin-player-tab-symbol-setting-tooltip = Shows antagonist icon in player list.
 ui-options-admin-player-tab-symbol-setting-off = No antag symbol
-ui-options-admin-player-tab-symbol-setting-basic = Show standard antag symbol
-ui-options-admin-player-tab-symbol-setting-specific = Show specific antag symbol
+ui-options-admin-player-tab-symbol-setting-basic = Standard symbol
+ui-options-admin-player-tab-symbol-setting-specific = Specific symbol
 
-ui-options-admin-player-tab-role-setting = Role display settings
+ui-options-admin-player-tab-role-setting = Role display
+ui-options-admin-player-tab-role-setting-tooltip = Format for roles and subtypes in player list.
 ui-options-admin-player-tab-role-setting-roletype = Show role type
 ui-options-admin-player-tab-role-setting-subtype = Show subtype
 ui-options-admin-player-tab-role-setting-roletypesubtype = Show role type and subtype
 ui-options-admin-player-tab-role-setting-subtyperoletype = Show subtype and role type
 
-ui-options-admin-player-tab-color-setting = Color settings
-ui-options-admin-player-tab-color-setting-off = I hate colors
+ui-options-admin-player-tab-color-setting = Role colors
+ui-options-admin-player-tab-color-setting-tooltip = Color coding for antagonist roles.
+ui-options-admin-player-tab-color-setting-off = No colors
 ui-options-admin-player-tab-color-setting-character = Colorize antag character names
 ui-options-admin-player-tab-color-setting-roletype = Colorize all role types
 ui-options-admin-player-tab-color-setting-both = Colorize both
@@ -451,14 +461,17 @@ ui-options-admin-overlay-antag-format-subtype = Show subtype
 
 ui-options-admin-overlay-antag-symbol = Antag symbol style
 ui-options-admin-overlay-antag-symbol-off = No antag symbol
-ui-options-admin-overlay-antag-symbol-basic = Show standard antag symbol
-ui-options-admin-overlay-antag-symbol-specific = Show specific antag symbol
+ui-options-admin-overlay-antag-symbol-basic = Standard symbol
+ui-options-admin-overlay-antag-symbol-specific = Specific symbol
 
 ui-options-admin-enable-overlay-playtime = Show playtime
 ui-options-admin-enable-overlay-starting-job = Show starting job
 ui-options-admin-overlay-merge-distance = Stack merge distance
-ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
-ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
+ui-options-admin-overlay-ghost-fade-distance = Overlay fade range
+ui-options-admin-overlay-ghost-fade-distance-tooltip = Distance from cursor where admin overlay begins fading.
+ui-options-admin-overlay-ghost-hide-distance = Overlay hide range
+ui-options-admin-overlay-ghost-hide-distance-tooltip = Distance from cursor where admin overlay is fully hidden.
 
 ui-options-admin-strip-overlay-title = Strip Overlay
 ui-options-admin-strip-overlay-setting = Show strip overlay by default
+ui-options-admin-strip-overlay-setting-tooltip = Always open extended admin strip interface.

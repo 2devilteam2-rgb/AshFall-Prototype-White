@@ -29,3 +29,7 @@ advertise = false
 tags = "lang:ru,rp:high"
 [loc]
 culture_name = "ru-RU"
+
+[audio]
+attenuation = 4 # InverseDistanceClamped
+z_offset = -2

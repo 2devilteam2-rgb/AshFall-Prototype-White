@@ -9,6 +9,8 @@ using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
+using Content.Server.Chat.Systems;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Smoking;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map.Components;
@@ -42,6 +44,8 @@ public sealed partial class SmokeSystem : EntitySystem
     [Dependency] private SharedBroadphaseSystem _broadphase = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     [Dependency] private EntityQuery<SmokeComponent> _smokeQuery = default!;
     [Dependency] private EntityQuery<SmokeAffectedComponent> _smokeAffectedQuery = default!;
@@ -279,6 +283,11 @@ public sealed partial class SmokeSystem : EntitySystem
 
         if (blockIngestion)
             return;
+
+        if (!_mobState.IsDead(entity) && _random.Prob(0.35f))
+        {
+            _chat.TryEmoteWithChat(entity, "Cough", ignoreActionBlocker: true);
+        }
 
         if (_blood.TryAddToBloodstream((entity, bloodstream), transferSolution))
         {

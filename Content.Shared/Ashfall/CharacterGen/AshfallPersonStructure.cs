@@ -61,6 +61,7 @@ public sealed class AshfallPersonStructure
     public ProtoId<AshfallCulturePrototype> Culture { get; set; }
     public ProtoId<AshfallOriginPrototype> Origin { get; set; }
     public ProtoId<AshfallEducationPrototype> Education { get; set; }
+    public ProtoId<AshfallPsychotypePrototype>? Psychotype { get; set; }
     public string Birthplace { get; set; } = string.Empty;
 
     public List<AshfallCareerStint> Career { get; } = new();

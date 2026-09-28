@@ -270,6 +270,22 @@
           MaterialWoodPlank1: *Min0Max1
   - type: StaticPrice
     price: 75
+  - type: SolidFuel
+    ignitionTime: 240
+    burnTime: 120
+  - type: Flammable
+    alwaysCombustible: true
+    fireSpread: false
+    firestackFade: 0
+    damage: {}
+  - type: Appearance
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: fire
 
 - type: entity
   parent: ChairWood

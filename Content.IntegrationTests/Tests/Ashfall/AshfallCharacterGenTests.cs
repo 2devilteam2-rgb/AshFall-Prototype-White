@@ -185,9 +185,12 @@ public sealed class AshfallCharacterGenTests : GameTest
             Assert.That(roles.Length, Is.GreaterThanOrEqualTo(30), "career roles");
             Assert.That(employers.Length, Is.GreaterThanOrEqualTo(20), "employers");
             Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.Personality), Is.GreaterThanOrEqualTo(32), "personality fragments");
+            Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.PersonalityStress), Is.GreaterThanOrEqualTo(32), "personality stress fragments");
+            Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.PersonalityQuirk), Is.GreaterThanOrEqualTo(32), "personality quirk fragments");
             Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.Evaluation), Is.GreaterThanOrEqualTo(32), "evaluation fragments");
             Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.PersonalHook), Is.GreaterThanOrEqualTo(44), "hook fragments");
             Assert.That(fragments.Count(x => x.Category == AshfallCharacterLoreCategory.PreCryo), Is.GreaterThanOrEqualTo(16), "precryo fragments");
+            Assert.That(_protoMan.EnumeratePrototypes<AshfallPsychotypePrototype>().Count(), Is.GreaterThanOrEqualTo(8), "psychotypes");
         });
 
         // Every personnel-file-selectable job must have a career requirement definition.

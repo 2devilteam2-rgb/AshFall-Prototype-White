@@ -61,8 +61,6 @@ public sealed partial class AdminOptionsTab : Control
         Control.AddOptionCheckBox(CCVars.AdminOverlayPlaytime, EnableOverlayPlaytimeCheckBox);
         Control.AddOptionCheckBox(CCVars.AdminOverlayStartingJob, EnableOverlayStartingJobCheckBox);
 
-        Control.Initialize();
-
         Control.AddOptionPercentSlider(
             CCVars.AdminOverlayMergeDistance,
             OverlayMergeDistanceSlider,
@@ -82,6 +80,8 @@ public sealed partial class AdminOptionsTab : Control
             OverlayGhostHideMax);
 
         Control.AddOptionCheckBox(CCVars.AdminStripMenuOverlayDefault, EnableAdminStripOverlayDefault);
+
+        Control.Initialize();
     }
 }
 

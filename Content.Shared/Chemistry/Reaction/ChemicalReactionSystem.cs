@@ -9,6 +9,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Chemistry.Reaction
@@ -30,6 +31,9 @@ namespace Content.Shared.Chemistry.Reaction
         [Dependency] private SharedAudioSystem _audio = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+        [Dependency] private IGameTiming _timing = default!;
+
+        private readonly Dictionary<EntityUid, TimeSpan> _lastReactionSound = new();
 
         /// <summary>
         /// A cache of all reactions indexed by at most ONE of their required reactants.
@@ -48,6 +52,12 @@ namespace Content.Shared.Chemistry.Reaction
 
             InitializeReactionCache();
             SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+            SubscribeLocalEvent<EntityTerminatingEvent>(OnTerminating);
+        }
+
+        private void OnTerminating(ref EntityTerminatingEvent args)
+        {
+            _lastReactionSound.Remove(args.Entity);
         }
 
         /// <summary>
@@ -214,8 +224,15 @@ namespace Content.Shared.Chemistry.Reaction
             // Someday, some brave soul will thread through an optional actor
             // argument in from every call of OnReaction up, all just to pass
             // it to PlayPredicted. I am not that brave soul.
-            if (_netMan.IsServer)
-                _audio.PlayPvs(reaction.Sound, soln);
+            if (_netMan.IsServer && reaction.Sound != null)
+            {
+                var curTime = _timing.CurTime;
+                if (!_lastReactionSound.TryGetValue(soln.Owner, out var lastTime) || curTime - lastTime > TimeSpan.FromSeconds(0.6))
+                {
+                    _lastReactionSound[soln.Owner] = curTime;
+                    _audio.PlayPvs(reaction.Sound, soln);
+                }
+            }
         }
 
         /// <summary>

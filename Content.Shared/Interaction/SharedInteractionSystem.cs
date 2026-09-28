@@ -37,12 +37,14 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared.Ashfall.Interaction;
 
 namespace Content.Shared.Interaction
 {
@@ -52,6 +54,7 @@ namespace Content.Shared.Interaction
     [UsedImplicitly]
     public abstract partial class SharedInteractionSystem : EntitySystem
     {
+        [Dependency] private INetManager _net = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
         [Dependency] private ISharedChatManager _chat = default!;
@@ -1419,7 +1422,14 @@ namespace Content.Shared.Interaction
         /// <summary>
         ///     Simple convenience function to raise contact events (disease, forensics, etc).
         /// </summary>
-        public void DoContactInteraction(EntityUid uidA, EntityUid? uidB, HandledEntityEventArgs? args = null)
+        public void DoContactInteraction(
+            EntityUid uidA,
+            EntityUid? uidB,
+            HandledEntityEventArgs? args = null,
+            EntityUid? used = null,
+            bool predicted = false,
+            bool interactionParticles = true,
+            StellarInteractionParticleType interactionParticleType = StellarInteractionParticleType.Use)
         {
             if (uidB == null || args?.Handled == false)
                 return;
@@ -1439,6 +1449,20 @@ namespace Content.Shared.Interaction
 
             ev.Other = uidA;
             RaiseLocalEvent(uidB.Value, ev);
+
+            if (!interactionParticles)
+                return;
+
+            if (_net.IsServer)
+            {
+                var filter = Filter.PvsExcept(uidA, entityManager: EntityManager);
+                RaiseNetworkEvent(new StellarInteractionParticleEvent(GetNetEntity(uidA), GetNetEntity(used), GetNetEntity(uidB.Value), false, interactionParticleType), filter);
+            }
+            else if (_gameTiming.IsFirstTimePredicted)
+            {
+                var evt = new StellarInteractionParticleEvent(GetNetEntity(uidA), GetNetEntity(used), GetNetEntity(uidB.Value), true, interactionParticleType);
+                RaiseLocalEvent(evt);
+            }
         }
 
 

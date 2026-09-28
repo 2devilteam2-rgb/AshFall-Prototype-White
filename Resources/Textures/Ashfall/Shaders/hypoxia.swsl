@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
 // Ashfall Hypoxia (Suffocation) Post-Processing Shader
 // Activates dynamically when taking asphyxiation damage or suffering oxygen deprivation.
 
@@ -7,31 +6,32 @@ uniform highp float HypoxiaIntensity; // 0.0 to 1.0
 
 void fragment() {
     highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
-    highp vec2 centerOffset = coord - vec2(0.5);
-    highp float aspect = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
-    centerOffset.x *= aspect;
-    highp float dist = length(centerOffset);
+    highp vec2 norm = (coord - vec2(0.5)) * 2.0;
+    // Cinema oval shape (matches natural visual field)
+    highp float dist = length(norm * vec2(0.85, 1.0));
 
-    // Choking pulse: breathes between 0.88 and 1.12 of intensity
-    highp float pulse = 1.0 + 0.12 * sin(TIME * 2.8);
+    // Choking pulse: breathes gently with fading consciousness
+    highp float pulse = 1.0 + 0.08 * sin(TIME * 2.2);
     highp float effectiveIntensity = clamp(HypoxiaIntensity * pulse, 0.0, 1.0);
 
-    // Tunnel vision radius narrows as hypoxia deepens
-    highp float vigRadius = 0.82 - (effectiveIntensity * 0.45);
-    highp float vigSoftness = 0.35 + (effectiveIntensity * 0.15);
+    // Tunnel vision radius smoothly closes in as hypoxia deepens
+    highp float vigRadius = mix(1.45, 0.65, effectiveIntensity);
+    highp float vigSoftness = 0.45;
     highp float vignette = 1.0 - smoothstep(vigRadius - vigSoftness, vigRadius, dist);
 
     highp vec4 baseColor = zTextureSpec(SCREEN_TEXTURE, coord);
     highp vec3 col = baseColor.rgb;
 
-    // Darken and tint peripheral vision to anoxic cyanotic dark blue/black
-    highp vec3 cyanoticColor = vec3(0.04, 0.06, 0.12);
-    col = mix(cyanoticColor, col, clamp(vignette, 0.0, 1.0));
-
-    // Desaturate slightly at the suffocating edges
-    highp float desat = clamp(effectiveIntensity * 0.5 * (1.0 - vignette), 0.0, 1.0);
+    // Desaturate slightly at the suffocating peripheral edges
+    highp float desat = clamp(effectiveIntensity * 0.70 * (1.0 - vignette), 0.0, 1.0);
     highp float gray = zGrayscale(col);
     col = mix(col, vec3(gray), desat);
+
+    // Darken and tint peripheral vision to anoxic cyanotic dark blue/black
+    // Strictly scaled by effectiveIntensity so it transitions smoothly with 0 popping
+    highp vec3 cyanoticColor = vec3(0.04, 0.06, 0.12);
+    highp float darkAmount = clamp((1.0 - vignette) * effectiveIntensity * 1.15, 0.0, 1.0);
+    col = mix(col, cyanoticColor, darkAmount);
 
     COLOR = vec4(col, baseColor.a);
 }

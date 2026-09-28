@@ -1,0 +1,17 @@
+- type: entity
+  id: ReagentPuddleFireEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: Effects/reagentfire.rsi
+    layers:
+    - state: "4"
+      shader: unshaded
+    visible: true
+    drawdepth: FloorObjects
+  - type: Appearance
+  - type: ReagentPuddleFireEffect
+  - type: Tag
+    tags:
+    - HideContextMenu

@@ -21,6 +21,8 @@ public sealed partial class OptionsMenu : DefaultWindow
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
+        Tabs.PanelStyleBoxOverride = new StyleBoxEmpty();
+
         AddSidebarCategory(0, Loc.GetString("ui-options-tab-misc"));
         AddSidebarCategory(1, Loc.GetString("ui-options-tab-chat"));
         AddSidebarCategory(2, Loc.GetString("ui-options-tab-graphics"));
@@ -92,7 +94,7 @@ public sealed partial class OptionsMenu : DefaultWindow
                 MinWidth = 4,
                 MaxWidth = 4,
                 VerticalExpand = true,
-                PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#5288cc") },
+                PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#D48944") },
                 Visible = false,
             };
 

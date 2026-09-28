@@ -147,10 +147,15 @@
       Heat: 1
       Blunt: 2
       Piercing: 3
+  tileBreakChance: [0]
+  tileBreakIntensity: [0]
+  spillReagent: WeldingFuel
+  spillVolumePerIntensity: 4
+  ignitePuddles: true
   lightColor: Orange
   texturePath: /Textures/Effects/fire.rsi
   fireStates: 3
-  fireStacks: 2
+  fireStacks: 3
   temperature: 1500
 
 - type: explosion
