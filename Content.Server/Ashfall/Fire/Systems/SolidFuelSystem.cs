@@ -73,7 +73,6 @@ public sealed partial class SolidFuelSystem : EntitySystem
     public bool Enabled => _config.GetCVar(AshfallFireCVars.SolidFuelEnabled);
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
-    private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly EntProtoId FireSteamPrototype = "AshfallFireSteam";
     private readonly HashSet<EntityUid> _standingEntities = new();
     private readonly HashSet<EntityUid> _nearbySmoke = new();
@@ -786,9 +785,7 @@ public sealed partial class SolidFuelSystem : EntitySystem
         var smoke = Spawn(FireSteamPrototype, coords);
         if (TryComp<SmokeComponent>(smoke, out var smokeComp))
         {
-            var sol = new Solution();
-            sol.AddReagent(WaterReagent, FixedPoint2.New(4));
-            _smoke.StartSmoke(smoke, sol, duration: 8f, spreadAmount: 1, smokeComp);
+            _smoke.StartSmoke(smoke, new Solution(), duration: 8f, spreadAmount: 1, smokeComp);
         }
     }
 }
