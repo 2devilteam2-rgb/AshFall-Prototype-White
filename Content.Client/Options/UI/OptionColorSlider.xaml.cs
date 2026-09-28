@@ -28,4 +28,27 @@ public sealed partial class OptionColorSlider : Control
         get => ExampleLabel.Text;
         set => ExampleLabel.Text = value;
     }
+
+    /// <summary>
+    /// Tooltip text for the option, displayed when hovering anywhere over the row.
+    /// </summary>
+    public new string? ToolTip
+    {
+        get => base.ToolTip;
+        set
+        {
+            base.ToolTip = value;
+            TitleLabel.ToolTip = value;
+            Slider.ToolTip = value;
+        }
+    }
+
+    /// <summary>
+    /// Tooltip/description text for the option.
+    /// </summary>
+    public string? Description
+    {
+        get => ToolTip;
+        set => ToolTip = value;
+    }
 }

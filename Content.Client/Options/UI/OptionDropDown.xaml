@@ -1,6 +1,6 @@
 <Control xmlns="https://spacestation14.io" HorizontalExpand="True">
     <BoxContainer Orientation="Horizontal" Margin="0 2" HorizontalExpand="True">
-        <Label Name="NameLabel" MinWidth="260" HorizontalExpand="True" />
-        <OptionButton Name="Button" Access="Public" MinWidth="340" MaxWidth="340" HorizontalAlignment="Right" />
+        <Label Name="NameLabel" ClipText="True" HorizontalExpand="True" />
+        <OptionButton Name="Button" Access="Public" MinWidth="260" MaxWidth="260" HorizontalAlignment="Right" />
     </BoxContainer>
 </Control>

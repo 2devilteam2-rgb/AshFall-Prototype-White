@@ -2,12 +2,11 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
-        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="14" HorizontalExpand="True">
                 <!-- Reduced Motion & Effects -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-reduced-motion'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionCheckBox Name="ReducedMotionCheckBox"
                                        Title="{Loc 'ui-options-reduced-motion'}"
                                        ToolTip="{Loc 'ui-options-reduced-motion-tooltip'}" />
@@ -38,27 +37,37 @@
                 </BoxContainer>
 
                 <!-- Visuals & Text -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-accessibility-header-visuals'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-visuals'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionCheckBox Name="EnableColorNameCheckBox" Title="{Loc 'ui-options-enable-color-name'}" />
                     <ui:OptionCheckBox Name="ColorblindFriendlyCheckBox" Title="{Loc 'ui-options-colorblind-friendly'}" />
-                    <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
-                    <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
-                    <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
-                    <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
-                    <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider" Title="{Loc 'ui-options-speech-bubble-background-opacity'}" />
+                    <ui:OptionSlider Name="ScreenShakeIntensitySlider"
+                                     Title="{Loc 'ui-options-screen-shake-intensity'}"
+                                     ToolTip="{Loc 'ui-options-screen-shake-intensity-tooltip'}" />
+                    <ui:OptionSlider Name="ChatWindowOpacitySlider"
+                                     Title="{Loc 'ui-options-chat-window-opacity'}"
+                                     ToolTip="{Loc 'ui-options-chat-window-opacity-tooltip'}" />
+                    <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider"
+                                     Title="{Loc 'ui-options-speech-bubble-text-opacity'}"
+                                     ToolTip="{Loc 'ui-options-speech-bubble-text-opacity-tooltip'}" />
+                    <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider"
+                                     Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}"
+                                     ToolTip="{Loc 'ui-options-speech-bubble-speaker-opacity-tooltip'}" />
+                    <ui:OptionSlider Name="SpeechBubbleBackgroundOpacitySlider"
+                                     Title="{Loc 'ui-options-speech-bubble-background-opacity'}"
+                                     ToolTip="{Loc 'ui-options-speech-bubble-background-opacity-tooltip'}" />
                     <ui:OptionCheckBox Name="AutoFillHighlightsCheckBox" Title="{Loc 'ui-options-auto-fill-highlights'}" />
                     <ui:OptionColorSlider Name="HighlightsColorSlider"
-                                          Title="{Loc 'ui-options-highlights-color'}"
-                                          Example="{Loc 'ui-options-highlights-color-example'}"/>
+                                           Title="{Loc 'ui-options-highlights-color'}"
+                                           Example="{Loc 'ui-options-highlights-color-example'}"/>
                 </BoxContainer>
 
                 <!-- Content -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-accessibility-header-content'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                    <ui:OptionCheckBox Name="CensorNudityCheckBox" Title="{Loc 'ui-options-censor-nudity'}" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-accessibility-header-content'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
+                    <ui:OptionCheckBox Name="CensorNudityCheckBox"
+                                       Title="{Loc 'ui-options-censor-nudity'}"
+                                       ToolTip="{Loc 'ui-options-censor-nudity-tooltip'}" />
                 </BoxContainer>
             </BoxContainer>
         </ScrollContainer>

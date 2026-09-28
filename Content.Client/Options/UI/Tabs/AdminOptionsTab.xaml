@@ -2,35 +2,44 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
-        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="14" HorizontalExpand="True">
                 <!-- Player Panel -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-admin-player-panel'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                    <ui:OptionDropDown Name="DropDownPlayerTabSymbolSetting" Title="{Loc 'ui-options-admin-player-tab-symbol-setting'}" />
-                    <ui:OptionDropDown Name="DropDownPlayerTabRoleSetting" Title="{Loc 'ui-options-admin-player-tab-role-setting'}" />
-                    <ui:OptionDropDown Name="DropDownPlayerTabColorSetting" Title="{Loc 'ui-options-admin-player-tab-color-setting'}" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-admin-player-panel'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
+                    <ui:OptionDropDown Name="DropDownPlayerTabSymbolSetting"
+                                       Title="{Loc 'ui-options-admin-player-tab-symbol-setting'}"
+                                       ToolTip="{Loc 'ui-options-admin-player-tab-symbol-setting-tooltip'}" />
+                    <ui:OptionDropDown Name="DropDownPlayerTabRoleSetting"
+                                       Title="{Loc 'ui-options-admin-player-tab-role-setting'}"
+                                       ToolTip="{Loc 'ui-options-admin-player-tab-role-setting-tooltip'}" />
+                    <ui:OptionDropDown Name="DropDownPlayerTabColorSetting"
+                                       Title="{Loc 'ui-options-admin-player-tab-color-setting'}"
+                                       ToolTip="{Loc 'ui-options-admin-player-tab-color-setting-tooltip'}" />
                 </BoxContainer>
 
                 <!-- Antagonist Overlays -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-admin-overlay-title'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-admin-overlay-title'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionDropDown Name="DropDownOverlayAntagFormat" Title="{Loc 'ui-options-admin-overlay-antag-format'}" />
                     <ui:OptionDropDown Name="DropDownOverlayAntagSymbol" Title="{Loc 'ui-options-admin-overlay-antag-symbol'}" />
                     <ui:OptionCheckBox Name="EnableOverlayPlaytimeCheckBox" Title="{Loc 'ui-options-admin-enable-overlay-playtime'}" />
                     <ui:OptionCheckBox Name="EnableOverlayStartingJobCheckBox" Title="{Loc 'ui-options-admin-enable-overlay-starting-job'}" />
                     <ui:OptionSlider Name="OverlayMergeDistanceSlider" Title="{Loc 'ui-options-admin-overlay-merge-distance'}"/>
-                    <ui:OptionSlider Name="OverlayGhostFadeSlider" Title="{Loc 'ui-options-admin-overlay-ghost-fade-distance'}"/>
-                    <ui:OptionSlider Name="OverlayGhostHideSlider" Title="{Loc 'ui-options-admin-overlay-ghost-hide-distance'}"/>
+                    <ui:OptionSlider Name="OverlayGhostFadeSlider"
+                                     Title="{Loc 'ui-options-admin-overlay-ghost-fade-distance'}"
+                                     ToolTip="{Loc 'ui-options-admin-overlay-ghost-fade-distance-tooltip'}"/>
+                    <ui:OptionSlider Name="OverlayGhostHideSlider"
+                                     Title="{Loc 'ui-options-admin-overlay-ghost-hide-distance'}"
+                                     ToolTip="{Loc 'ui-options-admin-overlay-ghost-hide-distance-tooltip'}"/>
                 </BoxContainer>
 
                 <!-- Strip Overlay -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-admin-strip-overlay-title'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                    <ui:OptionCheckBox Name="EnableAdminStripOverlayDefault" Title="{Loc 'ui-options-admin-strip-overlay-setting'}" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-admin-strip-overlay-title'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
+                    <ui:OptionCheckBox Name="EnableAdminStripOverlayDefault"
+                                       Title="{Loc 'ui-options-admin-strip-overlay-setting'}"
+                                       ToolTip="{Loc 'ui-options-admin-strip-overlay-setting-tooltip'}" />
                 </BoxContainer>
             </BoxContainer>
         </ScrollContainer>

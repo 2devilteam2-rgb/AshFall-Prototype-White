@@ -106,25 +106,24 @@ ui-options-hud-theme-minimalist = Минимализм
 ui-options-hud-theme-ashen = Пепел
 ui-options-hud-layout-default = Стандартный
 ui-options-hud-layout-separated = Разделённый
-ui-options-vp-stretch = Растянуть изображение для соответствия окну игры
-ui-options-vp-scale = Фиксированный масштаб окна игры:
+ui-options-vp-stretch = Растягивать изображение
+ui-options-vp-stretch-tooltip = Растягивает область обзора под размер окна игры.
+ui-options-vp-scale = Фиксированный масштаб:
 ui-options-vp-scale-value = x{ $scale }
-ui-options-vp-integer-scaling = Использовать целочисленное масштабирование (может вызывать появление чёрных полос/обрезания)
-ui-options-vp-integer-scaling-tooltip = Если эта опция включена, область просмотра будет масштабироваться,
-                                        используя целочисленное значение при определённых разрешениях. Хотя это и
-                                        приводит к чётким текстурам, это часто означает, что сверху/снизу экрана будут
-                                        чёрные полосы или что часть окна не будет видна.
+ui-options-vp-integer-scaling = Целочисленное масштабирование
+ui-options-vp-integer-scaling-tooltip = Масштабирует область обзора с целочисленным множителем для чётких пикселей.
 ui-options-filter-label = Фильтр масштабирования:
 ui-options-filter-nearest = Ближайший (без сглаживания)
 ui-options-filter-bilinear = Билинейный (сглаживание)
-ui-options-vp-vertical-fit = Подгон окна просмотра по вертикали
-ui-options-vp-vertical-fit-tooltip = Когда функция включена, основное окно просмотра не будет учитывать горизонтальную ось
-                                     при подгонке под ваш экран. Если ваш экран меньше, чем окно просмотра,
-                                     то это приведёт к его обрезанию по горизонтальной оси.
-ui-options-vp-low-res = Изображение низкого разрешения
-ui-options-parallax-low-quality = Низкокачественный параллакс (фон)
-ui-options-ambient-occlusion = Отображать окружающее затенение
-ui-options-fps-counter = Показать счётчик FPS
+ui-options-vp-vertical-fit = Вертикальная подгонка
+ui-options-vp-vertical-fit-tooltip = Подгоняет область обзора по вертикали без учёта горизонтальной оси.
+ui-options-vp-low-res = Низкое разрешение
+ui-options-vp-low-res-tooltip = Снижает разрешение рендеринга для повышения производительности.
+ui-options-parallax-low-quality = Упрощённый параллакс
+ui-options-parallax-low-quality-tooltip = Снижает качество космического фона (параллакса).
+ui-options-ambient-occlusion = Окружающее затенение (AO)
+ui-options-ambient-occlusion-tooltip = Мягкое затенение вокруг объектов и стен.
+ui-options-fps-counter = Счётчик FPS
 ui-options-vp-width = Ширина окна игры:
 ui-options-hud-layout = Тип HUD:
 ui-options-sharpness = Резкость:
@@ -391,12 +390,12 @@ ui-options-accessibility-header-content = Содержимое
 ui-options-enable-color-name = Цветные имена персонажей
 ui-options-colorblind-friendly = Режим для дальтоников
 
-ui-options-reduced-motion = Снижение интенсивности визуальных эффектов
+ui-options-reduced-motion = Снижение спецэффектов
 ui-options-reduced-motion-tooltip = Использовать альтернативные спрайты с меньшим количеством движения там, где они предусмотрены.
 
 # accessibility option tooltips taken from CVar summary blocks.
 
-ui-options-disable-ai-static = Отключить статический эффект помех на ИИ.
+ui-options-disable-ai-static = Отключить помехи ИИ
 ui-options-disable-ai-static-tooltip = Заменяет помехи камеры ИИ обычным градиентом.
 ui-options-disable-blurry-vision = Размытое зрение
 ui-options-disable-blurry-vision-tooltip = Заменяет движение в эффекте размытия статичным изображением.
@@ -413,37 +412,46 @@ ui-options-disable-rainbow-overlay-tooltip = Заменяет движение �
 ui-options-disable-singulo-warp = Сингулярность
 ui-options-disable-singulo-warp-tooltip = Отключает искажение экрана рядом с сингулярностью.
 
-ui-options-screen-shake-intensity = Интенсивность дрожания экрана
+ui-options-screen-shake-intensity = Дрожание экрана
+ui-options-screen-shake-intensity-tooltip = Настройка интенсивности тряски экрана от взрывов и отдачи.
 
-ui-options-chat-window-opacity = Непрозрачность окна чата
-ui-options-speech-bubble-text-opacity = Непрозрачность текста речевого пузыря
-ui-options-speech-bubble-speaker-opacity = Непрозрачность диктора речевого пузыря
-ui-options-speech-bubble-background-opacity = Непрозрачность фона речевого пузыря
+ui-options-chat-window-opacity = Прозрачность окна чата
+ui-options-chat-window-opacity-tooltip = Регулирует прозрачность фона панели чата.
+ui-options-speech-bubble-text-opacity = Прозрачность текста облачка
+ui-options-speech-bubble-text-opacity-tooltip = Регулирует прозрачность текста в облачках речи.
+ui-options-speech-bubble-speaker-opacity = Прозрачность имени говорящего
+ui-options-speech-bubble-speaker-opacity-tooltip = Регулирует прозрачность имени в облачках речи.
+ui-options-speech-bubble-background-opacity = Прозрачность фона облачка
+ui-options-speech-bubble-background-opacity-tooltip = Регулирует прозрачность фона облачков речи.
 
 ui-options-censor-nudity = Цензура обнажённых персонажей
+ui-options-censor-nudity-tooltip = Скрывает наготу персонажей в игре.
 
 ## Admin menu
 
-ui-options-admin-player-panel = Список персонажей в админ меню
+ui-options-admin-player-panel = Список персонажей в админ-меню
 
-ui-options-admin-player-tab-symbol-setting = Символ антага в колонке персонажей
-ui-options-admin-player-tab-symbol-setting-off = Без антаг символов
-ui-options-admin-player-tab-symbol-setting-basic = Показывать стандартные символы антагов
-ui-options-admin-player-tab-symbol-setting-specific = Показывать определённые символы антагов
+ui-options-admin-player-tab-symbol-setting = Символ антагониста
+ui-options-admin-player-tab-symbol-setting-tooltip = Отображение значка антагониста в таблице игроков.
+ui-options-admin-player-tab-symbol-setting-off = Без антаг-символов
+ui-options-admin-player-tab-symbol-setting-basic = Стандартные символы
+ui-options-admin-player-tab-symbol-setting-specific = Индивидуальные символы
 
-ui-options-admin-player-tab-role-setting = Настройки отображения ролей
+ui-options-admin-player-tab-role-setting = Отображение ролей
+ui-options-admin-player-tab-role-setting-tooltip = Формат отображения роли и подтипа в панели игроков.
 ui-options-admin-player-tab-role-setting-roletype = Показывать тип роли
 ui-options-admin-player-tab-role-setting-subtype = Показывать подтип
 ui-options-admin-player-tab-role-setting-roletypesubtype = Показывать тип роли и подтип
 ui-options-admin-player-tab-role-setting-subtyperoletype = Показывать подтип и тип роли
 
-ui-options-admin-player-tab-color-setting = Настройки цвета
-ui-options-admin-player-tab-color-setting-off = Я ненавижу цвета (отключить)
+ui-options-admin-player-tab-color-setting = Окрашивание ролей
+ui-options-admin-player-tab-color-setting-tooltip = Цветовая подсветка антагонистов и специальных ролей.
+ui-options-admin-player-tab-color-setting-off = Без подсветки
 ui-options-admin-player-tab-color-setting-character = Окрашивать имена персонажей антагов
 ui-options-admin-player-tab-color-setting-roletype = Окрашивать все типы ролей
 ui-options-admin-player-tab-color-setting-both = Окрашивать типы ролей и антагов
 
-ui-options-admin-overlay-title = Админ оверлей
+ui-options-admin-overlay-title = Админ-оверлей
 
 ui-options-admin-overlay-antag-format = Стиль надписи антагов
 ui-options-admin-overlay-antag-format-binary = Отображать антагов
@@ -451,15 +459,18 @@ ui-options-admin-overlay-antag-format-roletype = Отображать тип р�
 ui-options-admin-overlay-antag-format-subtype = Отображать подтип
 
 ui-options-admin-overlay-antag-symbol = Стиль символа антагов
-ui-options-admin-overlay-antag-symbol-off = Без антаг символов
-ui-options-admin-overlay-antag-symbol-basic = Отображать стандартные символы антагов
-ui-options-admin-overlay-antag-symbol-specific = Отображать определённые символы антагов
+ui-options-admin-overlay-antag-symbol-off = Без антаг-символов
+ui-options-admin-overlay-antag-symbol-basic = Стандартные символы
+ui-options-admin-overlay-antag-symbol-specific = Индивидуальные символы
 
 ui-options-admin-enable-overlay-playtime = Отображать игровое время
 ui-options-admin-enable-overlay-starting-job = Отображать стартовую должность
 ui-options-admin-overlay-merge-distance = Дистанция группировки оверлеев
-ui-options-admin-overlay-ghost-fade-distance = Расстояние от курсора до плавного исчезновения админ оверлея.
-ui-options-admin-overlay-ghost-hide-distance = Расстояние от курсора до скрытия админ оверлея.
+ui-options-admin-overlay-ghost-fade-distance = Дистанция угасания оверлея
+ui-options-admin-overlay-ghost-fade-distance-tooltip = Расстояние от курсора до начала плавного исчезновения админ-оверлея.
+ui-options-admin-overlay-ghost-hide-distance = Дистанция скрытия оверлея
+ui-options-admin-overlay-ghost-hide-distance-tooltip = Расстояние от курсора до полного скрытия админ-оверлея.
 
 ui-options-admin-strip-overlay-title = Оверлей обыска
-ui-options-admin-strip-overlay-setting = Показывать админ-вид обыска по умолчанию
+ui-options-admin-strip-overlay-setting = Админ-вид обыска по умолчанию
+ui-options-admin-strip-overlay-setting-tooltip = Всегда открывать расширенный админский интерфейс обыска сущностей.

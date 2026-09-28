@@ -2,37 +2,41 @@
               xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
               xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
-        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="14" HorizontalExpand="True">
                 <!-- UI Style -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-general-ui-style'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-general-ui-style'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'ui-options-hud-theme'}" />
                     <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'ui-options-hud-layout'}" />
                 </BoxContainer>
 
                 <!-- Discord -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-general-discord'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-general-discord'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
                     <ui:OptionCheckBox Name="DiscordRich" Title="{Loc 'ui-options-discordrich'}" />
                 </BoxContainer>
 
                 <!-- Cursor & Indicators -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-general-cursor'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                    <ui:OptionCheckBox Name="ShowHeldItemCheckBox" Title="{Loc 'ui-options-show-held-item'}" />
-                    <ui:OptionCheckBox Name="ShowCombatModeIndicatorsCheckBox" Title="{Loc 'ui-options-show-combat-mode-indicators'}" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-general-cursor'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
+                    <ui:OptionCheckBox Name="ShowHeldItemCheckBox"
+                                       Title="{Loc 'ui-options-show-held-item'}"
+                                       ToolTip="{Loc 'ui-options-show-held-item-tooltip'}" />
+                    <ui:OptionCheckBox Name="ShowCombatModeIndicatorsCheckBox"
+                                       Title="{Loc 'ui-options-show-combat-mode-indicators'}"
+                                       ToolTip="{Loc 'ui-options-show-combat-mode-indicators-tooltip'}" />
                 </BoxContainer>
 
                 <!-- Storage -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-general-storage'}" StyleClasses="AshfallSectionHeader"/>
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
-                    <ui:OptionCheckBox Name="OpaqueStorageWindowCheckBox" Title="{Loc 'ui-options-opaque-storage-window'}" />
-                    <ui:OptionCheckBox Name="StaticStorageUI" Title="{Loc 'ui-options-static-storage-ui'}" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-general-storage'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2"/>
+                    <ui:OptionCheckBox Name="OpaqueStorageWindowCheckBox"
+                                       Title="{Loc 'ui-options-opaque-storage-window'}"
+                                       ToolTip="{Loc 'ui-options-opaque-storage-window-tooltip'}" />
+                    <ui:OptionCheckBox Name="StaticStorageUI"
+                                       Title="{Loc 'ui-options-static-storage-ui'}"
+                                       ToolTip="{Loc 'ui-options-static-storage-ui-tooltip'}" />
                 </BoxContainer>
             </BoxContainer>
         </ScrollContainer>

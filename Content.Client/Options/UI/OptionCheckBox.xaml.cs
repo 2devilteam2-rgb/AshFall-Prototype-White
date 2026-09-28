@@ -39,17 +39,26 @@ public sealed partial class OptionCheckBox : Control
     }
 
     /// <summary>
+    /// Tooltip text for the option, displayed when hovering anywhere over the row.
+    /// </summary>
+    public new string? ToolTip
+    {
+        get => base.ToolTip;
+        set
+        {
+            base.ToolTip = value;
+            NameLabel.ToolTip = value;
+            CheckBox.ToolTip = value;
+        }
+    }
+
+    /// <summary>
     /// Tooltip/description text for the option.
     /// </summary>
     public string? Description
     {
         get => ToolTip;
-        set
-        {
-            ToolTip = value;
-            NameLabel.ToolTip = value;
-            CheckBox.ToolTip = value;
-        }
+        set => ToolTip = value;
     }
 
     /// <summary>

@@ -2,29 +2,26 @@
               xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
               xmlns:ui="clr-namespace:Content.Client.Options.UI">
     <BoxContainer Orientation="Vertical">
-        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
-            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="16" HorizontalExpand="True">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="18 14" SeparationOverride="14" HorizontalExpand="True">
                 <!-- Runechat -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-chat-runechat'}" StyleClasses="AshfallSectionHeader" />
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-chat-runechat'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2" />
                     <ui:OptionCheckBox Name="RunechatSpeechBubblesCheckBox" Title="{Loc 'ui-options-runechat-enable'}" />
                     <ui:OptionSlider Name="RunechatSpeechBubbleScaleSlider" Title="{Loc 'ui-options-runechat-scale'}" />
                 </BoxContainer>
 
                 <!-- Classic Bubbles -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-chat-bubbles'}" StyleClasses="AshfallSectionHeader" />
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-chat-bubbles'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2" />
                     <ui:OptionCheckBox Name="FancySpeechBubblesCheckBox" Title="{Loc 'ui-options-fancy-speech'}" />
                     <ui:OptionCheckBox Name="FancyNameBackgroundsCheckBox" Title="{Loc 'ui-options-fancy-name-background'}" />
                     <ui:OptionCheckBox Name="ShowLoocAboveHeadCheckBox" Title="{Loc 'ui-options-show-looc-on-head'}" />
                 </BoxContainer>
 
                 <!-- Chat & Log -->
-                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
-                    <Label Text="{Loc 'ui-options-chat-general'}" StyleClasses="AshfallSectionHeader" />
-                    <PanelContainer StyleClasses="LowDivider" MinHeight="1" MaxHeight="1" Margin="0 2 0 6" HorizontalExpand="True" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
+                    <Label Text="{Loc 'ui-options-chat-general'}" StyleClasses="AshfallSectionHeader" Margin="0 4 0 2" />
                     <ui:OptionCheckBox Name="ShowOocPatronColor" Title="{Loc 'ui-options-show-ooc-patron-color'}" />
                     <ui:OptionCheckBox Name="ChatFollowButton" Title="{Loc 'ui-options-chat-follow-button'}" />
                     <ui:OptionCheckBox Name="LogActionsInChatCheckBox" Title="{Loc 'ui-options-log-actions-in-chat'}" />
