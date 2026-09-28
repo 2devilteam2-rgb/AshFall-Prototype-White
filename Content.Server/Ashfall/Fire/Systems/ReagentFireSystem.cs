@@ -99,7 +99,6 @@ public sealed partial class ReagentFireSystem : EntitySystem
 
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentStartup>(OnFireStartup);
         SubscribeLocalEvent<ReagentPuddleFireComponent, ComponentShutdown>(OnFireShutdown);
-        SubscribeLocalEvent<PuddleComponent, SolutionChangedEvent>(OnPuddleSolutionChanged);
         SubscribeLocalEvent<PuddleComponent, InteractUsingEvent>(OnPuddleInteractUsing);
         SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleTileFire);
     }
@@ -125,11 +124,6 @@ public sealed partial class ReagentFireSystem : EntitySystem
             QueueDel(component.FireEffectEntity.Value);
             component.FireEffectEntity = null;
         }
-    }
-
-    private void OnPuddleSolutionChanged(Entity<PuddleComponent> ent, ref SolutionChangedEvent args)
-    {
-        UpdateFire(ent);
     }
 
     private void OnPuddleInteractUsing(Entity<PuddleComponent> ent, ref InteractUsingEvent args)
