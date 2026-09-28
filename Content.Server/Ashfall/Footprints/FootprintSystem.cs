@@ -11,6 +11,7 @@ using Content.Shared.Fluids.Components;
 using Content.Shared.IgnitionSource;
 using Content.Trauma.Common.Movement;
 using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
@@ -25,6 +26,7 @@ public sealed partial class FootprintSystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private AtmosphereSystem _atmos = default!;
     [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
 
     private readonly List<(EntityUid Grid, DecalIndex Decal, TimeSpan ExpireTime)> _decayingDecals = new();
@@ -243,6 +245,9 @@ public sealed partial class FootprintSystem : EntitySystem
                 }
                 if (TryComp<IgnitionSourceComponent>(ent, out var ignition) && ignition.Ignited)
                 {
+                    if (_containers.IsEntityOrParentInContainer(ent) || _containers.TryGetContainingContainer((ent, null), out _))
+                        continue;
+
                     IgniteFootprint(fp);
                     _flammableDecals.RemoveAt(i);
                     break;

@@ -73,7 +73,8 @@ public sealed partial class SolidFuelSystem : EntitySystem
     public bool Enabled => _config.GetCVar(AshfallFireCVars.SolidFuelEnabled);
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
-    private static readonly ProtoId<ReagentPrototype> CarbonReagent = "Carbon";
+    private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
+    private static readonly EntProtoId FireSteamPrototype = "AshfallFireSteam";
     private readonly HashSet<EntityUid> _standingEntities = new();
     private readonly HashSet<EntityUid> _nearbySmoke = new();
     private readonly HashSet<Entity<SolidFuelComponent>> _nearby = new();
@@ -81,6 +82,7 @@ public sealed partial class SolidFuelSystem : EntitySystem
     private readonly Dictionary<EntityUid, (EntityUid Source, float Rate, EntityUid? User)> _exposures = new();
     private float _elapsed;
     private readonly HashSet<Entity<SolidFuelComponent>> _floorCandidates = new();
+    private readonly List<(EntityUid Uid, SolidFuelComponent Fuel, FlammableComponent Fire)> _fuelList = new();
     private readonly HashSet<EntityUid> _sources = new();
     private static readonly Vector2i[] Neighbors = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
 
@@ -357,7 +359,7 @@ public sealed partial class SolidFuelSystem : EntitySystem
     private void HeatNearby(EntityUid source)
     {
         var rate = GetIgnitionRate(source);
-        if (rate <= 0 || _containers.IsEntityOrParentInContainer(source))
+        if (rate <= 0 || _containers.IsEntityOrParentInContainer(source) || _containers.TryGetContainingContainer((source, null), out _))
             return;
 
         var burning = TryComp<FlammableComponent>(source, out var fire) && fire.OnFire;
@@ -501,9 +503,16 @@ public sealed partial class SolidFuelSystem : EntitySystem
 
         if (!Enabled)
         {
+            _fuelList.Clear();
             var disabled = EntityQueryEnumerator<SolidFuelComponent, FlammableComponent>();
             while (disabled.MoveNext(out var uid, out var fuel, out var fire))
+                _fuelList.Add((uid, fuel, fire));
+
+            foreach (var (uid, fuel, fire) in _fuelList)
             {
+                if (TerminatingOrDeleted(uid))
+                    continue;
+
                 fuel.Exposure = 0;
                 _flammable.Extinguish(uid, fire);
                 if (fuel.TileType != null)
@@ -532,9 +541,16 @@ public sealed partial class SolidFuelSystem : EntitySystem
         foreach (var source in _sources)
             HeatNearby(source);
 
+        _fuelList.Clear();
         var fuels = EntityQueryEnumerator<SolidFuelComponent, FlammableComponent>();
         while (fuels.MoveNext(out var uid, out var fuel, out var fire))
+            _fuelList.Add((uid, fuel, fire));
+
+        foreach (var (uid, fuel, fire) in _fuelList)
         {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
             fuel.WetTime = MathF.Max(0, fuel.WetTime - elapsed);
 
             if (fuel.TileType is { } tileType &&
@@ -757,12 +773,12 @@ public sealed partial class SolidFuelSystem : EntitySystem
         if (!_random.Prob(0.30f))
             return;
 
-        var smoke = Spawn("Smoke", coords);
+        var smoke = Spawn(FireSteamPrototype, coords);
         if (TryComp<SmokeComponent>(smoke, out var smokeComp))
         {
             var sol = new Solution();
-            sol.AddReagent(CarbonReagent, FixedPoint2.New(4));
-            _smoke.StartSmoke(smoke, sol, duration: 12f, spreadAmount: 2, smokeComp);
+            sol.AddReagent(WaterReagent, FixedPoint2.New(4));
+            _smoke.StartSmoke(smoke, sol, duration: 8f, spreadAmount: 1, smokeComp);
         }
     }
 }

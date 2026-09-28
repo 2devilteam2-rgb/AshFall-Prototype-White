@@ -60,7 +60,8 @@ public sealed partial class ReagentFireSystem : EntitySystem
     [Dependency] private SmokeSystem _smoke = default!;
 
     private readonly HashSet<EntityUid> _nearbySmoke = new();
-    private static readonly ProtoId<ReagentPrototype> CarbonReagent = "Carbon";
+    private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
+    private static readonly EntProtoId FireSteamPrototype = "AshfallFireSteam";
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
     private static readonly string[] BurntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];
@@ -595,12 +596,12 @@ public sealed partial class ReagentFireSystem : EntitySystem
         if (!_random.Prob(0.25f))
             return;
 
-        var smoke = Spawn("Smoke", coords);
+        var smoke = Spawn(FireSteamPrototype, coords);
         if (TryComp<SmokeComponent>(smoke, out var smokeComp))
         {
             var sol = new Solution();
-            sol.AddReagent(CarbonReagent, FixedPoint2.New(4));
-            _smoke.StartSmoke(smoke, sol, duration: 10f, spreadAmount: 2, smokeComp);
+            sol.AddReagent(WaterReagent, FixedPoint2.New(4));
+            _smoke.StartSmoke(smoke, sol, duration: 8f, spreadAmount: 1, smokeComp);
         }
     }
 

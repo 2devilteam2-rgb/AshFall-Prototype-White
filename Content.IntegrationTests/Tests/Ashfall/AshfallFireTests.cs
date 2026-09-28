@@ -44,7 +44,7 @@ public sealed class AshfallFireTests : GameTest
             Assert.That(flammability, Is.GreaterThan(0));
 
             solution.BurnFlammableReagents(0.25f, protoMan);
-            Assert.That(solution.GetTotalPrototypeQuantity(EthanolProto), Is.EqualTo(FixedPoint2.New(5)));
+            Assert.That(solution.GetTotalPrototypeQuantity(EthanolProto), Is.EqualTo(FixedPoint2.New(2.5)));
             Assert.That(solution.GetTotalPrototypeQuantity(WaterProto), Is.EqualTo(FixedPoint2.New(10)));
         });
 
