@@ -3,6 +3,7 @@ using Content.Server.Ashfall.Fire.Components;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Decals;
+using Content.Server.Fluids.EntitySystems;
 using Content.Shared.Ashfall.Fire;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -56,7 +57,10 @@ public sealed partial class ReagentFireSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
+    [Dependency] private SmokeSystem _smoke = default!;
 
+    private readonly HashSet<EntityUid> _nearbySmoke = new();
+    private static readonly ProtoId<ReagentPrototype> CarbonReagent = "Carbon";
     private static readonly ProtoId<DamageTypePrototype> StructuralDamage = "Structural";
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
     private static readonly string[] BurntDecals = ["burnt1", "burnt2", "burnt3", "burnt4"];
@@ -575,6 +579,29 @@ public sealed partial class ReagentFireSystem : EntitySystem
         }
 
         DamageStandingEntities(uid, gridUid, tilePos, tileMix, effectiveFlammability);
+        TryEmitSmoke(uid, xform.Coordinates);
+    }
+
+    private void TryEmitSmoke(EntityUid uid, EntityCoordinates coords)
+    {
+        _nearbySmoke.Clear();
+        _lookup.GetEntitiesInRange(coords, 0.8f, _nearbySmoke);
+        foreach (var near in _nearbySmoke)
+        {
+            if (HasComp<SmokeComponent>(near))
+                return;
+        }
+
+        if (!_random.Prob(0.25f))
+            return;
+
+        var smoke = Spawn("Smoke", coords);
+        if (TryComp<SmokeComponent>(smoke, out var smokeComp))
+        {
+            var sol = new Solution();
+            sol.AddReagent(CarbonReagent, FixedPoint2.New(4));
+            _smoke.StartSmoke(smoke, sol, duration: 10f, spreadAmount: 2, smokeComp);
+        }
     }
 
     private void TryAddBurntDecal(EntityUid gridUid, Vector2i tilePos)

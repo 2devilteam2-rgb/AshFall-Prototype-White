@@ -1,24 +1,37 @@
 using System.Numerics;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Fluids.EntitySystems;
+using Content.Shared.Armor;
 using Content.Shared.Ashfall.Fire;
 using Content.Shared.Ashfall.Fire.Components;
 using Content.Shared.Ashfall.Fire.Events;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.EntityEffects.Effects.Atmos;
+using Content.Shared.FixedPoint;
 using Content.Shared.Fluids;
 using Content.Shared.Fluids.Components;
 using Content.Shared.IgnitionSource;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Popups;
 using Content.Shared.Smoking;
+using Content.Shared.StepTrigger.Components;
+using Content.Shared.StepTrigger.Systems;
 using Content.Server.Ashfall.Fire.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -26,6 +39,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.Ashfall.Fire.Systems;
 
@@ -49,10 +63,19 @@ public sealed partial class SolidFuelSystem : EntitySystem
     [Dependency] private ReagentFireSystem _reagentFire = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SmokeSystem _smoke = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityQuery<ReagentPuddleFireComponent> _puddleFireQuery = default!;
 
     public bool Enabled => _config.GetCVar(AshfallFireCVars.SolidFuelEnabled);
 
+    private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
+    private static readonly ProtoId<ReagentPrototype> CarbonReagent = "Carbon";
+    private readonly HashSet<EntityUid> _standingEntities = new();
+    private readonly HashSet<EntityUid> _nearbySmoke = new();
     private readonly HashSet<Entity<SolidFuelComponent>> _nearby = new();
     private readonly HashSet<Entity<PuddleComponent>> _puddles = new();
     private readonly Dictionary<EntityUid, (EntityUid Source, float Rate, EntityUid? User)> _exposures = new();
@@ -73,6 +96,8 @@ public sealed partial class SolidFuelSystem : EntitySystem
         SubscribeLocalEvent<SolidFuelComponent, ExtinguishEvent>(OnExtinguish);
         SubscribeLocalEvent<SolidFuelComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<IgnitionSourceComponent, AfterInteractEvent>(OnIgnitionAfterInteract);
+        SubscribeLocalEvent<SolidFuelComponent, StepTriggeredOnEvent>(OnStepTriggeredOn);
+        SubscribeLocalEvent<SolidFuelComponent, StepTriggeredOffEvent>(OnStepTriggeredOff);
     }
 
     private void OnExtinguished(Entity<SolidFuelComponent> ent, ref ExtinguishedEvent args)
@@ -538,6 +563,10 @@ public sealed partial class SolidFuelSystem : EntitySystem
 
             if (fire.OnFire)
             {
+                DamageStandingEntities(uid);
+                HeatAtmosphere(uid);
+                TryEmitSmoke(uid);
+
                 fuel.Exposure = 0;
                 fuel.BurnedTime += elapsed * MathF.Max(0, _config.GetCVar(AshfallFireCVars.SolidFuelBurnMultiplier));
                 if (fuel.BurnedTime >= fuel.BurnTime)
@@ -568,5 +597,172 @@ public sealed partial class SolidFuelSystem : EntitySystem
         }
 
         _exposures.Clear();
+    }
+
+    private void OnStepTriggeredOn(Entity<SolidFuelComponent> ent, ref StepTriggeredOnEvent args)
+    {
+        if (!TryComp<FlammableComponent>(ent, out var fire) || !fire.OnFire)
+            return;
+
+        BurnEntity(ent.Owner, args.Tripper);
+    }
+
+    private void OnStepTriggeredOff(Entity<SolidFuelComponent> ent, ref StepTriggeredOffEvent args)
+    {
+        if (!TryComp<FlammableComponent>(ent, out var fire) || !fire.OnFire)
+            return;
+
+        BurnEntity(ent.Owner, args.Tripper);
+    }
+
+    private void BurnEntity(EntityUid floorUid, EntityUid victim)
+    {
+        if (TerminatingOrDeleted(victim))
+            return;
+
+        if (TryComp<DamageableComponent>(victim, out _))
+        {
+            var damageAmount = FixedPoint2.New(5);
+            var damage = new DamageSpecifier();
+            damage.DamageDict.Add(HeatDamage, damageAmount);
+
+            var ignoreResistances = !HasComp<MobStateComponent>(victim);
+            var appliedDamage = damage;
+            if (!ignoreResistances)
+            {
+                var reduction = Math.Clamp(GetFireProtectionReduction(victim), 0f, 0.8f);
+                appliedDamage = damage * (1f - reduction);
+            }
+
+            _damageable.TryChangeDamage(victim, appliedDamage, ignoreResistances: ignoreResistances);
+        }
+
+        if (TryComp<FlammableComponent>(victim, out var flammable))
+        {
+            _flammable.AdjustFireStacks(victim, 1.5f, flammable);
+            _flammable.Ignite(victim, floorUid, flammable);
+        }
+
+        var fireEvent = new TileFireEvent(Atmospherics.T0C + 250f, 60f);
+        RaiseLocalEvent(victim, ref fireEvent);
+    }
+
+    private float GetFireProtectionReduction(EntityUid uid)
+    {
+        if (!TryComp<InventoryComponent>(uid, out var inv))
+            return 0f;
+
+        var survivalFactor = 1f;
+        foreach (var slot in inv.Slots)
+        {
+            if (!_inventory.TryGetSlotEntity(uid, slot.Name, out var slotEnt, inv))
+                continue;
+
+            if (TryComp<FireProtectionComponent>(slotEnt, out var protection))
+                survivalFactor *= 1f - Math.Clamp(protection.Reduction, 0f, 1f);
+        }
+
+        return 1f - survivalFactor;
+    }
+
+    private void DamageStandingEntities(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        if (xform.GridUid is not { } gridUid)
+            return;
+
+        var tilePos = _transform.GetGridTilePositionOrDefault((uid, xform));
+        _standingEntities.Clear();
+        _lookup.GetLocalEntitiesIntersecting(gridUid, tilePos, _standingEntities, 0f);
+        _standingEntities.Remove(uid);
+
+        if (_standingEntities.Count == 0)
+            return;
+
+        var damageAmount = FixedPoint2.New(4);
+        var totalDamage = new DamageSpecifier();
+        totalDamage.DamageDict.Add(HeatDamage, damageAmount);
+
+        var fireEvent = new TileFireEvent(Atmospherics.T0C + 250f, 60f);
+
+        foreach (var ent in _standingEntities)
+        {
+            if (TerminatingOrDeleted(ent))
+                continue;
+
+            if (_transform.GetGridTilePositionOrDefault(ent) != tilePos)
+                continue;
+
+            if (TryComp<DamageableComponent>(ent, out _))
+            {
+                var ignoreResistances = !HasComp<MobStateComponent>(ent);
+                var appliedDamage = totalDamage;
+
+                if (!ignoreResistances)
+                {
+                    var reduction = Math.Clamp(GetFireProtectionReduction(ent), 0f, 0.8f);
+                    appliedDamage = totalDamage * (1f - reduction);
+                }
+
+                _damageable.TryChangeDamage(ent, appliedDamage, ignoreResistances: ignoreResistances);
+            }
+
+            if (TryComp<FlammableComponent>(ent, out var flammable))
+            {
+                _flammable.AdjustFireStacks(ent, 1f, flammable);
+                _flammable.Ignite(ent, uid, flammable);
+            }
+
+            RaiseLocalEvent(ent, ref fireEvent);
+        }
+    }
+
+    private void HeatAtmosphere(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        if (xform.GridUid is not { } gridUid)
+            return;
+
+        var tilePos = _transform.GetGridTilePositionOrDefault((uid, xform));
+        var tileMix = _atmos.GetTileMixture(gridUid, null, tilePos, excite: true);
+        if (tileMix == null)
+            return;
+
+        var oxygenMoles = tileMix.GetMoles(Gas.Oxygen);
+        if (oxygenMoles > 0.05f)
+        {
+            var consumedO2 = MathF.Min(0.2f, oxygenMoles);
+            tileMix.AdjustMoles(Gas.Oxygen, -consumedO2);
+            tileMix.AdjustMoles(Gas.CarbonDioxide, consumedO2 * 0.7f);
+        }
+
+        var maxTemp = Atmospherics.T0C + 350f;
+        if (tileMix.Temperature < maxTemp)
+        {
+            tileMix.Temperature = MathF.Min(tileMix.Temperature + 25f, maxTemp);
+        }
+    }
+
+    private void TryEmitSmoke(EntityUid uid)
+    {
+        var coords = Transform(uid).Coordinates;
+        _nearbySmoke.Clear();
+        _lookup.GetEntitiesInRange(coords, 0.8f, _nearbySmoke);
+        foreach (var near in _nearbySmoke)
+        {
+            if (HasComp<SmokeComponent>(near))
+                return;
+        }
+
+        if (!_random.Prob(0.30f))
+            return;
+
+        var smoke = Spawn("Smoke", coords);
+        if (TryComp<SmokeComponent>(smoke, out var smokeComp))
+        {
+            var sol = new Solution();
+            sol.AddReagent(CarbonReagent, FixedPoint2.New(4));
+            _smoke.StartSmoke(smoke, sol, duration: 12f, spreadAmount: 2, smokeComp);
+        }
     }
 }

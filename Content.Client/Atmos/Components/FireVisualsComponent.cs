@@ -38,6 +38,12 @@ public sealed partial class FireVisualsComponent : Component
     public Color LightColor = Color.Orange;
 
     /// <summary>
+    /// Optional color tint applied to the fire sprite layer (e.g. for greyscale fire sprites).
+    /// </summary>
+    [DataField("color")]
+    public Color? FireColor;
+
+    /// <summary>
     ///     Client side point-light entity. We use this instead of directly adding a light to
     ///     the burning entity as entities don't support having multiple point-lights.
     /// </summary>

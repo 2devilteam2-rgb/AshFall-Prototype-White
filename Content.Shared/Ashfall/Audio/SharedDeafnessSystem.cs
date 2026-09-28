@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
 using Content.Shared.Inventory;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -18,6 +18,15 @@ public partial class SharedDeafnessSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<DeafenedComponent, MobStateChangedEvent>(OnMobStateChanged);
+    }
+
+    private void OnMobStateChanged(EntityUid uid, DeafenedComponent component, MobStateChangedEvent args)
+    {
+        if (args.NewMobState == MobState.Dead)
+        {
+            RemCompDeferred<DeafenedComponent>(uid);
+        }
     }
 
     public float GetEarProtection(EntityUid uid)
@@ -46,6 +55,9 @@ public partial class SharedDeafnessSystem : EntitySystem
     public bool TryDeafen(EntityUid uid, TimeSpan duration, bool ignoreProtection = false, bool showPopup = true)
     {
         if (duration <= TimeSpan.Zero)
+            return false;
+
+        if (TryComp<MobStateComponent>(uid, out var mob) && mob.CurrentState == MobState.Dead)
             return false;
 
         if (!ignoreProtection && HasEarProtection(uid))

@@ -51,6 +51,8 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         sprite.LayerSetShader(FireVisualLayers.Fire, "unshaded");
         if (component.Sprite != null)
             SpriteSystem.LayerSetRsi((uid, sprite), FireVisualLayers.Fire, new ResPath(component.Sprite));
+        if (component.FireColor != null)
+            SpriteSystem.LayerSetColor((uid, sprite), FireVisualLayers.Fire, component.FireColor.Value);
 
         UpdateAppearance(uid, component, sprite, appearance);
     }
@@ -70,6 +72,9 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
         AppearanceSystem.TryGetData<float>(uid, FireVisuals.FireStacks, out var fireStacks, appearance);
         AppearanceSystem.TryGetData<string?>(uid, FireVisuals.FireDisplacement, out var fireDisplacement, appearance);
         SpriteSystem.LayerSetVisible((uid, sprite), index, onFire);
+
+        if (component.FireColor != null)
+            SpriteSystem.LayerSetColor((uid, sprite), index, component.FireColor.Value);
 
         if (!onFire)
         {

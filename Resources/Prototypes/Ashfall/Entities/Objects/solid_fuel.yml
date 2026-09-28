@@ -18,6 +18,7 @@
     normalState: "4"
     alternateState: "5"
     fireStackAlternateState: 2
+    color: "#FFA240"
     lightRadiusPerStack: 1.0
     lightEnergyPerStack: 0.8
   - type: Reactive
@@ -60,6 +61,22 @@
     castShadows: false
   - type: Transform
     anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+          - SlipLayer
+        mask:
+          - ItemMask
+        hard: false
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.1
 
 - type: entity
   id: SolidFuelFloorCarpet
